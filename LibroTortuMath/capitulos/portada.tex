@@ -1,0 +1,34 @@
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[tmNavy] (current page.south west) rectangle (current page.north east);
+  \begin{scope}[shift={([xshift=-3.2cm,yshift=7.2cm]current page.south east)},rotate=-15]
+    \tmespiral{tmOro,line width=1.2pt}{1260}
+  \end{scope}
+  \begin{scope}[shift={([xshift=3.5cm,yshift=-6cm]current page.north west)},rotate=165]
+    \tmespiral{tmOro,line width=0.8pt,opacity=0.5}{900}
+  \end{scope}
+  \foreach \r/\o in {1.0/0.5,1.7/0.35,2.4/0.2}{
+    \draw[tmOro,opacity=\o,line width=0.8pt] ([xshift=2.2cm,yshift=-2.2cm]current page.north west) circle (\r);}
+  \node[anchor=north,text=tmOro,font=\sffamily\bfseries\large,align=center] at ([yshift=-4.2cm]current page.north) {TORTUMATH \,{\Large\ding{72}}\, EDICI\'ON UNIVERSITARIA};
+  \node[anchor=center,text=tmCrema,font=\sffamily\bfseries\fontsize{40}{46}\selectfont,align=center,text width=0.8\paperwidth]
+       at ([yshift=3.3cm]current page.center) {Matem\'aticas para};
+  \draw[tmOro,line width=1.4pt] ([xshift=-5.2cm,yshift=1.3cm]current page.center) -- ([xshift=5.2cm,yshift=1.3cm]current page.center);
+  \node[anchor=center,text=tmCrema,font=\sffamily\bfseries\fontsize{40}{46}\selectfont,align=center,text width=0.85\paperwidth]
+       at ([yshift=-0.7cm]current page.center) {Ingenier\'ia de\\Sistemas};
+  \node[anchor=center] at ([yshift=-4.6cm]current page.center) {\tortu[2.4]{tmVerde}};
+  \node[anchor=south,text=tmCrema,font=\sffamily\large,align=center] at ([yshift=3.6cm]current page.south)
+       {Gisselle Severich \;\textbullet\; Luzmila Pati \;\textbullet\; Jery Loza \;\textbullet\; Isacc Mealla};
+  \node[anchor=south,text=tmOro,font=\sffamily\small\bfseries,align=center] at ([yshift=2.4cm]current page.south)
+       {NIVEL UNIVERSITARIO \;\textbullet\; PRIMERA EDICI\'ON 2026};
+  \node at ([xshift=-6.5cm,yshift=-3.2cm]current page.center) {\tortu[0.6]{tmOro}};
+  \node at ([xshift=6.4cm,yshift=-2.2cm]current page.center) {\tortu[0.45]{tmVerde}};
+  \node at ([xshift=-7cm,yshift=1.4cm]current page.center) {\tortu[0.35]{tmVerde}};
+  \node at ([xshift=7cm,yshift=5.2cm]current page.center) {\tortu[0.3]{tmOro}};
+  \node at ([xshift=-5cm,yshift=7.2cm]current page.center) {\tortu[0.4]{tmCrema}};
+  \node at ([xshift=-2.4cm,yshift=-5.6cm]current page.center) {\tortu[0.3]{tmVerde}};
+  \node at ([xshift=3cm,yshift=-6.4cm]current page.center) {\tortu[0.5]{tmOro}};
+  \node[anchor=south,text=tmCrema,opacity=0.7,font=\sffamily\footnotesize,align=center] at ([yshift=1.4cm]current page.south)
+       {Cada cap\'itulo incluye retos con c\'odigo QR conectados a la plataforma TortuMath};
+\end{tikzpicture}
+\end{titlepage}

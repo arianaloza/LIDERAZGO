@@ -1,0 +1,139 @@
+% =====================================================================
+\tmcapitulo{tmNavy}{Las herramientas de c\'odigo que usan los ejemplos del libro, en una sola gu\'ia.}{x}
+\chapter{Python para este libro}
+\markboth{Ap\'endice D: Python}{}
+\tmgancho{No necesitas instalar nada: abre Google Colab, crea un cuaderno nuevo y pega los bloques de c\'odigo del libro.}
+
+\section*{Preparar el entorno}
+\begin{tmpasos}
+\item Entra a \texttt{colab.research.google.com} con tu cuenta de Google y elige \textbf{Cuaderno nuevo}.
+\item En una celda escribe \texttt{import numpy, sympy, scipy, matplotlib} y ejec\'utala. Si no da error, todo est\'a listo.
+\item Copia un bloque del libro en una celda y presiona \textbf{Shift + Enter}. Compara la salida con el comentario del bloque.
+\end{tmpasos}
+
+\begin{tmtip}Si trabajas en tu computadora, instala todo con \texttt{pip install numpy sympy scipy matplotlib}. En Windows usa el s\'imbolo del sistema o PowerShell.\end{tmtip}
+
+\section*{Qu\'e librer\'ia usar en cada cap\'itulo}
+\begin{center}
+\begin{tabular}{|c|p{3.6cm}|p{7.6cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Cap.} & \textbf{Librer\'ia} & \textbf{Funciones \'utiles}\\ \hline
+1 & Python puro, NumPy & \texttt{set}, operadores \texttt{|}, \texttt{\&}, \texttt{-}, \texttt{\^{}}; \texttt{np.array}\\ \hline
+2 & \texttt{math}, \texttt{sympy} & \texttt{comb}, \texttt{perm}, \texttt{factorial}, \texttt{gcd}, \texttt{pow(a, b, m)}, \texttt{factorint}, \texttt{isprime}\\ \hline
+3 & NumPy, SymPy & \texttt{np.linalg.solve}, \texttt{det}, \texttt{inv}; \texttt{Matrix(...).rref()}\\ \hline
+4 & SymPy, Matplotlib & \texttt{limit}, \texttt{diff}, \texttt{integrate}, \texttt{solve}; \texttt{plt.plot}\\ \hline
+5 & \texttt{statistics}, SciPy & \texttt{mean}, \texttt{median}, \texttt{stdev}; \texttt{stats.binom}, \texttt{poisson}, \texttt{norm}; \texttt{np.polyfit}\\ \hline
+\end{tabular}
+\end{center}
+
+\section*{Tres programas completos}
+\subsection{Camino m\'as corto con Dijkstra (cap\'itulo 2)}
+\begin{tmcodigo}
+import heapq
+
+G = {"A": {"B": 7, "E": 1},
+     "B": {"A": 7, "C": 3, "E": 8},
+     "C": {"B": 3, "D": 6, "E": 2},
+     "D": {"C": 6, "E": 7},
+     "E": {"A": 1, "B": 8, "C": 2, "D": 7}}
+
+def dijkstra(G, origen):
+    dist = {v: float("inf") for v in G}
+    dist[origen] = 0
+    cola = [(0, origen)]
+    while cola:
+        d, u = heapq.heappop(cola)
+        if d > dist[u]:
+            continue
+        for v, peso in G[u].items():
+            if d + peso < dist[v]:
+                dist[v] = d + peso
+                heapq.heappush(cola, (dist[v], v))
+    return dist
+
+print(dijkstra(G, "A"))   # {'A': 0, 'B': 6, 'C': 3, 'D': 8, 'E': 1}
+\end{tmcodigo}
+
+\subsection{Simulaci\'on de disponibilidad: m\'etodo Monte Carlo (cap\'itulo 5)}
+En lugar de calcular $1-0{,}1^3$, \textbf{simulamos} 200\,000 d\'ias y contamos en cu\'antos sigue activo al menos un servidor:
+
+\begin{tmcodigo}
+import random
+
+random.seed(1)
+N = 200_000
+activos = 0
+for _ in range(N):
+    if any(random.random() > 0.1 for _ in range(3)):   # 3 replicas
+        activos += 1
+
+print(activos / N)    # ~ 0.999 (exacto: 0.999)
+\end{tmcodigo}
+
+\subsection{Resumen estad\'istico de latencias (cap\'itulo 5)}
+\begin{tmcodigo}
+import statistics as st
+import numpy as np
+from scipy import stats
+
+lat = [10, 12, 12, 14, 15, 16, 18, 43]
+print(st.mean(lat), st.median(lat), st.stdev(lat))   # 17.5 14.5 10.61
+print(np.percentile(lat, 95))                        # p95
+print(stats.norm.cdf(240, loc=200, scale=20))        # 0.9772
+print(stats.poisson.pmf(0, mu=3))                    # 0.0498
+\end{tmcodigo}
+
+\begin{tmcuidado}Una simulaci\'on da un resultado \textbf{aproximado} que cambia con la semilla; la f\'ormula da el valor exacto. Usa la simulaci\'on para verificar tu c\'alculo, no para sustituirlo.\end{tmcuidado}
+
+\begin{tmejercicios}[Practica con c\'odigo]
+\begin{tmlista}
+\item \tmbasico\ Verifica en Python que $P(10, 3)=720$ usando \texttt{math.perm}.
+\item \tmmedio\ Escribe una funci\'on que calcule el m\'aximo com\'un divisor con el algoritmo de Euclides y comp\'aralo con \texttt{math.gcd}.
+\item \tmmedio\ Cambia el grafo del Dijkstra para que el peso $E$--$D$ sea 1. \textquestiondown Cambia el camino $A\to D$?
+\item \tmdificil\ Simula 200\,000 d\'ias con 2 r\'eplicas en vez de 3 y compara con el valor exacto $1-0{,}1^2$.
+\end{tmlista}
+\end{tmejercicios}
+
+% =====================================================================
+\tmcapitulo{tmNavy}{Los errores que m\'as se repiten, reunidos para repasar antes de un examen.}{x}
+\chapter{Errores comunes}
+\markboth{Ap\'endice E: Errores comunes}{}
+\tmgancho{Los errores no son al azar: casi siempre son los mismos. Con esta lista puedes revisar tu propio trabajo en un minuto.}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{|c|p{5.4cm}|p{6.2cm}|}
+\hline
+\rowcolor{tmCoral}\textcolor{white}{\textbf{Cap.}} & \textcolor{white}{\textbf{Error}} & \textcolor{white}{\textbf{C\'omo evitarlo}}\\ \hline
+1 & Confundir $a\in A$ con $\{a\}\subseteq A$ & Pertenencia es de elemento a conjunto; inclusi\'on es entre conjuntos\\ \hline
+1 & Pensar que $p\to q$ es falsa si $p$ es falsa & Solo es falsa con $p$ verdadera y $q$ falsa\\ \hline
+1 & Creer que la rec\'iproca equivale a la implicaci\'on & Solo la contrapositiva es equivalente\\ \hline
+1 & Usar Big-O como igualdad exacta & Es una cota superior; busca la m\'as ajustada\\ \hline
+1 & Usar un $\alpha$ muy grande en el descenso del gradiente & Si diverge, reduce $\alpha$\\ \hline
+2 & Multiplicar etapas que no son independientes & Cuenta solo combinaciones v\'alidas\\ \hline
+2 & Usar $P(n, r)$ cuando hay repeticiones & Con repetici\'on son $n^r$\\ \hline
+2 & Llamar primo al 1 & El 1 tiene un solo divisor positivo\\ \hline
+2 & Usar Dijkstra con pesos negativos & Exige pesos no negativos\\ \hline
+3 & No comprobar tras elevar al cuadrado & Verifica siempre: pueden aparecer soluciones extra\~nas\\ \hline
+3 & Cambiar el signo de solo un t\'ermino al quitar par\'entesis & Cambian todos los t\'erminos de adentro\\ \hline
+3 & Suponer $AB=BA$ & El producto de matrices no es conmutativo\\ \hline
+3 & Usar una clave de Hill con $\det$ no coprimo con 26 & Verifica $\operatorname{MCD}(\det K, 26)=1$\\ \hline
+4 & Olvidar la cadena al derivar & Multiplica por la derivada de lo de adentro\\ \hline
+4 & Dar por m\'inimo todo punto con $f'=0$ & Clasifica con $f''$ (o con $D$ en dos variables)\\ \hline
+4 & Omitir la constante $+C$ & En la integral indefinida siempre va\\ \hline
+5 & Confundir $P(A\mid B)$ con $P(B\mid A)$ & Usa Bayes\\ \hline
+5 & Esperar que $E[X]$ sea un resultado posible & Es un promedio a largo plazo\\ \hline
+5 & Dividir entre $n$ la varianza muestral & Se divide entre $n-1$\\ \hline
+5 & Concluir causalidad de una correlaci\'on & Correlaci\'on no implica causalidad\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmtip}Cuando termines un problema, rev\'isalo con esta pregunta: \textquestiondown qu\'e error de esta tabla podr\'ia haber cometido? Si no encuentras ninguno, probablemente est\'a bien.\end{tmtip}
+
+\begin{tmquiz}[Mini repaso: \textquestiondown qu\'e error es?]
+\tmpreg{Alguien dice que $\sqrt{x+7}=x+1$ tiene soluciones $x=2$ y $x=-3$.}{No comprob\'o la ra\'iz extra\~na}{Olvid\'o la cadena}{Us\'o $P(n, r)$}{Divid\'o entre $n$}
+\tmpreg{Alguien calcula $(2x+1)^3$ derivado como $3(2x+1)^2$.}{Olvid\'o la constante $C$}{Olvid\'o la regla de la cadena}{Us\'o Bayes mal}{No clasific\'o con $f''$}
+\tmpreg{Alguien dice: ``si el correo es spam contiene la palabra con 60\%, entonces un correo con la palabra es spam con 60\%''.}{Confundi\'o $P(A\mid B)$ con $P(B\mid A)$}{Us\'o conteo}{Olvid\'o $+C$}{Us\'o Dijkstra}
+\end{tmquiz}
+\textbf{Respuestas:} 1 a, 2 b, 3 a.
+

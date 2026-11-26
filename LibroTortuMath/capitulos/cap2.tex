@@ -1,0 +1,692 @@
+\tmcapitulo{tmMorado}{Contar, ordenar, repetir y conectar: las matem\'aticas de lo que se puede enumerar.}{x}
+\chapter{Matem\'atica discreta}
+\label{cap:discreta}
+
+\begin{tmsistemas}
+Cu\'antas configuraciones tiene un sistema, cu\'antos casos de prueba hacen falta, cu\'an grande es el espacio de b\'usqueda de una clave y c\'omo se conectan los servidores de una red: todo eso se responde contando.
+\end{tmsistemas}
+
+\begin{center}
+\begin{tabular}{|p{4.2cm}|p{4.8cm}|p{3.8cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tema} & \textbf{Qu\'e aprender\'as} & \textbf{D\'onde se usa}\\ \hline
+2.1 Conteo & Sumar y multiplicar posibilidades & Pruebas, claves\\ \hline
+2.2 Permutaciones y combinaciones & Orden s\'i u orden no & Selecci\'on de variables\\ \hline
+2.3 Recurrencias & Costo de algoritmos & Divide y vencer\'as\\ \hline
+2.4 Primos y divisibilidad & Factorizar y MCD & Criptograf\'ia\\ \hline
+2.5 Aritm\'etica modular & Aritm\'etica con residuos & Contadores, RSA\\ \hline
+2.6 Grafos & Redes y dependencias & Redes, IA, compiladores\\ \hline
+\end{tabular}
+\end{center}
+
+% =====================================================================
+\section{Principios de conteo}
+\label{sec:2-1}
+\tmgancho{Antes de probar todas las configuraciones de un sistema, \textquestiondown sabes cu\'antas son?}
+
+\begin{tmconcepto}{sumar o multiplicar}
+Si haces cosas una \textbf{despu\'es} de otra, \textbf{multiplicas}. Si eliges una cosa \textbf{o} la otra, \textbf{sumas}.
+\end{tmconcepto}
+
+\tmcomo{contar configuraciones}{{Identifica las etapas del procedimiento},{Cuenta las opciones de cada etapa},{\textquestiondown Van en secuencia? Multiplica},{Descarta las combinaciones no v\'alidas}}
+
+\subsection{Principio aditivo}
+\begin{tmdef}{Principio aditivo}
+Si una tarea se hace de una forma \textbf{o} de otra, mutuamente excluyentes, el total es la suma: $N=n_1+n_2+\cdots+n_k$.
+\end{tmdef}
+
+\begin{tmejemplo}{Interfaz de comunicaci\'on}
+Hay 2 opciones de conexi\'on serial y 3 inal\'ambricas. Se elige exactamente una: $N=2+3=5$ opciones.
+\end{tmejemplo}
+
+\subsection{Principio multiplicativo}
+\begin{tmdef}{Principio multiplicativo}
+Si un procedimiento tiene varias etapas y cada una admite $n_i$ posibilidades, el total es el producto: $N=n_1\cdot n_2\cdots n_k$.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}[level distance=1.5cm,every node/.style={font=\sffamily\small},
+  level 1/.style={sibling distance=4.6cm},level 2/.style={sibling distance=2.2cm},
+  tn/.style={draw=tmAzul,fill=tmAzulClaro,rounded corners=3pt,inner sep=3pt},
+  hoja/.style={draw=tmVerde,fill=tmVerdeClaro,rounded corners=3pt,inner sep=3pt}]
+  \node[tn] {inicio}
+    child {node[tn] {Chrome}
+      child {node[hoja] {Windows}}
+      child {node[hoja] {Linux}}}
+    child {node[tn] {Firefox}
+      child {node[hoja] {Windows}}
+      child {node[hoja] {Linux}}};
+  \node[font=\sffamily\bfseries,text=tmVerde] at (6,-3) {$2\times2=4$ caminos};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Configuraciones de prueba}
+Un formulario web: 3 navegadores, 2 sistemas operativos y 4 perfiles de usuario, todas las combinaciones compatibles.
+\begin{tmpasos}
+\item Tres etapas independientes: $3$, $2$ y $4$ opciones.
+\item $N=3\cdot2\cdot4=24$ configuraciones.
+\item Es el tama\~no del espacio de pruebas, no el n\'umero de pruebas que har\'as: algunas ser\'an redundantes.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Espacio de b\'usqueda de una clave}
+Clave de 4 d\'igitos decimales, con repeticiones y ceros iniciales: $N=10^4=10\,000$ claves posibles.
+\end{tmejemplo}
+
+\begin{tmdef}{Principio del palomar}
+Si se reparten $n+1$ objetos en $n$ cajas, alguna caja recibe al menos 2 objetos.
+\end{tmdef}
+
+\begin{tmsistemas}
+El conteo dimensiona el espacio de b\'usqueda de una clave, pero \textbf{no} mide la seguridad real: el tiempo de un ataque depende de la velocidad de verificaci\'on, los bloqueos y c\'omo se proteja el sistema. El palomar explica por qu\'e las funciones hash \textbf{siempre} tienen colisiones.
+\end{tmsistemas}
+
+\begin{tmcuidado}Si ciertos navegadores no son compatibles con algunos sistemas operativos, las etapas dejan de ser independientes y el producto directo \textbf{sobrecuenta}. Hay que contar solo las combinaciones v\'alidas.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 2.1 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:2-1}}]
+\label{ej:2-1}
+\begin{tmlista}
+\item \tmbasico\ Un sistema usa 4 m\'etodos de autenticaci\'on y 3 niveles de acceso. \textquestiondown Cu\'antas configuraciones hay?
+\item \tmbasico\ Una app se prueba en 4 navegadores, 3 sistemas operativos y 2 tama\~nos de pantalla. \textquestiondown Cu\'antas combinaciones?
+\item \tmbasico\ \textquestiondown Cu\'antos PIN de 6 d\'igitos existen?
+\item \tmmedio\ Una placa lleva 3 letras (26 posibles) y 3 d\'igitos. \textquestiondown Cu\'antas placas hay?
+\item \tmmedio\ Debes elegir un servidor: 5 locales o 3 en la nube. \textquestiondown Cu\'antas opciones?
+\item \tmmedio\ Una contrase\~na de 8 caracteres con 62 s\'imbolos posibles (con repetici\'on). \textquestiondown Cu\'antas hay?
+\item \tmdificil\ En el ejercicio 2, Safari solo funciona en un sistema operativo (de los 3). \textquestiondown Cu\'antas combinaciones v\'alidas quedan?
+\item \tmdificil\ Guardas 25 archivos en 24 carpetas. Justifica que alguna carpeta tiene al menos 2.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{2}{Misi\'on 1 (Espacio de Pruebas): configura el espacio de pruebas hasta tener exactamente 24 combinaciones.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Aditivo: ``o'' suma. Multiplicativo: ``y'' multiplica.
+\item El conteo dimensiona espacios de b\'usqueda; no mide por s\'i solo la seguridad.
+\item Si las etapas no son independientes, cuenta solo las combinaciones v\'alidas.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Permutaciones y combinaciones}
+\label{sec:2-2}
+\tmgancho{\textquestiondown De cu\'antas formas se pueden ordenar tres tareas de un servidor? \textquestiondown Y cu\'antos grupos de revisi\'on puedes armar?}
+
+\begin{tmconcepto}{orden s\'i u orden no}
+\textbf{Permutaci\'on:} el orden importa (como un podio). \textbf{Combinaci\'on:} el orden no importa (como un equipo).
+\end{tmconcepto}
+
+\tmcomo{elegir la f\'ormula correcta}{{\textquestiondown Se repiten elementos? Usa $n^r$},{\textquestiondown Importa el orden? S\'i: $P(n, r)$},{Si no importa: $\binom nr$},{Verifica con un caso peque\~no}}
+
+\subsection{Factorial}
+\begin{tmdef}{Factorial}
+$n!=n(n-1)(n-2)\cdots2\cdot1$ y por definici\'on $0!=1$. Cuenta las formas de ordenar $n$ objetos distintos: $4!=24$.
+\end{tmdef}
+
+\subsection{Cu\'ando importa el orden}
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\small,rounded corners=4pt,inner sep=6pt,align=center}]
+  \node[draw=tmAzul,fill=tmAzulClaro,text width=4.6cm] (a) at (0,0) {\textbf{Permutaci\'on}\\el orden \textbf{s\'i} importa\\$P(n, r)=\dfrac{n!}{(n-r)!}$};
+  \node[draw=tmVerde,fill=tmVerdeClaro,text width=4.6cm] (b) at (6.2,0) {\textbf{Combinaci\'on}\\el orden \textbf{no} importa\\$\dbinom nr=\dfrac{n!}{r!(n-r)!}$};
+  \node[font=\sffamily\scriptsize,text=tmGris] at (3.1,-1.7) {relaci\'on: $P(n, r)=r!\,\binom nr$};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Planificaci\'on de tareas}
+Se ejecutan 3 tareas distintas elegidas de 5. \textquestiondown Cu\'antos \'ordenes hay?
+\begin{tmpasos}
+\item El orden importa: $P(5, 3)=\dfrac{5!}{2!}=\dfrac{120}{2}=60$.
+\item En la pr\'actica no todos son v\'alidos si hay dependencias entre tareas.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Revisi\'on de m\'odulos}
+De 5 m\'odulos se eligen 3 para una revisi\'on conjunta; solo importa cu\'ales:
+\[\binom53=\frac{5!}{3!\,2!}=10.\]
+\end{tmejemplo}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\small,circle,fill=tmAzulClaro,draw=tmAzul,inner sep=2pt,minimum size=0.7cm}]
+  \foreach \n in {0,1,2,3,4,5}{
+    \foreach \k in {0,...,\n}{
+      \pgfmathtruncatemacro{\v}{int(round(exp(ln(factorial(\n))-ln(factorial(\k))-ln(factorial(\n-\k)))))}
+      \node at ({(\k-\n/2)*0.95},{-\n*0.85}) {\v};}}
+  \node[rectangle,draw=none,fill=none,anchor=west,text=tmGris,align=left] at (3.1,-2) {tri\'angulo de Pascal:\\$\binom nr=\binom{n-1}{r-1}+\binom{n-1}{r}$};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmtip}Pregunta clave: \textquestiondown cambia el resultado si intercambio dos elementos? Si s\'i, es permutaci\'on; si no, combinaci\'on. Siempre $\binom nr=\binom n{n-r}$.\end{tmtip}
+
+\begin{tmsistemas}
+\textbf{IA:} con 8 caracter\'isticas y 3 a elegir hay $\binom83=56$ subconjuntos para evaluar. \textbf{Ciberseguridad:} una contrase\~na de 6 letras min\'usculas tiene $26^6=308\,915\,776$ posibilidades. Ese n\'umero no dice qu\'e tan segura es: las personas no eligen claves al azar.
+\end{tmsistemas}
+
+\begin{tmcuidado}Una clave \textbf{con repetici\'on} se cuenta con $n^r$, no con $P(n, r)$. Permutaci\'on y combinaci\'on suponen elementos \textbf{sin repetir}.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 2.2 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:2-2}}]
+\label{ej:2-2}
+\begin{tmlista}
+\item \tmbasico\ \textquestiondown De cu\'antas formas se ordenan 4 tareas diferentes?
+\item \tmbasico\ \textquestiondown Cu\'antos grupos de 4 se forman con 10 estudiantes?
+\item \tmbasico\ De un sistema de 12 m\'odulos se eligen 5. \textquestiondown Cu\'antos subconjuntos hay?
+\item \tmmedio\ Calcula $P(6, 2)$.
+\item \tmmedio\ Con 8 estudiantes: \textquestiondown cu\'antas ternas con presidente, secretario y tesorero? \textquestiondown Y cu\'antos comit\'es de 3 sin cargos?
+\item \tmmedio\ De 10 m\'odulos, elegir 4 para revisi\'on y, aparte, ordenar 4 para ejecuci\'on. Calcula ambos.
+\item \tmdificil\ \textquestiondown Cu\'antas palabras distintas salen reordenando las letras de REDES?
+\item \tmdificil\ Demuestra $\binom nr=\binom n{n-r}$ y calcula $\binom{10}3-\binom{10}7$.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{2}{Contar es el primer paso del laboratorio del cap\'itulo 2: practica con el espacio de pruebas antes de pasar a las siguientes misiones.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item $P(n, r)=\frac{n!}{(n-r)!}$ si importa el orden; $\binom nr=\frac{n!}{r!(n-r)!}$ si no importa.
+\item Con repetici\'on se usa $n^r$.
+\item El resultado matem\'atico no sustituye el an\'alisis de seguridad real.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Sucesiones y recurrencias}
+\label{sec:2-3}
+\tmgancho{\textquestiondown C\'omo sabe un ingeniero cu\'anto tardar\'a un algoritmo sin ejecutarlo para todos los tama\~nos?}
+
+\begin{tmconcepto}{la recurrencia como ficha de domin\'o}
+Una recurrencia es una receta que dice c\'omo obtener el siguiente t\'ermino a partir de los anteriores, como una cadena de domin\'os.
+\end{tmconcepto}
+
+\tmcomo{resolver una recurrencia simple}{{Escribe los primeros t\'erminos},{Busca el patr\'on},{Propone una f\'ormula cerrada},{Comprueba con $n=1, 2, 3$}}
+
+\subsection{Sucesiones}
+\begin{tmdef}{Sucesi\'on}
+Lista ordenada de valores que sigue una regla. Aritm\'etica: $a_n=a_1+(n-1)d$. Geom\'etrica: $a_n=a_1r^{n-1}$. Ejemplo: $2, 4, 6, 8, 10,\dots$ con $a_n=2n$.
+\end{tmdef}
+
+\begin{tmdef}{Relaci\'on de recurrencia}
+Define un t\'ermino a partir de los anteriores. Ejemplo: $a_n=a_{n-1}+3$ con $a_1=2$ da $2, 5, 8, 11, 14,\dots$
+\end{tmdef}
+
+\begin{tmejemplo}{Suma aritm\'etica}
+Suma de los primeros 10 t\'erminos de $a_n=2n+3$.
+\begin{tmpasos}
+\item $a_1=5$ y $a_{10}=23$.
+\item $S=\dfrac{n(a_1+a_n)}{2}=\dfrac{10\cdot28}{2}=140$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Fibonacci y torres de Hanoi}
+\begin{tmpasos}
+\item Fibonacci: $F_n=F_{n-1}+F_{n-2}$ da $1, 1, 2, 3, 5, 8, 13, 21,\dots$
+\item Hanoi: mover $n$ discos exige $T(n)=2T(n-1)+1$ movimientos, con $T(1)=1$.
+\item Resulta $T(n)=2^n-1$: con 5 discos son 31 movimientos.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{An\'alisis de algoritmos: divide y vencer\'as}
+Un algoritmo parte el problema en 2 mitades y combina en tiempo proporcional a $n$:
+\tmformula{T(n)=2\,T(n/2)+cn\ \Rightarrow\ T(n)=\Theta(n\log n)}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\scriptsize,draw=tmMorado,fill=tmMorado!12,rounded corners=2pt,inner sep=2pt},
+  level distance=1.1cm,level 1/.style={sibling distance=4cm},level 2/.style={sibling distance=2cm},level 3/.style={sibling distance=1cm}]
+  \node {$cn$}
+    child {node {$cn/2$} child {node {$cn/4$} child {node {}} child {node {}}} child {node {$cn/4$} child {node {}} child {node {}}}}
+    child {node {$cn/2$} child {node {$cn/4$} child {node {}} child {node {}}} child {node {$cn/4$} child {node {}} child {node {}}}};
+  \node[draw=none,fill=none,anchor=west,text=tmGris,font=\sffamily\small,align=left] at (4.7,-1.5) {cada nivel trabaja $cn$\\hay $\log_2 n$ niveles\\total: $cn\log_2 n$};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmsistemas}
+Este patr\'on es el de \textbf{MergeSort}. En una estructura jer\'arquica, como un \'arbol binario completo, el nivel $k$ (con la ra\'iz en el nivel 0) tiene como m\'aximo $N_k=2^k$ nodos: el nivel 5 puede tener 32. En hardware, los contadores y las secuencias de estados son sucesiones discretas.
+\end{tmsistemas}
+
+\begin{tmtip}Para comparar dos algoritmos no los ejecutes: resuelve su recurrencia. $T(n)=2T(n/2)+n$ da $n\log n$; $T(n)=T(n-1)+n$ da $n^2/2$.\end{tmtip}
+
+\begin{tmejercicios}[Ejercicios 2.3 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:2-3}}]
+\label{ej:2-3}
+\begin{tmlista}
+\item \tmbasico\ Escribe los primeros 6 t\'erminos de $a_n=3a_{n-1}$ con $a_1=2$.
+\item \tmbasico\ Un algoritmo hace 4 operaciones por elemento de una lista de $n$. Expr\'esalo en funci\'on de $n$.
+\item \tmbasico\ \textquestiondown Cu\'antos nodos puede tener el nivel 5 de un \'arbol binario completo?
+\item \tmmedio\ Suma los primeros 10 t\'erminos de $a_n=2n+3$.
+\item \tmmedio\ Escribe los 8 primeros n\'umeros de Fibonacci.
+\item \tmmedio\ \textquestiondown Cu\'antos movimientos requiere Hanoi con 5 discos?
+\item \tmdificil\ Resuelve $T(n)=T(n-1)+n$ con $T(1)=1$ y calcula $T(4)$.
+\item \tmdificil\ Explica por qu\'e resolver una recurrencia ayuda a comparar dos algoritmos.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{2}{Misi\'on 2 (Contador Modular): un contador cuya actualizaci\'on es una recurrencia modular. Usa lo aprendido aqu\'i para predecir su estado.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Una sucesi\'on sigue una regla; una recurrencia define cada t\'ermino con los anteriores.
+\item $T(n)=2T(n/2)+cn$ es $\Theta(n\log n)$; Hanoi es $2^n-1$.
+\item Resolver recurrencias compara algoritmos sin ejecutarlos.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{N\'umeros primos y divisibilidad}
+\label{sec:2-4}
+\tmgancho{\textquestiondown Por qu\'e multiplicar dos n\'umeros primos es f\'acil, pero separarlos de nuevo es tan dif\'icil que protege tus mensajes?}
+
+\begin{tmconcepto}{los primos como ladrillos}
+Los primos son los \textbf{ladrillos} de los n\'umeros: todo entero mayor que 1 se arma multiplicando primos, y de una \'unica manera.
+\end{tmconcepto}
+
+\tmcomo{aplicar el algoritmo de Euclides}{{Divide $a$ entre $b$},{Toma el residuo $r$},{Repite con el par $(b, r)$},{Cuando $r=0$, el MCD es el \'ultimo divisor}}
+
+\subsection{Conceptos}
+\begin{tmdef}{Divisibilidad, primo y compuesto}
+$a$ es divisible por $b>0$ si existe un entero $k$ con $a=bk$ (24 es divisible por 6: $24=6\cdot4$). Un \textbf{primo} es un entero mayor que 1 con exactamente dos divisores positivos: 2, 3, 5, 7, 11, 13. Un \textbf{compuesto} tiene m\'as de dos.
+\end{tmdef}
+
+\begin{tmdef}{Teorema fundamental}
+Todo entero mayor que 1 se escribe de forma \'unica como producto de primos. Ejemplo: $60=2^2\cdot3\cdot5$.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\small,circle,draw=tmAzul,fill=tmAzulClaro,inner sep=3pt,minimum size=0.8cm},level distance=1.2cm,
+  level 1/.style={sibling distance=2.6cm},level 2/.style={sibling distance=1.3cm}]
+  \node {60}
+    child {node {2}}
+    child {node {30}
+      child {node[fill=tmVerdeClaro,draw=tmVerde] {2}}
+      child {node {15} child {node[fill=tmVerdeClaro,draw=tmVerde] {3}} child {node[fill=tmVerdeClaro,draw=tmVerde] {5}}}};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{\textquestiondown 91 es primo?}
+\begin{tmpasos}
+\item Basta probar primos hasta $\sqrt{91}\approx9{,}5$: 2, 3, 5, 7.
+\item $91=7\cdot13$. Es \textbf{compuesto}.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{M\'aximo com\'un divisor y algoritmo de Euclides}
+El $\operatorname{MCD}$ es el mayor entero que divide a ambos. Euclides: se divide y se repite con el residuo hasta llegar a 0.
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Divisi\'on} & \textbf{Paso}\\ \hline
+$48=2(18)+12$ & primera divisi\'on\\ \hline
+$18=1(12)+6$ & segunda divisi\'on\\ \hline
+$12=2(6)+0$ & residuo cero: $\operatorname{MCD}(48, 18)=6$\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmtip}Relaci\'on \'util: $\operatorname{MCD}(a, b)\cdot\operatorname{MCM}(a, b)=a\cdot b$. Con 12 y 18: $6\cdot36=216$.\end{tmtip}
+
+\begin{tmcodigo}
+def mcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
+
+def es_primo(n):
+    if n < 2:
+        return False
+    d = 2
+    while d * d <= n:
+        if n % d == 0:
+            return False
+        d += 1
+    return True
+
+print(mcd(48, 18), es_primo(91))   # 6 False
+\end{tmcodigo}
+
+\begin{tmsistemas}
+En \textbf{RSA} se eligen dos primos distintos $p$ y $q$ y se calcula $n=pq$. Con $p=5$ y $q=11$ resulta $n=55$: sirve para ilustrar, pero \textbf{es demasiado peque\~no} para proteger informaci\'on real. Los sistemas reales exigen primos enormes, buena implementaci\'on y claves del tama\~no que fijan los est\'andares vigentes.
+\end{tmsistemas}
+
+\begin{tmcuidado}El 1 \textbf{no es primo} (solo tiene un divisor positivo) y el 2 es el \'unico primo par.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 2.4 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:2-4}}]
+\label{ej:2-4}
+\begin{tmlista}
+\item \tmbasico\ \textquestiondown 91 es primo o compuesto?
+\item \tmbasico\ Factoriza 180 en primos.
+\item \tmbasico\ Calcula $\operatorname{MCD}(84, 30)$ con Euclides.
+\item \tmmedio\ Calcula $\operatorname{MCM}(12, 18)$.
+\item \tmmedio\ \textquestiondown 97 es primo?
+\item \tmmedio\ Calcula $\operatorname{MCD}(252, 105)$ con Euclides.
+\item \tmdificil\ Explica por qu\'e basta probar divisores hasta $\sqrt n$.
+\item \tmdificil\ Explica por qu\'e un ejemplo de RSA con primos peque\~nos no protege informaci\'on real.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{2}{Pon a prueba tu lectura de n\'umeros primos y factorizaci\'on en las misiones del laboratorio del cap\'itulo 2.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Todo entero $>1$ es producto \'unico de primos.
+\item Euclides: $\operatorname{MCD}(a, b)=\operatorname{MCD}(b, a\bmod b)$.
+\item RSA se apoya en la dificultad de factorizar $n=pq$ cuando $p$ y $q$ son enormes.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Aritm\'etica modular}
+\label{sec:2-5}
+\tmgancho{\textquestiondown Qu\'e hora ser\'a dentro de 30 horas? Tu reloj ya sabe aritm\'etica modular.}
+
+\begin{tmconcepto}{n\'umeros que dan vueltas}
+En aritm\'etica modular los n\'umeros \textbf{dan vueltas} como las horas de un reloj: al llegar al m\'odulo, vuelves a empezar en 0.
+\end{tmconcepto}
+
+\tmcomo{calcular $a\bmod m$}{{Divide $a$ entre $m$},{Qu\'edate con el residuo},{En sumas y productos, reduce en cada paso},{El resultado est\'a entre $0$ y $m-1$}}
+
+\tmformulanota{a\equiv b\pmod m}{$a$ y $b$ dejan el mismo residuo al dividir}{$m$ es el m\'odulo: el tama\~no del reloj}
+
+\subsection{Congruencias}
+\begin{tmdef}{Congruencia}
+$a\equiv b\pmod m$ si $a$ y $b$ dejan el mismo residuo al dividirse entre $m$, es decir, si $m\mid(a-b)$. Ejemplo: $17\equiv5\pmod{12}$.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+  \draw[tmAzul,line width=1.2pt] (0,0) circle (1.9);
+  \foreach \i in {0,...,11}{\node[font=\sffamily\small\bfseries] at ({90-30*\i}:1.55) {\i};}
+  \draw[-{Stealth},tmCoral,line width=1.4pt] (0,0) -- ({90-30*5}:1.05);
+  \node[font=\sffamily\small,text=tmGris,anchor=west,align=left] at (2.4,0) {$17\equiv5\pmod{12}$\\$(8+9)\bmod7=3$ \quad $(4\cdot6)\bmod7=3$};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Operaciones modulares}
+\begin{tmpasos}
+\item $(8+9)\bmod7=17\bmod7=3$.
+\item $(4\cdot6)\bmod7=24\bmod7=3$.
+\item $29\bmod6=5$ y $(15+23)\bmod8=38\bmod8=6$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Contador de m\'odulo 8}
+Estados $0, 1,\dots,7$ y luego otra vez $0$: $x_{\text{nuevo}}=(x+1)\bmod8$. Si $x=7$, el siguiente es $(7+1)\bmod8=0$.
+\end{tmejemplo}
+
+\subsection{Inverso modular y RSA en miniatura}
+El inverso de $a$ m\'odulo $m$ es $b$ con $ab\equiv1\pmod m$. Existe si $\operatorname{MCD}(a, m)=1$. Ejemplo: $3\cdot5=15\equiv1\pmod7$, as\'i que $3^{-1}=5$.
+
+\begin{tmejemplo}{RSA de juguete}
+$p=5$, $q=11$, $n=55$, $\varphi(n)=4\cdot10=40$. Se elige $e=3$ y $d=27$, pues $3\cdot27=81\equiv1\pmod{40}$.
+\begin{tmpasos}
+\item Mensaje $m=7$. Cifrado: $c=7^3\bmod55=343\bmod55=13$.
+\item Descifrado: $13^{27}\bmod55=7$. Se recupera el mensaje.
+\item Clave p\'ublica $(55, 3)$; clave privada $27$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmsistemas}
+\textbf{\'Indices circulares:} una cola circular de 10 posiciones en la posici\'on 8 que avanza 5 termina en $(8+5)\bmod10=3$. \textbf{Hash tables:} la posici\'on de un dato es $h(k)\bmod m$. \textbf{Blockchain:} usa criptograf\'ia (hash, firmas), pero tambi\'en estructuras de datos, consenso y redes; la aritm\'etica modular es solo una pieza.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+print(29 % 6)                  # 5
+print((15 + 23) % 8)           # 6
+print(pow(7, 3, 55))           # 13  (cifrado RSA de juguete)
+print(pow(13, 27, 55))         # 7   (descifrado)
+print(pow(3, -1, 7))           # 5   (inverso modular)
+\end{tmcodigo}
+
+\begin{tmcuidado}En Python \texttt{\%} con negativos da resultado no negativo: \texttt{-1 \% 5} es 4, justo lo que pide la matem\'atica. En otros lenguajes puede dar $-1$.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 2.5 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:2-5}}]
+\label{ej:2-5}
+\begin{tmlista}
+\item \tmbasico\ Calcula $29\bmod6$.
+\item \tmbasico\ Calcula $(15+23)\bmod8$.
+\item \tmbasico\ Un \'indice circular de 10 posiciones est\'a en la 8 y avanza 5. \textquestiondown D\'onde termina?
+\item \tmmedio\ Calcula $(7\cdot9)\bmod5$.
+\item \tmmedio\ Un contador de m\'odulo 16 est\'a en 13 y recibe 7 incrementos. \textquestiondown Qu\'e estado alcanza?
+\item \tmmedio\ Halla el inverso de 3 m\'odulo 7.
+\item \tmdificil\ Cifra $m=7$ con la clave p\'ublica $(55, 3)$.
+\item \tmdificil\ Explica qu\'e aporta la aritm\'etica modular a RSA y por qu\'e no basta para describir toda una blockchain.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{2}{Misi\'on 2 (Contador Modular): calcula el estado de un contador modular que parte de 13 con saltos de 7 en m\'odulo 16.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item $a\equiv b\pmod m$ si dejan el mismo residuo.
+\item Se puede reducir cada paso m\'odulo $m$ en sumas y productos.
+\item RSA cifra con $c=m^e\bmod n$ y descifra con $m=c^d\bmod n$.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Introducci\'on a grafos}
+\label{sec:2-6}
+\tmgancho{\textquestiondown C\'omo sabe tu ruta de Internet cu\'al es el camino m\'as corto hasta un servidor?}
+
+\begin{tmconcepto}{puntos y l\'ineas}
+Un grafo es un \textbf{mapa de puntos} (v\'ertices) unidos por l\'ineas (aristas). Sirve para modelar redes, rutas y dependencias.
+\end{tmconcepto}
+
+\tmcomo{el algoritmo de Dijkstra}{{Distancia 0 al origen y $\infty$ al resto},{Visita el nodo no visitado m\'as cercano},{Actualiza las distancias de sus vecinos},{Repite hasta visitar todos}}
+
+\subsection{Definici\'on y tipos}
+\begin{tmdef}{Grafo}
+$G=(V, E)$: un conjunto $V$ de v\'ertices y un conjunto $E$ de aristas. Los v\'ertices son computadoras, usuarios o procesos; las aristas, conexiones, dependencias o relaciones.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={circle,draw=tmAzul,fill=tmAzulClaro,minimum size=0.7cm,font=\sffamily\small},scale=0.9]
+  % no dirigido
+  \node (n6) at (0,2) {6}; \node (n4) at (1.3,1.2) {4}; \node (n5) at (2.9,1.5) {5};
+  \node (n1) at (4.1,0.9) {1}; \node (n3) at (1.0,-0.4) {3}; \node (n2) at (2.8,-0.2) {2};
+  \draw[tmAzul] (n6)--(n4)--(n5)--(n1)--(n2)--(n3)--(n4); \draw[tmAzul] (n5)--(n2);
+  \node[draw=none,fill=none,font=\sffamily\bfseries\small] at (2,-1.4) {no dirigido};
+  % dirigido
+  \begin{scope}[xshift=6cm]
+  \node (A) at (0,0.8) {A}; \node (B) at (1.3,1.8) {B}; \node (C) at (1.3,-0.2) {C};
+  \node (D) at (2.8,-0.2) {D}; \node (E) at (2.8,1.8) {E};
+  \foreach \p/\q in {A/B,A/C,B/C,B/E,C/D,D/E}{\draw[-{Stealth},tmAzul] (\p) -- (\q);}
+  \node[draw=none,fill=none,font=\sffamily\bfseries\small] at (1.4,-1.2) {dirigido};
+  \end{scope}
+  % ponderado
+  \begin{scope}[xshift=11cm]
+  \node (a) at (0,0.8) {A}; \node (b) at (1.2,1.8) {B}; \node (c) at (2.6,1.8) {C};
+  \node (d) at (2.6,-0.2) {D}; \node (e) at (1.2,-0.2) {E};
+  \draw[tmAzul] (a)--node[draw=none,fill=none,above left,font=\sffamily\scriptsize]{7}(b)
+     (b)--node[draw=none,fill=none,above,font=\sffamily\scriptsize]{3}(c)
+     (a)--node[draw=none,fill=none,below left,font=\sffamily\scriptsize]{1}(e)
+     (b)--node[draw=none,fill=none,left,font=\sffamily\scriptsize]{8}(e)
+     (c)--node[draw=none,fill=none,right,font=\sffamily\scriptsize]{6}(d)
+     (e)--node[draw=none,fill=none,below,font=\sffamily\scriptsize]{7}(d)
+     (c)--node[draw=none,fill=none,above right,font=\sffamily\scriptsize]{2}(e);
+  \node[draw=none,fill=none,font=\sffamily\bfseries\small] at (1.4,-1.2) {ponderado};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Grado, caminos y matriz de adyacencia}
+\begin{tmdef}{Grado}
+En un grafo no dirigido, $\deg(v)$ es el n\'umero de aristas incidentes en $v$. Siempre se cumple $\sum_v\deg(v)=2|E|$.
+\end{tmdef}
+
+\begin{tmejemplo}{Grados en una red}
+Dispositivos $A, B, C, D$ con $E=\{(A, B),(A, C),(B, C),(C, D)\}$.
+\begin{tmpasos}
+\item $\deg(A)=2$, $\deg(B)=2$, $\deg(C)=3$, $\deg(D)=1$.
+\item Suma: $2+2+3+1=8=2\cdot4$. Correcto.
+\item $C$ tiene el mayor grado: se conecta con tres dispositivos.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Camino m\'as corto: Dijkstra}
+Con pesos \textbf{no negativos}, Dijkstra calcula caminos de costo m\'inimo. Mejor distancia desde $A$ en el grafo ponderado de arriba:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Paso} & \textbf{Visita} & \textbf{$B$} & \textbf{$C$} & \textbf{$D$} & \textbf{$E$}\\ \hline
+0 & $A$ & 7 & $\infty$ & $\infty$ & 1\\ \hline
+1 & $E$ & 7 & 3 & 8 & \textbf{1}\\ \hline
+2 & $C$ & 6 & \textbf{3} & 8 & 1\\ \hline
+3 & $B$ & \textbf{6} & 3 & 8 & 1\\ \hline
+4 & $D$ & 6 & 3 & \textbf{8} & 1\\ \hline
+\end{tabular}
+\end{center}
+Costo $A\to D$: $8$ (camino $A\to E\to D$).
+
+\begin{tmsistemas}
+\textbf{Redes:} topolog\'ia, conectividad, fallos. \textbf{IA:} grafos de conocimiento y recomendaci\'on (usuarios y productos como v\'ertices). \textbf{Software:} un grafo dirigido ac\'iclico (DAG) modela dependencias: instalar $\to$ compilar $\to$ probar, y detecta dependencias circulares. La ruta real que usa una red tambi\'en depende de protocolos, congesti\'on y pol\'iticas.
+\end{tmsistemas}
+
+\begin{tmcuidado}Dijkstra \textbf{no funciona con pesos negativos}. Y el camino de costo m\'inimo matem\'atico no siempre es la ruta que usa una red real.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 2.6 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:2-6}}]
+\label{ej:2-6}
+\begin{tmlista}
+\item \tmbasico\ Calcula el grado de cada v\'ertice de $V=\{A, B, C, D\}$ con $E=\{(A, B),(A, C),(B, D),(C, D)\}$.
+\item \tmbasico\ Si un grafo no dirigido tiene 7 aristas, \textquestiondown cu\'anto suman sus grados?
+\item \tmbasico\ Representa las dependencias: instalar dependencias, compilar, ejecutar pruebas.
+\item \tmmedio\ Escribe la matriz de adyacencia del grafo del ejercicio 1.
+\item \tmmedio\ Con $E=\{(A, B),(C, D)\}$, \textquestiondown existe camino de $A$ a $D$?
+\item \tmmedio\ En el grafo ponderado de la secci\'on, halla el camino m\'as corto de $A$ a $B$.
+\item \tmdificil\ \textquestiondown Cu\'antas aristas tiene como m\'aximo un grafo simple no dirigido de 8 v\'ertices?
+\item \tmdificil\ Explica la diferencia entre usar un grafo para una red f\'isica y para relaciones entre usuarios.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{2}{Misi\'on 3 (Enlace Cr\'itico): simula el aislamiento del nodo cr\'itico $D$ desactivando el enlace $C$--$D$.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item $G=(V, E)$; puede ser dirigido, no dirigido o ponderado.
+\item $\sum\deg(v)=2|E|$.
+\item Dijkstra da caminos de costo m\'inimo con pesos no negativos.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Aplicaciones integradoras}
+\label{sec:2-7}
+\tmgancho{\textquestiondown C\'omo se combinan conteo, recurrencias, teor\'ia de n\'umeros y grafos para resolver un problema completo?}
+
+\begin{tmconcepto}{un problema, varias herramientas}
+Un problema real casi nunca es de un solo tema: se \textbf{modela} con grafos, se \textbf{cuenta} con combinatoria y se \textbf{protege} con aritm\'etica modular.
+\end{tmconcepto}
+
+\tmcomo{analizar una red}{{Dibuja el grafo},{Calcula los grados},{Busca caminos entre los nodos},{Prueba qu\'e pasa si falla una arista}}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={draw=tmAzul,fill=tmAzulClaro,rounded corners=3pt,font=\sffamily\scriptsize,inner sep=3pt},scale=0.95]
+  \node (fw) at (7,3) {Firewall}; \node (in) at (9.2,3) {Internet};
+  \node (ro) at (5,2) {Router}; \node (s1) at (2.5,2) {Switch 1};
+  \node (web) at (0.2,3) {WebServer}; \node (ftp) at (0,2) {FTP}; \node (em) at (0.2,1) {Email};
+  \node (s2) at (3.3,0.6) {Switch 2};
+  \node (h1) at (2,-0.5) {Host 1}; \node (h2) at (3.3,-0.5) {Host 2}; \node (h3) at (4.6,-0.5) {Host 3};
+  \node (s3) at (7,1.4) {Switch 3}; \node (h4) at (8.4,0.3) {Host 4}; \node (h5) at (9.6,0.3) {Host 5};
+  \node (s4) at (6.2,0) {Switch 4}; \node (h6) at (5.2,-1.1) {Host 6}; \node (h7) at (6.3,-1.1) {Host 7}; \node (h8) at (7.4,-1.1) {Host 8};
+  \draw[tmAzul] (fw)--(in) (fw)--(ro) (ro)--(s1) (s1)--(web) (s1)--(ftp) (s1)--(em) (ro)--(s2) (s2)--(h1) (s2)--(h2) (s2)--(h3) (ro)--(s3) (s3)--(h4) (s3)--(h5) (s3)--(s4) (s4)--(h6) (s4)--(h7) (s4)--(h8);
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{3.2cm}|p{3.6cm}|p{6cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Caso} & \textbf{Conceptos} & \textbf{Idea}\\ \hline
+Redes inform\'aticas & grafos, caminos, conteo & modelar dispositivos y conexiones para analizar rutas y alternativas\\ \hline
+Inteligencia artificial & sucesiones, recurrencias, conteo & \'arboles de b\'usqueda: estimar estados y costos\\ \hline
+Blockchain & teor\'ia de n\'umeros, aritm\'etica modular & clave p\'ublica; el hash vincula bloques y detecta alteraciones\\ \hline
+Ciberseguridad & conteo, divisibilidad, mod & espacios de b\'usqueda y criptograf\'ia; importan implementaci\'on y gesti\'on de claves\\ \hline
+Hardware digital & aritm\'etica modular, sucesiones & contadores c\'iclicos e \'indices circulares\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Caso integrador: an\'alisis de una red de servidores}
+Cuatro servidores $A, B, C, D$ con $E=\{(A, B),(A, C),(B, C),(C, D)\}$, conexiones bidireccionales del mismo costo.
+
+\begin{tmejemplo}{Cuatro preguntas}
+\begin{tmpasos}
+\item \textbf{\textquestiondown Cu\'antas conexiones?} $|E|=4$.
+\item \textbf{\textquestiondown Qui\'en tiene m\'as conexiones directas?} $C$, con grado 3.
+\item \textbf{\textquestiondown Hay camino de $A$ a $D$?} S\'i: $A\to C\to D$ (tambi\'en $A\to B\to C\to D$).
+\item \textbf{\textquestiondown Qu\'e pasa si falla $C$--$D$?} $D$ queda aislado: es una conexi\'on cr\'itica.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmsistemas}
+Un modelo matem\'atico sencillo detecta puntos cr\'iticos y fundamenta decisiones. En una red real hay que considerar tambi\'en la redundancia f\'isica, los protocolos, la capacidad y las condiciones de operaci\'on.
+\end{tmsistemas}
+
+\begin{tmejercicios}[Ejercicios 2.7 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:2-7}}]
+\label{ej:2-7}
+\begin{tmlista}
+\item \tmbasico\ En el caso integrador, \textquestiondown cu\'antas aristas habr\'ia que agregar para que $D$ tenga dos conexiones?
+\item \tmmedio\ Una red tiene 4 servidores y se desea una conexi\'on entre cada par. \textquestiondown Cu\'antos cables hacen falta?
+\item \tmmedio\ Si cada cable puede fallar o no (2 estados), \textquestiondown cu\'antos estados distintos tiene una red con 6 cables?
+\item \tmdificil\ Propone una situaci\'on donde combines un grafo con aritm\'etica modular (por ejemplo, rutas circulares).
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{2}{Resuelve el caso integrador en el laboratorio: identifica el enlace cr\'itico de la red.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Un problema real mezcla varias herramientas: modelo con grafos, conteo para los casos, modular para ciclos.
+\item Detectar conexiones cr\'iticas es una aplicaci\'on directa de los grafos.
+\item El modelo matem\'atico simplifica; la realidad agrega protocolos, capacidad y redundancia.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\clearpage
+\section{Actividades de cierre del cap\'itulo}
+\label{sec:2-8}
+
+\subsection{Mapa mental}
+\tmmapa{Matem\'atica discreta}{{Conteo\\$N=n_1n_2\cdots n_k$},{Combinatoria\\$P(n, r)$ y $\binom nr$},{Recurrencias\\$2T(n/2)+cn$},{Primos\\Euclides y RSA},{Modular\\$a\equiv b\pmod m$},{Grafos\\grado y Dijkstra}}
+
+\subsection{Hoja de f\'ormulas}
+\begin{center}
+\begin{tabular}{|p{4.4cm}|p{8.2cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tema} & \textbf{F\'ormula}\\ \hline
+Aditivo / multiplicativo & $n_1+\cdots+n_k$ \quad / \quad $n_1\cdots n_k$\\ \hline
+Permutaci\'on / combinaci\'on & $\frac{n!}{(n-r)!}$ \quad / \quad $\frac{n!}{r!(n-r)!}$\\ \hline
+Aritm\'etica / geom\'etrica & $a_n=a_1+(n-1)d$ \quad / \quad $a_n=a_1r^{n-1}$\\ \hline
+Divide y vencer\'as & $T(n)=2T(n/2)+cn\Rightarrow\Theta(n\log n)$\\ \hline
+MCD y MCM & $\operatorname{MCD}(a, b)\operatorname{MCM}(a, b)=ab$\\ \hline
+RSA de juguete & $c=m^e\bmod n$, $m=c^d\bmod n$\\ \hline
+Grafos & $\sum\deg(v)=2|E|$\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Actividades}
+\begin{tmlista}
+\item \textbf{Conteo.} Calcula cu\'antas configuraciones existen con 4 navegadores, 2 sistemas operativos y 3 perfiles, todas v\'alidas.
+\item \textbf{Combinatoria.} \textquestiondown Cu\'antos grupos de 3 m\'odulos salen de un sistema de 7?
+\item \textbf{Recurrencias.} Analiza $T(n)=2T(n/2)+n$ y di qu\'e algoritmo puede tener ese patr\'on.
+\item \textbf{Teor\'ia de n\'umeros.} Calcula $\operatorname{MCD}(252, 105)$ con Euclides.
+\item \textbf{Aritm\'etica modular.} Un contador de m\'odulo 16 est\'a en 13. \textquestiondown Qu\'e estado alcanza tras 7 incrementos?
+\item \textbf{Grafos.} Representa una red de 6 dispositivos, halla sus grados y determina si todos est\'an conectados.
+\item \textbf{Ciberseguridad.} Explica c\'omo el tama\~no de un espacio de b\'usqueda ayuda a evaluar una pol\'itica de contrase\~nas y por qu\'e no basta.
+\item \textbf{Integraci\'on.} Propone una situaci\'on de Ingenier\'ia de Sistemas con al menos dos conceptos del cap\'itulo, formula el problema, resu\'elvelo y justifica las herramientas.
+\end{tmlista}
+
+\begin{tmsistemas}
+\textbf{Bibliograf\'ia inicial:} ``Matem'aticas para Ciencias de Computaci'on'' (Lehman, Leighton y Meyer, MIT OpenCourseWare); ``Matem'aticas Discretas: una introducci'on abierta'' (Levin); recursos criptogr\'aficos del NIST.
+\end{tmsistemas}
+
+\tmreto{2}{Cierre del cap\'itulo: completa las tres misiones del laboratorio (espacio de pruebas, contador modular y enlace cr\'itico) y acredita tus TortuPuntos.}
+
+\begin{tmquiz}[Autoevaluaci\'on 2]
+\label{quiz:2}
+\tmpreg{Con 3 navegadores, 2 sistemas y 4 perfiles hay}{9}{24}{12}{6}
+\tmpreg{$P(5, 3)$ vale}{10}{60}{120}{15}
+\tmpreg{$\binom83$ vale}{56}{24}{336}{8}
+\tmpreg{Con $a_n=a_{n-1}+3$ y $a_1=2$, $a_4$ vale}{8}{11}{14}{9}
+\tmpreg{$T(n)=2T(n/2)+cn$ es}{$\Theta(n)$}{$\Theta(n\log n)$}{$\Theta(n^2)$}{$\Theta(2^n)$}
+\tmpreg{$\operatorname{MCD}(48, 18)$ vale}{3}{6}{12}{9}
+\tmpreg{$17\bmod5$ vale}{2}{3}{1}{0}
+\tmpreg{$(7+1)\bmod8$ vale}{8}{1}{0}{7}
+\tmpreg{En $E=\{AB, AC, BC, CD\}$, el grado de $C$ es}{1}{2}{3}{4}
+\tmpreg{Dijkstra exige que los pesos sean}{negativos}{no negativos}{todos iguales}{enteros}
+\end{tmquiz}

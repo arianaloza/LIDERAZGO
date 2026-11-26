@@ -1,0 +1,107 @@
+% =====================================================================
+\tmcapitulo{tmNavy}{Veinte problemas que mezclan los cinco cap\'itulos, con respuestas al final.}{x}
+\chapter{Banco de repaso integrador}
+\markboth{Ap\'endice B: Banco de repaso}{}
+\tmgancho{Los ex\'amenes y los trabajos reales no avisan en qu\'e cap\'itulo est\'a el problema. Practica reconociendo qu\'e herramienta usar.}
+
+\begin{tmtip}Para cada problema, primero escribe \textbf{qu\'e herramienta} vas a usar (conteo, derivada, matriz\ldots) y luego resu\'elvelo. Reconocer el tipo de problema es la mitad del trabajo.\end{tmtip}
+
+\section*{Fundamentos}
+\begin{tmlista}
+\item \tmbasico\ Una plataforma tiene 150 usuarios: 90 usan modo oscuro, 70 usan notificaciones y 30 usan ambas. \textquestiondown Cu\'antos no usan ninguna?
+\item \tmmedio\ Niega: ``todo servidor activo tiene certificado v\'alido o est\'a en mantenimiento''.
+\item \tmmedio\ Demuestra que $7n^2+3n+1=O(n^2)$ hallando $c$ y $n_0$.
+\item \tmdificil\ Con $J=w_1^2+3w_2^2$, $w=(2, 1)$ y $\alpha=0{,}1$, calcula un paso de descenso del gradiente.
+\end{tmlista}
+
+\section*{Matem\'atica discreta}
+\begin{tmlista}[start=5]
+\item \tmbasico\ Una clave tiene 4 letras min\'usculas \textbf{distintas}. \textquestiondown Cu\'antas claves hay?
+\item \tmmedio\ De 9 desarrolladores se eligen 3 y luego uno de ellos es l\'ider. \textquestiondown De cu\'antas formas?
+\item \tmmedio\ Resuelve $T(n)=T(n-1)+2$ con $T(1)=3$ y calcula $T(10)$.
+\item \tmdificil\ Un \'indice circular de 12 posiciones est\'a en la 9 y avanza 20. \textquestiondown D\'onde termina? Calcula adem\'as $\operatorname{MCD}(360, 84)$.
+\end{tmlista}
+
+\section*{\'Algebra}
+\begin{tmlista}[start=9]
+\item \tmbasico\ Un plan cobra Bs 40 fijos m\'as Bs 1,5 por GB. Si pagaste Bs 100, \textquestiondown cu\'antos GB usaste?
+\item \tmmedio\ Resuelve $2x+3y=13$ y $x-y=-1$.
+\item \tmmedio\ Halla $\det\begin{bmatrix}2&1\\5&3\end{bmatrix}$ y su inversa.
+\item \tmdificil\ Con la clave de Hill $K=\begin{bmatrix}1&2\\3&5\end{bmatrix}$, comprueba que es v\'alida y cifra HI.
+\end{tmlista}
+
+\section*{C\'alculo}
+\begin{tmlista}[start=13]
+\item \tmbasico\ Calcula $\lim_{x\to2}\frac{x^3-8}{x-2}$.
+\item \tmmedio\ Deriva $f(x)=x^2e^{-x}$.
+\item \tmmedio\ Halla el m\'inimo de $f(x, y)=x^2+y^2-2x-4y+10$.
+\item \tmdificil\ La tasa de peticiones es $r(t)=3t+1$. Calcula las acumuladas entre $t=0$ y $t=4$.
+\end{tmlista}
+
+\section*{Probabilidad y estad\'istica}
+\begin{tmlista}[start=17]
+\item \tmbasico\ Dos servidores independientes fallan con probabilidad $0{,}05$ y $0{,}1$. \textquestiondown Probabilidad de que al menos uno falle?
+\item \tmmedio\ $X$ vale 1, 2, 3 con probabilidades $0{,}2$, $0{,}5$, $0{,}3$. Calcula $E[X]$.
+\item \tmmedio\ Binomial con $n=8$ y $p=0{,}25$: halla $E[X]$ y $\operatorname{Var}(X)$.
+\item \tmdificil\ Datos: $4, 8, 6, 5, 3, 10$. Calcula media, mediana y desviaci\'on est\'andar muestral.
+\end{tmlista}
+
+\begin{tmsistemas}
+\textbf{Respuestas del banco.} (1) $150-(90+70-30)=20$. (2) Existe un servidor activo sin certificado v\'alido y que no est\'a en mantenimiento. (3) $7n^2+3n+1\le11n^2$ para $n\ge1$: $c=11$, $n_0=1$. (4) $\nabla J=(4, 6)$ y $w'=(1{,}6;\ 0{,}4)$. (5) $26\cdot25\cdot24\cdot23=358\,800$. (6) $\binom93\cdot3=252$. (7) $T(n)=2n+1$ y $T(10)=21$. (8) $29\bmod12=5$ y $\operatorname{MCD}=12$. (9) $40$ GB. (10) $(2, 3)$. (11) $\det=1$ e inversa $\begin{bmatrix}3&-1\\-5&2\end{bmatrix}$. (12) $\det K=-1\equiv25$, coprimo con 26; HI $=(7, 8)\to(23, 61)\equiv(23, 9)=$ XJ. (13) $12$. (14) $e^{-x}(2x-x^2)$. (15) M\'inimo en $(1, 2)$ con valor $5$. (16) $\int_0^4(3t+1)\,dt=24+4=28$. (17) $1-0{,}95\cdot0{,}9=0{,}145$. (18) $2{,}1$. (19) $E=2$ y $\operatorname{Var}=1{,}5$. (20) Media $6$, mediana $5{,}5$, $s=\sqrt{\frac{34}{5}}\approx2{,}61$.
+\end{tmsistemas}
+
+% =====================================================================
+\tmcapitulo{tmNavy}{Un proyecto que usa las cinco ramas: tu entrega integradora.}{x}
+\chapter{Proyecto final integrador}
+\markboth{Ap\'endice C: Proyecto final}{}
+\tmgancho{\textquestiondown Y si construyes, paso a paso, el sistema de monitoreo inteligente de un cl\'uster usando todo lo que aprendiste?}
+
+\begin{tmdef}{Proyecto: sistema de monitoreo inteligente}
+Dise\~na y analiza un cl\'uster de servidores. Cada etapa usa un cap\'itulo del libro y entrega un resultado verificable. Se hace en equipos de 3 o 4 personas.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\scriptsize,rounded corners=4pt,inner sep=5pt,align=center,minimum width=2.1cm,text=white}]
+  \node[fill=tmAzul] (a) at (0,0) {1\\Modelar};
+  \node[fill=tmMorado] (b) at (2.6,0) {2\\Contar y\\conectar};
+  \node[fill=tmVerde] (c) at (5.2,0) {3\\Recursos y\\cifrado};
+  \node[fill=tmAmbar] (d) at (7.8,0) {4\\Optimizar};
+  \node[fill=tmCoral] (e) at (10.4,0) {5\\Medir y\\predecir};
+  \foreach \p/\q in {a/b,b/c,c/d,d/e}{\draw[-{Stealth},tmOro,line width=1.4pt] (\p) -- (\q);}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Las cinco etapas}
+\begin{center}
+\begin{tabular}{|c|p{4.4cm}|p{7.2cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Etapa} & \textbf{Qu\'e haces} & \textbf{Entregable}\\ \hline
+1 Fundamentos & Define los conjuntos de servidores (activos, en alerta, ca\'idos), las reglas de alerta con l\'ogica y la funci\'on de riesgo $R(c, i)$ & Reglas escritas con conectivos, simplificadas con De Morgan; gr\'afica de curvas de nivel del riesgo\\ \hline
+2 Discreta & Modela la red como grafo, cuenta configuraciones de despliegue y halla rutas & Matriz de adyacencia, grados, camino m\'as corto (Dijkstra) y enlace cr\'itico\\ \hline
+3 \'Algebra & Plantea el balance de recursos como $A\mathbf x=\mathbf b$ y cifra los registros (logs) con Hill & Soluci\'on del sistema con $\det A$, y un mensaje cifrado y descifrado\\ \hline
+4 C\'alculo & Optimiza el n\'umero de servidores e integra la tasa de peticiones & Punto \'optimo con $C''$ y peticiones acumuladas en un intervalo\\ \hline
+5 Probabilidad & Calcula la disponibilidad con r\'eplicas, modela llegadas con Poisson y analiza las latencias & Disponibilidad, $P(X=k)$, media, mediana, percentiles y una recta de regresi\'on\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Datos de partida sugeridos}
+\begin{tmsistemas}
+Cl\'uster de 8 servidores con $R(c, i)=0{,}5c+10i$; red como la de la secci\'on 2.7; recursos de 17 n\'ucleos, 23 GB y 21 centenas de GB de disco; costo $C(n)=2n+\frac{800}{n}$; tasa $r(t)=4t+2$; r\'eplicas con probabilidad de fallo $0{,}1$; latencias $N(200, 20^2)$ ms.
+\end{tmsistemas}
+
+\subsection{R\'ubrica}
+\begin{center}
+\begin{tabular}{|p{5.8cm}|c|p{5.2cm}|}
+\hline
+\rowcolor{tmNavy}\textcolor{white}{\textbf{Criterio}} & \textcolor{white}{\textbf{Peso}} & \textcolor{white}{\textbf{Qu\'e se valora}}\\ \hline
+Correcci\'on matem\'atica & 35\% & Planteamiento y c\'alculos verificados\\ \hline
+Aplicaci\'on a sistemas & 25\% & Interpretaci\'on en el contexto del cl\'uster\\ \hline
+C\'odigo en Python & 15\% & Reproduce los resultados\\ \hline
+Retos TortuMath & 10\% & Misiones completadas en los 4 laboratorios\\ \hline
+Presentaci\'on (5 min) & 15\% & Claridad y uso de gr\'aficos\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmcuidado}Un resultado sin comprobaci\'on vale la mitad. En cada etapa incluye la verificaci\'on (por ejemplo, $A\mathbf x=\mathbf b$ con tu soluci\'on, o $C'(x)=0$).\end{tmcuidado}
+
+\tmreto{4}{Antes de entregar, repasa los laboratorios: cada misi\'on valida un resultado de tu proyecto (l\'imite, optimizaci\'on e integral acumulada).}

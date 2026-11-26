@@ -1,0 +1,134 @@
+\renewcommand{\chaptername}{Ap\'endice}
+\titleformat{\chapter}[block]{\normalfont}{}{0pt}{\tmchaphead}
+\tmcapitulo{tmNavy}{Respuestas, definiciones y el mapa para llegar a los retos de TortuMath.}{x}
+
+\chapter{Respuestas a ejercicios seleccionados}
+\markboth{Ap\'endice A: Respuestas}{}
+\tmgancho{Intenta cada ejercicio \textbf{antes} de mirar la respuesta. Si no te sale, vuelve al ejemplo resuelto de la secci\'on.}
+
+\input{capitulos/resp1}
+\medskip
+\input{capitulos/resp2}
+\medskip
+\input{capitulos/resp3}
+\medskip
+\input{capitulos/resp4}
+\medskip
+\input{capitulos/resp5}
+
+\input{capitulos/extras}
+\input{capitulos/extras2}
+
+% =====================================================================
+\tmcapitulo{tmNavy}{Los t\'erminos clave del libro, explicados en una l\'inea.}{x}
+\chapter{Glosario}
+\markboth{Ap\'endice F: Glosario}{}
+
+\begin{multicols}{2}
+\raggedright
+\sffamily\small
+\textbf{Antiderivada.} Funci\'on cuya derivada es la dada.
+
+\textbf{Aritm\'etica modular.} Aritm\'etica de residuos al dividir entre un m\'odulo.
+
+\textbf{Bayes.} Regla que actualiza una probabilidad con nueva evidencia.
+
+\textbf{Big-O.} Cota superior del crecimiento del costo de un algoritmo.
+
+\textbf{Cardinalidad.} N\'umero de elementos de un conjunto.
+
+\textbf{Cierre transitivo.} Relaci\'on m\'inima transitiva que contiene a otra.
+
+\textbf{Combinaci\'on.} Selecci\'on sin importar el orden.
+
+\textbf{Cofactor.} Menor con signo $(-1)^{i+j}$; sirve para Laplace.
+
+\textbf{Correlaci\'on.} Medida $r\in[-1, 1]$ de relaci\'on lineal.
+
+\textbf{De Morgan.} Leyes que niegan conjunciones y disyunciones.
+
+\textbf{Derivada.} Tasa de cambio instant\'anea; pendiente de la tangente.
+
+\textbf{Determinante.} N\'umero que indica si una matriz es invertible.
+
+\textbf{Discriminante.} $\Delta=b^2-4ac$; anticipa las ra\'ices.
+
+\textbf{Digrafo.} Grafo dirigido.
+
+\textbf{Distribuci\'on normal.} Campana definida por $\mu$ y $\sigma$.
+
+\textbf{Divisibilidad.} $a=bk$ para alg\'un entero $k$.
+
+\textbf{Esperanza.} Valor promedio de una variable aleatoria.
+
+\textbf{Factorial.} $n!=n(n-1)\cdots1$.
+
+\textbf{Funci\'on biyectiva.} Inyectiva y sobreyectiva a la vez.
+
+\textbf{Gauss.} M\'etodo de eliminaci\'on por filas.
+
+\textbf{Gradiente.} Vector de derivadas parciales; apunta al m\'aximo crecimiento.
+
+\textbf{Grafo.} Par $(V, E)$ de v\'ertices y aristas.
+
+\textbf{Hash.} Funci\'on que mapea datos a un valor de tama\~no fijo.
+
+\textbf{Inversa (matriz).} $A^{-1}$ con $AA^{-1}=I$.
+
+\textbf{Integral.} Acumulaci\'on; \'area bajo la curva.
+
+\textbf{L\'imite.} Valor al que se acerca $f(x)$ cuando $x\to a$.
+
+\textbf{MCD.} Mayor divisor com\'un de dos enteros.
+
+\textbf{Matriz.} Tabla de $m$ filas y $n$ columnas.
+
+\textbf{Mediana.} Valor central de datos ordenados.
+
+\textbf{Permutaci\'on.} Selecci\'on donde el orden importa.
+
+\textbf{Poisson.} Distribuci\'on de eventos por intervalo con tasa $\lambda$.
+
+\textbf{Primo.} Entero $>1$ con solo dos divisores positivos.
+
+\textbf{Proposici\'on.} Enunciado verdadero o falso.
+
+\textbf{Rango.} N\'umero de filas no nulas tras escalonar.
+
+\textbf{Recurrencia.} Definici\'on de un t\'ermino por los anteriores.
+
+\textbf{Regresi\'on lineal.} Recta de m\'inimos cuadrados $\hat y=a+bx$.
+
+\textbf{Relaci\'on de equivalencia.} Reflexiva, sim\'etrica y transitiva.
+
+\textbf{Riemann.} Suma de rect\'angulos que aproxima una integral.
+
+\textbf{Sucesi\'on.} Lista ordenada de valores que sigue una regla.
+
+\textbf{Varianza.} Promedio de las desviaciones al cuadrado.
+\end{multicols}
+
+% =====================================================================
+\tmcapitulo{tmNavy}{Escanea, resuelve y acumula TortuPuntos.}{x}
+\chapter{Mapa TortuMath}
+\markboth{Ap\'endice G: Mapa TortuMath}{}
+\tmgancho{Cada cap\'itulo tiene su propio laboratorio interactivo. Escanea el QR o escribe la direcci\'on.}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|c|p{3.2cm}|p{5.4cm}|c|}
+\hline
+\rowcolor{tmNavy}\textcolor{white}{\textbf{Cap.}} & \textcolor{white}{\textbf{Tema}} & \textcolor{white}{\textbf{Enlace}} & \textcolor{white}{\textbf{QR}}\\ \hline
+1 & Fundamentos matem\'aticos & \texttt{\scriptsize\tmurlbr{1}} & \qrcode[height=2cm]{\tmurl{1}}\\ \hline
+2 & Matem\'atica discreta & \texttt{\scriptsize\tmurlbr{2}} & \qrcode[height=2cm]{\tmurl{2}}\\ \hline
+3 & \'Algebra & \texttt{\scriptsize\tmurlbr{3}} & \qrcode[height=2cm]{\tmurl{3}}\\ \hline
+4 & C\'alculo & \texttt{\scriptsize\tmurlbr{4}} & \qrcode[height=2cm]{\tmurl{4}}\\ \hline
+5 & Probabilidad y estad\'istica & \texttt{\scriptsize\tmurlbr{5}}\newline{\footnotesize (pendiente de publicaci\'on)} & \qrcode[height=2cm]{\tmurl{5}}\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmtip}Tambi\'en puedes entrar desde la p\'agina principal de la plataforma: \texttt{https://isaccmealla.github.io/TortuMath/}\end{tmtip}
+
+\begin{tmsistemas}
+\textbf{Fuentes para seguir aprendiendo:} ``Matem\'aticas para Ciencias de Computaci\'on'' (Lehman, Leighton y Meyer, MIT OpenCourseWare); ``Matem\'aticas Discretas: una introducci\'on abierta'' (Levin); recursos de criptograf\'ia del NIST (\texttt{nist.gov/cryptography}).
+\end{tmsistemas}

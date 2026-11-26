@@ -1,0 +1,692 @@
+\tmcapitulo{tmAzul}{Conjuntos, l\'ogica, relaciones y funciones: el lenguaje con el que piensan las computadoras.}{x}
+\chapter{Fundamentos matem\'aticos}
+\label{cap:fundamentos}
+
+\begin{tmsistemas}
+Bases de datos, lenguajes formales, circuitos l\'ogicos, complejidad de algoritmos e inteligencia artificial se apoyan en cinco ideas: conjuntos, l\'ogica, relaciones, funciones y funciones de varias variables.
+\end{tmsistemas}
+
+\begin{center}
+\begin{tabular}{|p{3.6cm}|p{5.2cm}|p{4.2cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tema} & \textbf{Qu\'e aprender\'as} & \textbf{D\'onde se usa}\\ \hline
+1.1 Conjuntos & Operar colecciones sin repetidos & SQL, \texttt{set} en Python\\ \hline
+1.2 L\'ogica & Razonar con V y F & \texttt{if}, circuitos, pruebas\\ \hline
+1.3 Relaciones & Conectar elementos entre s\'i & Bases de datos, grafos\\ \hline
+1.4 Funciones & Transformar y medir algoritmos & Big-O, hash\\ \hline
+1.5 Multivariables & Optimizar con varias variables & IA, descenso del gradiente\\ \hline
+\end{tabular}
+\end{center}
+
+% =====================================================================
+\section{Conjuntos}
+\label{sec:1-1}
+\tmgancho{\textquestiondown C\'omo sabe una base de datos cu\'antos usuarios \'unicos tiene, sin contar a nadie dos veces?}
+
+\begin{tmconcepto}{qu\'e es un conjunto}
+Un conjunto es una bolsa de cosas \textbf{distintas}: no importa el orden y no hay repetidos. Lo \'unico que preguntas es: \textquestiondown est\'a o no est\'a?
+\end{tmconcepto}
+
+\tmcomo{hallar $A\cup B$, $A\cap B$ y $A\setminus B$}{{Escribe $A$ y $B$ por extensi\'on},{Marca los elementos comunes: $A\cap B$},{Junta todo sin repetir: $A\cup B$},{A $A$ qu\'itale lo com\'un: $A\setminus B$}}
+
+\subsection{Qu\'e es un conjunto}
+\begin{tmdef}{Conjunto}
+Colecci\'on bien definida de objetos distintos. Si $x$ pertenece a $A$ se escribe $x\in A$; si no, $x\notin A$.
+\end{tmdef}
+
+\begin{center}
+\begin{tabular}{|p{4.6cm}|p{8cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Forma} & \textbf{Ejemplo}\\ \hline
+Por extensi\'on (lista todo) & $A=\{1, 2, 3, 4, 5\}$\\ \hline
+Por comprensi\'on (una regla) & $B=\{x\in\mathbb Z^+\mid \exists k\,(x=3k)\wedge x\le15\}=\{3, 6, 9, 12, 15\}$\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmejemplo}{\textquestiondown Est\'a bien definido?}
+\begin{tmpasos}
+\item $A=\{\text{estudiantes matriculados en Programaci\'on 1}\}$: \textbf{s\'i}, el registro dice qui\'en pertenece.
+\item $B=\{\text{los lenguajes m\'as elegantes}\}$: \textbf{no}, la elegancia es subjetiva.
+\item $C=\{x\in\mathbb Z\mid x \text{ par positivo menor que } 10\}=\{2, 4, 6, 8\}$: \textbf{s\'i}.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmdef}{Conjuntos especiales}
+Vac\'io $\emptyset$ ($|\emptyset|=0$). Universal $U$ (todo lo que se considera). Cardinalidad $|A|$: n\'umero de elementos. Subconjunto: $A\subseteq B\iff\forall x\,(x\in A\to x\in B)$.
+\end{tmdef}
+
+\subsection{Operaciones}
+\begin{center}
+\begin{tabular}{ccccc}
+\tmvenn{union} & \tmvenn{inter} & \tmvenn{dif} & \tmvenn{comp} & \tmvenn{sim}\\[2pt]
+{\small$A\cup B$} & {\small$A\cap B$} & {\small$A\setminus B$} & {\small$A^c$} & {\small$A\,\Delta\,B$}\\
+{\footnotesize uni\'on} & {\footnotesize intersecci\'on} & {\footnotesize diferencia} & {\footnotesize complemento} & {\footnotesize dif. sim\'etrica}
+\end{tabular}
+\end{center}
+
+\begin{tmdef}{Doble inclusi\'on}
+$A=B\iff(A\subseteq B\wedge B\subseteq A)$. As\'i se demuestra que dos conjuntos son iguales.
+\end{tmdef}
+
+\begin{center}
+\begin{tabular}{|p{3.6cm}|p{9cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Ley} & \textbf{Expresi\'on}\\ \hline
+Conmutativa & $A\cup B=B\cup A$, $A\cap B=B\cap A$\\ \hline
+Distributiva & $A\cup(B\cap C)=(A\cup B)\cap(A\cup C)$\\ \hline
+Identidad / dominaci\'on & $A\cup\emptyset=A$, $A\cap U=A$, $A\cup U=U$, $A\cap\emptyset=\emptyset$\\ \hline
+Complemento & $A\cup A^c=U$, $A\cap A^c=\emptyset$, $(A^c)^c=A$\\ \hline
+De Morgan & $(A\cup B)^c=A^c\cap B^c$, $(A\cap B)^c=A^c\cup B^c$\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Conjunto potencia}
+\begin{tmdef}{Teorema: $|\mathcal P(A)|=2^n$}
+Si $|A|=n$, el conjunto de todos sus subconjuntos tiene $2^n$ elementos. Idea: cada elemento est\'a \textbf{dentro} o \textbf{fuera} de cada subconjunto, y eso se decide $n$ veces.
+\end{tmdef}
+
+\begin{tmejemplo}{Conjunto potencia de $S=\{a, b, c\}$}
+$|S|=3$, as\'i que habr\'a $2^3=8$ subconjuntos:
+\[\mathcal P(S)=\{\emptyset,\{a\},\{b\},\{c\},\{a, b\},\{a, c\},\{b, c\},\{a, b, c\}\}.\]
+\end{tmejemplo}
+
+\begin{tmdef}{Partici\'on}
+Colecci\'on de subconjuntos no vac\'ios $A_1,\dots,A_k$ de $A$, disjuntos dos a dos ($A_i\cap A_j=\emptyset$) y con $\bigcup A_i=A$.
+\end{tmdef}
+
+\subsection{Inclusi\'on--exclusi\'on}
+\tmformula{|A\cup B|=|A|+|B|-|A\cap B|}
+\tmformula{|A\cup B\cup C|=|A|+|B|+|C|-|A\cap B|-|A\cap C|-|B\cap C|+|A\cap B\cap C|}
+
+\begin{tmejemplo}{Auditor\'ia de 120 servidores}
+Fallo SSH ($S$): 60. BD desactualizada ($D$): 55. Firewall ($F$): 50. $S\cap D$: 25. $D\cap F$: 20. $S\cap F$: 18. Las tres: 10. \textquestiondown Cu\'antos est\'an libres de vulnerabilidades?
+\begin{tmpasos}
+\item $|S\cup D\cup F|=60+55+50-25-20-18+10=112$.
+\item Libres: $120-112=8$ servidores.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmsistemas}
+\textbf{K-Means} genera una partici\'on de los datos en cl\'usteres: cada punto cae en uno y solo uno. En Python, \texttt{set}; en Java, \texttt{HashSet}: verificar $x\in A$ cuesta $O(1)$ en promedio gracias al hash. En SQL: \texttt{UNION}, \texttt{INTERSECT}, \texttt{EXCEPT}.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+usuarios_activos = {"usr_101", "usr_102", "usr_103", "usr_104"}
+usuarios_premium = {"usr_102", "usr_104", "usr_105"}
+
+print(usuarios_activos - usuarios_premium)   # {'usr_101', 'usr_103'}
+print(usuarios_activos & usuarios_premium)   # {'usr_102', 'usr_104'}
+print(usuarios_activos ^ usuarios_premium)   # diferencia simetrica
+\end{tmcodigo}
+
+\begin{tmcuidado}$\{1, 1, 2\}=\{1, 2\}$: en un conjunto \textbf{no se repiten} elementos ni importa el orden. Y no confundas $a\in A$ (pertenencia) con $\{a\}\subseteq A$ (inclusi\'on).\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 1.1 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:1-1}}]
+\label{ej:1-1}
+\begin{tmlista}
+\item \tmbasico\ Con $A=\{1, 2, 3, 4\}$ y $B=\{3, 4, 5\}$, halla $A\cup B$, $A\cap B$ y $A\setminus B$.
+\item \tmbasico\ Escribe por comprensi\'on $\{2, 4, 6, 8, 10\}$.
+\item \tmbasico\ \textquestiondown Cu\'antos subconjuntos tiene un conjunto de 5 elementos?
+\item \tmmedio\ Con $U=\{1,\dots,7\}$, $A=\{1, 2, 3, 4, 5\}$ y $B=\{4, 5, 6\}$ halla $A^c$ y $A\,\Delta\,B$.
+\item \tmmedio\ Verifica $(A\cup B)^c=A^c\cap B^c$ con $A=\{1, 2\}$, $B=\{2, 3\}$ y $U=\{1, 2, 3, 4\}$.
+\item \tmmedio\ Si $|A|=30$, $|B|=25$ y $|A\cap B|=10$, halla $|A\cup B|$.
+\item \tmdificil\ De 200 usuarios, 120 usan la app web, 90 la m\'ovil y 40 ambas. \textquestiondown Cu\'antos no usan ninguna?
+\item \tmdificil\ \textquestiondown $\{\{1, 2\},\{3\},\{4, 5\}\}$ es partici\'on de $\{1,\dots,5\}$? \textquestiondown Y $\{\{1, 2\},\{2, 3\},\{4, 5\}\}$?
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{1}{Misi\'on 3 (Intersecci\'on Venn): usa un diagrama de Venn interactivo para hallar la intersecci\'on de dos conjuntos de servidores.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Un conjunto no repite elementos; se define por extensi\'on o por comprensi\'on.
+\item Uni\'on, intersecci\'on, diferencia y complemento; De Morgan intercambia $\cup$ y $\cap$.
+\item $|\mathcal P(A)|=2^n$ y $|A\cup B|=|A|+|B|-|A\cap B|$.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{L\'ogica matem\'atica}
+\label{sec:1-2}
+\tmgancho{\textquestiondown C\'omo decide un programa si debe dejarte entrar al sistema?}
+
+\begin{tmconcepto}{proposiciones y conectivos}
+Una proposici\'on es una afirmaci\'on que solo puede ser verdadera o falsa. Los conectivos (y, o, no, si\ldots entonces) son como \textbf{puertas l\'ogicas} que combinan esos valores.
+\end{tmconcepto}
+
+\tmcomo{armar una tabla de verdad}{{Lista las variables $p, q,\dots$},{Escribe todas las combinaciones V/F ($2^n$ filas)},{Eval\'ua por partes, de adentro hacia afuera},{Lee la \'ultima columna: \textquestiondown tautolog\'ia?}}
+
+\subsection{Proposiciones y conectivos}
+\begin{tmdef}{Proposici\'on}
+Enunciado que es verdadero (V) o falso (F), nunca ambos. Se nombran con $p, q, r,\dots$
+\end{tmdef}
+
+\begin{tmejemplo}{\textquestiondown Es proposici\'on?}
+\begin{tmpasos}
+\item ``TCP garantiza entrega ordenada'': s\'i (V). ``$2^8=256$'': s\'i (V).
+\item ``\textexclamdown Recompila el proyecto!'': no, es una orden.
+\item ``$x^2+2x-8=0$'': no, es un predicado abierto (depende de $x$).
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{|c|c||c|c|c|c|c|c|}
+\hline
+\rowcolor{tmAzul}\textcolor{white}{$p$} & \textcolor{white}{$q$} & \textcolor{white}{$\neg p$} & \textcolor{white}{$p\wedge q$} & \textcolor{white}{$p\vee q$} & \textcolor{white}{$p\oplus q$} & \textcolor{white}{$p\to q$} & \textcolor{white}{$p\leftrightarrow q$}\\ \hline
+V&V&F&V&V&F&V&V\\ \hline
+\rowcolor{tmAzulClaro}V&F&F&F&V&V&F&F\\ \hline
+F&V&V&F&V&V&V&F\\ \hline
+\rowcolor{tmAzulClaro}F&F&V&F&F&F&V&V\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{3.6cm}|p{9cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Conectivo} & \textbf{Se lee y cu\'ando es verdadero}\\ \hline
+$\neg p$ & ``no $p$'': invierte el valor\\ \hline
+$p\wedge q$ & ``$p$ y $q$'': solo si ambas son V\\ \hline
+$p\vee q$ & ``$p$ o $q$'': si al menos una es V\\ \hline
+$p\oplus q$ & o exclusivo: exactamente una es V\\ \hline
+$p\to q$ & ``si $p$ entonces $q$'': solo es F si $p$ es V y $q$ es F\\ \hline
+$p\leftrightarrow q$ & ``$p$ si y solo si $q$'': ambas con el mismo valor\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmdef}{Clasificaci\'on}
+Tautolog\'ia: siempre V ($p\vee\neg p$). Contradicci\'on: siempre F ($p\wedge\neg p$). Contingencia: a veces V y a veces F.
+\end{tmdef}
+
+\subsection{Equivalencias y De Morgan}
+\begin{tmdef}{Equivalencias clave}
+$\neg(p\wedge q)\equiv\neg p\vee\neg q$ \quad $\neg(p\vee q)\equiv\neg p\wedge\neg q$ \quad $(p\to q)\equiv(\neg p\vee q)$ \quad $(p\to q)\equiv(\neg q\to\neg p)$.
+\end{tmdef}
+
+\begin{tmtip}Para negar una condici\'on larga: cambia $\wedge$ por $\vee$ (o al rev\'es) y niega cada pieza. As\'i limpias cualquier \texttt{if}.\end{tmtip}
+
+\subsection{Reglas de inferencia}
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Regla} & \textbf{Premisas} & \textbf{Conclusi\'on}\\ \hline
+Modus Ponens & $p\to q,\ p$ & $q$\\ \hline
+Modus Tollens & $p\to q,\ \neg q$ & $\neg p$\\ \hline
+Silogismo hipot\'etico & $p\to q,\ q\to r$ & $p\to r$\\ \hline
+Silogismo disyuntivo & $p\vee q,\ \neg p$ & $q$\\ \hline
+Simplificaci\'on & $p\wedge q$ & $p$\\ \hline
+Adici\'on & $p$ & $p\vee q$\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmejemplo}{El pipeline de despliegue}
+$p$: hay error de sintaxis. $q$: no se genera el binario. $r$: el servidor detiene el pipeline. Premisas: $p\to q$, $q\to r$, $p$.
+\begin{tmpasos}
+\item $p\to r$ (silogismo hip\'otetico entre las premisas 1 y 2).
+\item $r$ (Modus Ponens entre $p\to r$ y $p$). El pipeline se detiene.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Formas normales y cuantificadores}
+\begin{tmdef}{FNC y FND}
+FNC: conjunci\'on de cl\'ausulas con disyunciones: $(p\vee\neg q\vee r)\wedge(\neg p\vee q)$. FND: disyunci\'on de conjunciones: $(p\wedge q)\vee(\neg p\wedge r\wedge\neg s)$. Se usan para demostradores autom\'aticos y circuitos.
+\end{tmdef}
+
+\begin{tmdef}{Cuantificadores}
+$\forall x\in D,\ P(x)$: para todo. $\exists x\in D,\ P(x)$: existe al menos uno. Negaci\'on: $\neg\forall x\,P(x)\equiv\exists x\,\neg P(x)$ y $\neg\exists x\,P(x)\equiv\forall x\,\neg P(x)$.
+\end{tmdef}
+
+\begin{tmsistemas}
+Refactoriza con De Morgan: \texttt{if (!(inactivo || !token))} equivale a \texttt{if (!inactivo \&\& token)}. Menos negaciones, menos errores. Lo mismo ocurre al dise\~nar puertas l\'ogicas AND, OR y NOT en un microprocesador.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+# Antes
+if not (sistema_inactivo or not token_valido):
+    procesar_transaccion()
+
+# Despues de De Morgan: not(A or B) == (not A) and (not B)
+if (not sistema_inactivo) and token_valido:
+    procesar_transaccion()
+\end{tmcodigo}
+
+\begin{tmcuidado}$p\to q$ es verdadera cuando $p$ es falsa (``de falso se sigue cualquier cosa''). Y la rec\'iproca $q\to p$ \textbf{no} es equivalente; la contrapositiva $\neg q\to\neg p$ s\'i.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 1.2 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:1-2}}]
+\label{ej:1-2}
+\begin{tmlista}
+\item \tmbasico\ \textquestiondown Son proposiciones? ``\textquestiondown Qu\'e hora es?'', ``7 es primo'', ``$x+1=5$''.
+\item \tmbasico\ Escribe la tabla de verdad de $p\to q$.
+\item \tmbasico\ Niega: ``todos los usuarios tienen token v\'alido''.
+\item \tmmedio\ Demuestra con tablas que $(p\to q)\equiv(\neg p\vee q)$.
+\item \tmmedio\ Simplifica con De Morgan: $\neg(p\wedge\neg q)$.
+\item \tmmedio\ Clasifica $p\vee\neg p$, $p\wedge\neg p$ y $p\to q$.
+\item \tmdificil\ Premisas: $p\to q$, $q\to r$, $\neg r$. Concluye $\neg p$ indicando la regla de cada paso.
+\item \tmdificil\ Simplifica la condici\'on \texttt{if (!(a \&\& !b))}.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{1}{Misi\'on 2 (Bloqueo De Morgan): aplica De Morgan para activar el bloqueo autom\'atico del servidor.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Una proposici\'on es V o F; los conectivos las combinan y las tablas de verdad las eval\'uan.
+\item De Morgan y $p\to q\equiv\neg p\vee q$ simplifican condiciones.
+\item Modus Ponens y Modus Tollens son las reglas de inferencia m\'as usadas.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Relaciones}
+\label{sec:1-3}
+\tmgancho{\textquestiondown C\'omo sabe una base de datos qu\'e usuario tiene qu\'e permiso?}
+
+\begin{tmconcepto}{qu\'e es una relaci\'on}
+Una relaci\'on es una lista de \textbf{parejas} que dice qui\'en est\'a conectado con qui\'en. Se puede ver como una tabla de 0 y 1 o como flechas entre puntos.
+\end{tmconcepto}
+
+\tmcomo{revisar si una relaci\'on es de equivalencia}{{\textquestiondown Reflexiva? La diagonal de la matriz son unos},{\textquestiondown Sim\'etrica? $M=M^T$},{\textquestiondown Transitiva? $x\to y\to z$ implica $x\to z$},{Si cumple las tres: es de equivalencia}}
+
+\subsection{Producto cartesiano y relaci\'on}
+\begin{tmdef}{Producto cartesiano y relaci\'on binaria}
+$A\times B=\{(a, b)\mid a\in A\wedge b\in B\}$ y $|A\times B|=|A|\cdot|B|$. Una relaci\'on $R$ de $A$ en $B$ es cualquier subconjunto $R\subseteq A\times B$; si $(a, b)\in R$ se escribe $aRb$.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\small}]
+  \foreach \i/\n in {0/1,1/2,2/3}{\node[circle,draw=tmAzul,fill=tmAzulClaro,minimum size=0.7cm] (a\n) at (0,-\i*1.0) {$\n$};}
+  \foreach \i/\n in {0/a,1/b,2/c}{\node[circle,draw=tmVerde,fill=tmVerdeClaro,minimum size=0.7cm] (b\n) at (3,-\i*1.0) {$\n$};}
+  \draw[-{Stealth},tmOro,line width=1.2pt] (a1) -- (ba);
+  \draw[-{Stealth},tmOro,line width=1.2pt] (a1) -- (bb);
+  \draw[-{Stealth},tmOro,line width=1.2pt] (a2) -- (bb);
+  \draw[-{Stealth},tmOro,line width=1.2pt] (a3) -- (bc);
+  \node at (0,0.8) {$A$}; \node at (3,0.8) {$B$};
+  \node[anchor=west,align=left] at (4.2,-1) {$R=\{(1, a),(1, b),(2, b),(3, c)\}$};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Matriz y digrafo}
+Sobre $A=\{a_1,\dots,a_n\}$ la \textbf{matriz booleana} es $M_R[i, j]=1$ si $(a_i, a_j)\in R$ y $0$ si no. El \textbf{digrafo} dibuja una flecha $x\to y$ por cada par $(x, y)\in R$.
+
+\subsection{Propiedades}
+\begin{center}
+\begin{tabular}{|l|p{6.2cm}|p{3.8cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Propiedad} & \textbf{Significa} & \textbf{En la matriz}\\ \hline
+Reflexiva & $\forall x,\ (x, x)\in R$ & diagonal de unos\\ \hline
+Irreflexiva & $\forall x,\ (x, x)\notin R$ & diagonal de ceros\\ \hline
+Sim\'etrica & $(x, y)\in R\to(y, x)\in R$ & $M=M^T$\\ \hline
+Antisim\'etrica & $(x, y),(y, x)\in R\to x=y$ & --\\ \hline
+Transitiva & $(x, y),(y, z)\in R\to(x, z)\in R$ & --\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Cierre transitivo: algoritmo de Warshall}
+El cierre transitivo $R^*$ agrega los pares m\'inimos para que $R$ sea transitiva. Costo: $O(n^3)$.
+
+\begin{tmcodigo}
+# W es la matriz M_R (n x n) de ceros y unos
+for k in range(n):
+    for i in range(n):
+        for j in range(n):
+            W[i][j] = W[i][j] or (W[i][k] and W[k][j])
+\end{tmcodigo}
+
+\begin{tmejemplo}{Carpetas alcanzables}
+Con $M_R=\begin{bmatrix}0&1&0\\0&0&1\\0&0&0\end{bmatrix}$ (1$\to$2 y 2$\to$3), en $k=2$ la cadena 1$\to$2$\to$3 crea la arista 1$\to$3:
+\[M_{R^*}=\begin{bmatrix}0&1&1\\0&0&1\\0&0&0\end{bmatrix}.\]
+\end{tmejemplo}
+
+\subsection{Equivalencia y orden parcial}
+\begin{tmdef}{Equivalencia y orden parcial}
+Equivalencia: reflexiva, sim\'etrica y transitiva; parte $A$ en clases $[a]=\{x\mid aRx\}$. Orden parcial (poset): reflexiva, antisim\'etrica y transitiva.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={circle,draw=tmAzul,fill=tmAzulClaro,minimum size=0.75cm,font=\sffamily\small}]
+  \node (n1) at (0,0) {1};
+  \node (n2) at (-1.2,1.3) {2};
+  \node (n3) at (1.2,1.3) {3};
+  \node (n6) at (0,2.6) {6};
+  \draw[tmOro,line width=1.2pt] (n1) -- (n2) -- (n6) -- (n3) -- (n1);
+  \node[draw=none,fill=none,anchor=west,align=left] at (2.4,1.3) {Diagrama de Hasse de la\\relaci\'on ``divide a'' en $\{1, 2, 3, 6\}$};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmsistemas}
+Una tabla relacional es un subconjunto del producto cartesiano de sus dominios. Una relaci\'on muchos-a-muchos entre usuarios y permisos se implementa as\'i:
+\end{tmsistemas}
+
+\begin{tmcodigo}
+CREATE TABLE Usuario_Permiso (
+    usuario_id INT NOT NULL,
+    permiso_id INT NOT NULL,
+    PRIMARY KEY (usuario_id, permiso_id),
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (permiso_id) REFERENCES Permisos(id) ON DELETE CASCADE
+);
+\end{tmcodigo}
+
+\begin{tmcuidado}Simetr\'ica y antisim\'etrica \textbf{no son opuestas}: la igualdad es ambas a la vez, y ``$<$'' no es ninguna de las dos (es antisim\'etrica solo de forma vac\'ia). Revisa siempre con un contraejemplo.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 1.3 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:1-3}}]
+\label{ej:1-3}
+\begin{tmlista}
+\item \tmbasico\ Si $|A|=2$ y $|B|=3$, \textquestiondown cu\'antos elementos tiene $A\times B$?
+\item \tmbasico\ \textquestiondown Es reflexiva $R=\{(1, 1),(2, 2),(3, 3),(1, 2)\}$ en $\{1, 2, 3\}$?
+\item \tmbasico\ \textquestiondown Es sim\'etrica $R=\{(1, 2)\}$?
+\item \tmmedio\ Escribe la matriz de $R=\{(1, 2),(2, 3),(3, 3)\}$ sobre $\{1, 2, 3\}$.
+\item \tmmedio\ Halla el cierre transitivo de $R=\{(1, 2),(2, 3),(3, 4)\}$.
+\item \tmmedio\ \textquestiondown ``Divide a'' es orden parcial en $\{1, 2, 3, 6\}$? Dibuja su Hasse.
+\item \tmdificil\ En $\{0,\dots,8\}$, $xRy$ si $x\equiv y\pmod 3$. Prueba que es de equivalencia y cuenta las clases.
+\item \tmdificil\ Aplica Warshall a $M=\begin{bmatrix}0&1&0\\0&0&1\\1&0&0\end{bmatrix}$.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{1}{Entra a la plataforma y comprueba las relaciones del sistema de permisos en el laboratorio del cap\'itulo.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Una relaci\'on es un subconjunto de $A\times B$; se representa con matriz o digrafo.
+\item Equivalencia = reflexiva + sim\'etrica + transitiva; orden parcial = reflexiva + antisim\'etrica + transitiva.
+\item Warshall calcula el cierre transitivo en $O(n^3)$.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Funciones}
+\label{sec:1-4}
+\tmgancho{\textquestiondown Por qu\'e un algoritmo con $n^2$ pasos se vuelve imposible de usar cuando $n$ crece?}
+
+\begin{tmconcepto}{la funci\'on como m\'aquina}
+Una funci\'on es una m\'aquina: entra un valor y sale \textbf{exactamente uno}. Si entradas distintas dan salidas distintas es inyectiva; si alcanza todo el codominio, es sobreyectiva.
+\end{tmconcepto}
+
+\tmcomo{demostrar que $f(n)=O(g(n))$}{{Escribe $f(n)$ y $g(n)$},{Acota cada t\'ermino de $f$ por un m\'ultiplo de $g$ para $n\ge n_0$},{Suma las constantes: ese es $c$},{Anota $c$ y $n_0$ y concluye}}
+
+\subsection{Definici\'on y clasificaci\'on}
+\begin{tmdef}{Funci\'on}
+$f:A\to B$ asigna a \textbf{cada} $x\in A$ \textbf{exactamente un} $y\in B$. Dominio: $A$. Codominio: $B$. Imagen: $\operatorname{Im}(f)=\{y\in B\mid\exists x,\ f(x)=y\}$.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.85,every node/.style={font=\sffamily\small}]
+  \foreach \x/\t in {0/Inyectiva,5/Sobreyectiva,10/Biyectiva}{
+    \node[font=\sffamily\bfseries] at (\x+1.2,1.1) {\t};}
+  % inyectiva
+  \foreach \i in {0,1,2}{\fill[tmAzul] (0,-\i*0.8) circle (0.1);}
+  \foreach \i in {0,1,2,3}{\fill[tmVerde] (2.4,-\i*0.8+0.4) circle (0.1);}
+  \draw[-{Stealth},tmOro,thick] (0,0) -- (2.4,0.4); \draw[-{Stealth},tmOro,thick] (0,-0.8) -- (2.4,-0.4); \draw[-{Stealth},tmOro,thick] (0,-1.6) -- (2.4,-1.2);
+  % sobreyectiva
+  \foreach \i in {0,1,2,3}{\fill[tmAzul] (5,-\i*0.8+0.4) circle (0.1);}
+  \foreach \i in {0,1,2}{\fill[tmVerde] (7.4,-\i*0.8) circle (0.1);}
+  \draw[-{Stealth},tmOro,thick] (5,0.4) -- (7.4,0); \draw[-{Stealth},tmOro,thick] (5,-0.4) -- (7.4,0); \draw[-{Stealth},tmOro,thick] (5,-1.2) -- (7.4,-0.8); \draw[-{Stealth},tmOro,thick] (5,-2.0) -- (7.4,-1.6);
+  % biyectiva
+  \foreach \i in {0,1,2}{\fill[tmAzul] (10,-\i*0.8) circle (0.1); \fill[tmVerde] (12.4,-\i*0.8) circle (0.1); \draw[-{Stealth},tmOro,thick] (10,-\i*0.8) -- (12.4,-\i*0.8);}
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tipo} & \textbf{Condici\'on} & \textbf{En palabras}\\ \hline
+Inyectiva & $f(x_1)=f(x_2)\Rightarrow x_1=x_2$ & entradas distintas, salidas distintas\\ \hline
+Sobreyectiva & $\operatorname{Im}(f)=B$ & nada queda suelto en $B$\\ \hline
+Biyectiva & ambas & tiene inversa $f^{-1}$\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmdef}{Composici\'on e inversa}
+$(f\circ g)(x)=f(g(x))$. Si $f$ es biyectiva existe $f^{-1}$ con $f^{-1}(f(x))=x$ y $f(f^{-1}(y))=y$.
+\end{tmdef}
+
+\begin{tmejemplo}{Composici\'on e inversa}
+Con $f(x)=2x+1$ y $g(x)=x^2$:
+\begin{tmpasos}
+\item $(f\circ g)(2)=f(4)=9$ y $(g\circ f)(2)=g(5)=25$. No son iguales.
+\item La inversa de $h(x)=3x-6$ es $h^{-1}(x)=\dfrac{x+6}{3}$.
+\item \textbf{Comprobaci\'on:} $h(h^{-1}(x))=3\cdot\frac{x+6}{3}-6=x$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmdef}{Funciones de las ciencias de la computaci\'on}
+Piso $\lfloor3{,}8\rfloor=3$. Techo $\lceil3{,}1\rceil=4$. M\'odulo $x\bmod n$: resto de la divisi\'on.
+\end{tmdef}
+
+\subsection{Complejidad algor\'itmica: Big-O}
+\begin{tmdef}{Notaci\'on O-grande}
+$f(n)=O(g(n))$ si existen $c>0$ y $n_0\ge1$ tales que $0\le f(n)\le c\cdot g(n)$ para todo $n\ge n_0$.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=10cm,height=6cm,xmin=0,xmax=8,ymin=0,ymax=60,axis lines=left,
+  xlabel={tama\~no $n$},ylabel={pasos},legend pos=north west,legend style={font=\sffamily\scriptsize},
+  label style={font=\sffamily\small},tick label style={font=\sffamily\scriptsize}]
+ \addplot[tmVerde,line width=1.4pt,domain=0.01:8,samples=60]{ln(x)*8};
+ \addplot[tmAzul,line width=1.4pt,domain=0:8]{x*2};
+ \addplot[tmAmbar,line width=1.4pt,domain=0.01:8,samples=60]{x*ln(x)*2};
+ \addplot[tmMorado,line width=1.4pt,domain=0:8,samples=60]{x^2};
+ \addplot[tmCoral,line width=1.4pt,domain=0:5.9,samples=60]{2^x};
+ \legend{$\log n$,$n$,$n\log n$,$n^2$,$2^n$}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|l|l|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Notaci\'on} & \textbf{Nombre} & \textbf{Ejemplo}\\ \hline
+$O(1)$ & constante & acceso por \'indice en un arreglo\\ \hline
+$O(\log n)$ & logar\'itmica & b\'usqueda binaria\\ \hline
+$O(n)$ & lineal & recorrer un arreglo\\ \hline
+$O(n\log n)$ & lineal-logar\'itmica & MergeSort, QuickSort\\ \hline
+$O(n^2)$ & cuadr\'atica & bucles anidados (BubbleSort)\\ \hline
+$O(2^n)$ & exponencial & subconjuntos por fuerza bruta\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmejemplo}{Demostrar que $3n^2+5n+12=O(n^2)$}
+\begin{tmpasos}
+\item Para $n\ge1$: $n\le n^2$ y $1\le n^2$.
+\item Entonces $3n^2+5n+12\le3n^2+5n^2+12n^2=20n^2$.
+\item Con $c=20$ y $n_0=1$ se cumple la definici\'on. Por tanto $f(n)=O(n^2)$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmsistemas}
+Una \textbf{funci\'on hash} (SHA-256) transforma datos de tama\~no arbitrario en un valor de tama\~no fijo. Debe ser casi inyectiva (pocas colisiones) y de un solo sentido (no se puede invertir). $O(2^n)$ es el motivo por el que probar todas las claves de un cifrado fuerte es inviable.
+\end{tmsistemas}
+
+\begin{tmcuidado}Big-O es una \textbf{cota superior}: $3n^2+5n+12$ tambi\'en es $O(n^3)$, pero lo \'util es la cota m\'as ajustada. Y se descartan constantes y t\'erminos menores.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 1.4 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:1-4}}]
+\label{ej:1-4}
+\begin{tmlista}
+\item \tmbasico\ Si $f(x)=2x+1$, calcula $f(3)$.
+\item \tmbasico\ Calcula $\lfloor3{,}8\rfloor$, $\lceil3{,}1\rceil$ y $17\bmod5$.
+\item \tmbasico\ \textquestiondown Es inyectiva $f(x)=x^2$ en $\mathbb R$? \textquestiondown Y en $[0,\infty)$?
+\item \tmmedio\ Con $f(x)=2x+1$ y $g(x)=x^2$, halla $(f\circ g)(2)$ y $(g\circ f)(2)$.
+\item \tmmedio\ Halla la inversa de $f(x)=3x-6$.
+\item \tmmedio\ Demuestra que $5n+3=O(n)$.
+\item \tmdificil\ Ordena de menor a mayor crecimiento: $n^2$, $\log n$, $2^n$, $n$, $n\log n$.
+\item \tmdificil\ Demuestra que $4n^2+10n+7=O(n^2)$.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{1}{Pon a prueba la complejidad de un algoritmo en el laboratorio y compara su crecimiento con el de otros.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Una funci\'on asigna a cada entrada una \'unica salida; inyectiva, sobreyectiva y biyectiva.
+\item Solo las biyectivas tienen inversa.
+\item Big-O compara el crecimiento: $\log n<n<n\log n<n^2<2^n$.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Funciones multivariables}
+\label{sec:1-5}
+\tmgancho{\textquestiondown C\'omo aprende una red neuronal a equivocarse cada vez menos?}
+
+\begin{tmconcepto}{el paisaje de dos variables}
+Con varias variables, la funci\'on es un \textbf{paisaje}: $x$ e $y$ son el mapa y $z$ es la altura. El gradiente se\~nala la subida m\'as empinada; para bajar, vas al lado contrario.
+\end{tmconcepto}
+
+\tmcomo{dar un paso de descenso del gradiente}{{Calcula las derivadas parciales de $J$},{Eval\'ualas en el punto actual $w$},{Multipl\'icalas por $\alpha$},{Resta: $w_{\text{nuevo}}=w-\alpha\nabla J$}}
+
+\tmformulanota{w_{\text{nuevo}}=w-\alpha\,\nabla J(w)}{punto actual y su gradiente (la subida m\'as empinada)}{$\alpha$: tasa de aprendizaje, el tama\~no del paso}
+
+\subsection{Dominio y niveles}
+\begin{tmdef}{Funci\'on multivariable}
+Asigna a cada tupla $(x_1,\dots,x_n)\in\mathbb R^n$ un n\'umero real: $z=f(x_1,\dots,x_n)$.
+\end{tmdef}
+
+\begin{tmejemplo}{Dominio en $\mathbb R^2$}
+Halla el dominio de $f(x, y)=\dfrac{\ln(y-x^2)}{\sqrt{16-x^2-y^2}}$.
+\begin{tmpasos}
+\item El logaritmo exige $y-x^2>0$: $y>x^2$ (sobre la par\'abola).
+\item La ra\'iz en el denominador exige $16-x^2-y^2>0$: $x^2+y^2<16$ (dentro del c\'irculo de radio 4).
+\item $\operatorname{Dom}(f)=\{(x, y)\mid y>x^2\wedge x^2+y^2<16\}$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.55]
+  \foreach \r/\c in {4/tmAzul!15,3/tmAzul!30,2/tmAzul!45,1/tmAzul!60}{\fill[\c,draw=tmAzul] (0,0) circle (\r);}
+  \draw[tmGris,-{Stealth}] (-4.6,0) -- (4.8,0) node[right,font=\sffamily\scriptsize] {$x$};
+  \draw[tmGris,-{Stealth}] (0,-4.6) -- (0,4.8) node[above,font=\sffamily\scriptsize] {$y$};
+  \node[font=\sffamily\scriptsize,text=white] at (0,0) {m\'in.};
+  \node[font=\sffamily\small,anchor=west] at (5.2,0) {curvas de nivel de $f(x, y)=x^2+y^2$:\ $f=k$};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmsistemas}
+Las \textbf{curvas de nivel} dibujan mapas de calor: en un servidor, $T(x, y)=k$ une los puntos de igual temperatura y revela puntos calientes antes de que falle el hardware.
+\end{tmsistemas}
+
+\subsection{Derivadas parciales y gradiente}
+\begin{tmdef}{Derivada parcial}
+$\dfrac{\partial f}{\partial x}=\lim_{\Delta x\to0}\dfrac{f(x+\Delta x, y)-f(x, y)}{\Delta x}$: se deriva respecto a una variable y las dem\'as se tratan como constantes.
+\end{tmdef}
+
+\begin{tmejemplo}{Derivadas parciales}
+$f(x, y)=4x^3y^2-7x^2+5y^4-9$.
+\[\frac{\partial f}{\partial x}=12x^2y^2-14x,\qquad\frac{\partial f}{\partial y}=8x^3y+20y^3.\]
+\end{tmejemplo}
+
+\begin{tmdef}{Gradiente}
+$\nabla f=\left(\dfrac{\partial f}{\partial x_1},\dots,\dfrac{\partial f}{\partial x_n}\right)$. Apunta en la direcci\'on de \textbf{m\'aximo crecimiento} de $f$ y $\|\nabla f\|$ es esa tasa m\'axima.
+\end{tmdef}
+
+\subsection{Descenso del gradiente}
+Para minimizar la p\'erdida $J(w_1,\dots,w_m)$ se avanza en sentido contrario al gradiente:
+\tmformula{w_i^{(k+1)}=w_i^{(k)}-\alpha\,\dfrac{\partial J}{\partial w_i}}
+donde $\alpha>0$ es la \textbf{tasa de aprendizaje}.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
+  \foreach \rx/\ry/\c in {4.2/2.4/tmAzul!12,3.2/1.8/tmAzul!22,2.2/1.25/tmAzul!34,1.3/0.75/tmAzul!48}{\fill[\c,draw=tmAzul] (0,0) ellipse [x radius=\rx,y radius=\ry];}
+  \draw[-{Stealth},tmCoral,line width=1.4pt] (3,1.2) -- (1.9,0.8) -- (1.1,0.45) -- (0.5,0.2) -- (0.15,0.06);
+  \foreach \p in {(3,1.2),(1.9,0.8),(1.1,0.45),(0.5,0.2)}{\fill[tmCoral] \p circle (0.08);}
+  \fill[tmVerde] (0,0) circle (0.12);
+  \node[font=\sffamily\scriptsize,text=tmVerde,below] at (0,-0.15) {m\'inimo};
+  \node[font=\sffamily\scriptsize,text=tmCoral] at (3.4,1.7) {inicio};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Un paso de descenso}
+$J(w_1, w_2)=w_1^2+w_2^2$, $w=(4, 2)$ y $\alpha=0{,}1$.
+\begin{tmpasos}
+\item $\nabla J=(2w_1, 2w_2)=(8, 4)$.
+\item $w^{(1)}=(4, 2)-0{,}1\,(8, 4)=(3{,}2;\ 1{,}6)$. Nos acercamos al m\'inimo $(0, 0)$.
+\item Un segundo paso da $(2{,}56;\ 1{,}28)$: cada paso multiplica por $0{,}8$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmcodigo}
+import numpy as np
+
+w = np.array([4.0, 2.0])
+alpha = 0.1
+for k in range(5):
+    grad = 2 * w                 # gradiente de J = w1^2 + w2^2
+    w = w - alpha * grad
+    print(k + 1, w)              # (3.2, 1.6), (2.56, 1.28), ...
+\end{tmcodigo}
+
+\begin{tmcuidado}Si $\alpha$ es demasiado grande el algoritmo \textbf{se pasa de largo} y diverge; si es demasiado peque\~no tarda una eternidad. En IA, elegir $\alpha$ es un arte.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 1.5 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:1-5}}]
+\label{ej:1-5}
+\begin{tmlista}
+\item \tmbasico\ Si $f(x, y)=x^2+y$, calcula $f(2, 3)$.
+\item \tmbasico\ Calcula $\partial f/\partial x$ de $f=3x^2y$.
+\item \tmbasico\ Halla $\nabla f$ de $f=x^2+y^2$ en el punto $(1, 2)$.
+\item \tmmedio\ Halla el dominio de $f=\sqrt{25-x^2-y^2}$.
+\item \tmmedio\ Calcula las parciales de $f=x^3y^2-4x+5y$.
+\item \tmmedio\ Describe la curva de nivel $f=x^2+y^2=4$.
+\item \tmdificil\ Un paso de descenso para $J=w_1^2+w_2^2$, $w=(4, 2)$ y $\alpha=0{,}1$.
+\item \tmdificil\ Con $R(c, i)=0{,}5c+10i$ e $i=3$, \textquestiondown desde qu\'e CPU $c$ se activa el modo seguro ($R>50$)?
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{1}{Misi\'on 1 (Zona Segura): calibra CPU e intentos fallidos para encontrar la zona segura $R\le50$.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Una funci\'on multivariable toma varios datos y da un n\'umero; sus curvas de nivel la dibujan.
+\item El gradiente apunta al m\'aximo crecimiento; $-\nabla J$ al descenso m\'as r\'apido.
+\item Descenso del gradiente: $w\leftarrow w-\alpha\nabla J$.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\clearpage
+\section*{Cierre del cap\'itulo 1}
+\addcontentsline{toc}{section}{Cierre del cap\'itulo 1}
+\subsection{Mapa mental}
+\tmmapa{Fundamentos}{{Conjuntos\\$\cup,\cap,\mathcal P(A)$},{L\'ogica\\De Morgan, inferencia},{Relaciones\\equivalencia, orden},{Funciones\\biyectiva, inversa},{Big-O\\$\log n<n<2^n$},{Gradiente\\descenso $w-\alpha\nabla J$}}
+
+\subsection{Hoja de f\'ormulas}
+\begin{center}
+\begin{tabular}{|p{4.2cm}|p{8.4cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tema} & \textbf{F\'ormula}\\ \hline
+Conjunto potencia & $|\mathcal P(A)|=2^n$\\ \hline
+Inclusi\'on--exclusi\'on & $|A\cup B|=|A|+|B|-|A\cap B|$\\ \hline
+De Morgan (l\'ogica) & $\neg(p\wedge q)\equiv\neg p\vee\neg q$\\ \hline
+Implicaci\'on & $p\to q\equiv\neg p\vee q$\\ \hline
+Producto cartesiano & $|A\times B|=|A|\cdot|B|$\\ \hline
+Big-O & $f(n)\le c\,g(n)$ para $n\ge n_0$\\ \hline
+Descenso del gradiente & $w\leftarrow w-\alpha\nabla J(w)$\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Actividades de cierre: mini proyecto}
+\begin{tmsistemas}
+\textbf{Sistema de autenticaci\'on y control de acceso.} Sea $U$ el conjunto de usuarios registrados, $A\subseteq U$ los administradores y $V(u)\in\{0, 1\}$ la validaci\'on de contrase\~na. El riesgo del servidor es $R(c, i)=0{,}5c+10i$, con $c$ el uso de CPU ($0\le c\le100$) e $i$ los intentos fallidos ($0\le i\le10$). Si $R>50$ entra en \textbf{Modo Seguro} y bloquea todo.
+\end{tmsistemas}
+
+\begin{tmlista}
+\item Expresa con conectivos la proposici\'on $P(u)$ que concede acceso bajo riesgo normal ($R\le50$).
+\item Aplica De Morgan para obtener la expresi\'on que activa el \textbf{bloqueo autom\'atico}.
+\item Calcula $\partial R/\partial c$ y $\partial R/\partial i$: \textquestiondown qu\'e par\'ametro acelera m\'as el riesgo?
+\item Verifica el comportamiento en el laboratorio de TortuMath.
+\end{tmlista}
+
+\tmreto{1}{Cierre del cap\'itulo: completa las tres misiones del laboratorio (zona segura, bloqueo De Morgan e intersecci\'on de Venn) y acredita tus TortuPuntos.}
+
+\begin{tmquiz}[Autoevaluaci\'on 1]
+\label{quiz:1}
+\tmpreg{Si $|A|=4$, $|\mathcal P(A)|$ es}{8}{16}{4}{10}
+\tmpreg{Con $|A|=20$, $|B|=15$ y $|A\cap B|=5$, $|A\cup B|$ vale}{30}{35}{40}{25}
+\tmpreg{$\neg(p\wedge q)$ equivale a}{$\neg p\wedge\neg q$}{$\neg p\vee\neg q$}{$p\vee q$}{$\neg p\vee q$}
+\tmpreg{$p\to q$ es falsa solo cuando}{$p$ F y $q$ V}{$p$ V y $q$ F}{ambas V}{ambas F}
+\tmpreg{Modus Tollens: de $p\to q$ y $\neg q$ se concluye}{$p$}{$q$}{$\neg p$}{$\neg q$}
+\tmpreg{Una relaci\'on reflexiva, sim\'etrica y transitiva es}{orden parcial}{de equivalencia}{una funci\'on}{inyectiva}
+\tmpreg{Una funci\'on biyectiva es}{solo inyectiva}{solo sobreyectiva}{inyectiva y sobreyectiva}{constante}
+\tmpreg{La cota m\'as ajustada de $3n^2+5n+12$ es}{$O(n)$}{$O(n^2)$}{$O(\log n)$}{$O(2^n)$}
+\tmpreg{El gradiente de $f$ apunta hacia}{el m\'aximo decrecimiento}{el m\'aximo crecimiento}{un nivel constante}{el origen}
+\tmpreg{El descenso del gradiente se mueve en la direcci\'on}{$+\nabla J$}{$-\nabla J$}{aleatoria}{perpendicular a $\nabla J$}
+\end{tmquiz}

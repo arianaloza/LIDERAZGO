@@ -1,0 +1,267 @@
+\ProvidesPackage{tortumath-diseno}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{tikz,qrcode,pifont,enumitem,xcolor,array,booktabs}
+\RequirePackage{colortbl,fancyhdr,titlesec,icomma,multicol,pgfplots,listings,amsmath,amssymb}
+\usetikzlibrary{babel,calc,shapes.geometric,shapes.misc,arrows.meta,positioning,decorations.pathmorphing,patterns,fit,backgrounds}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.16}
+
+%% ---------- Paleta ----------
+\definecolor{tmVerde}{HTML}{1F8A70}
+\definecolor{tmVerdeClaro}{HTML}{E6F4EF}
+\definecolor{tmAzul}{HTML}{2B5C8A}
+\definecolor{tmAzulClaro}{HTML}{E8F0F8}
+\definecolor{tmAmbar}{HTML}{E8A317}
+\definecolor{tmAmbarClaro}{HTML}{FDF3DC}
+\definecolor{tmCoral}{HTML}{D9534F}
+\definecolor{tmCoralClaro}{HTML}{FBE9E8}
+\definecolor{tmGris}{HTML}{555B61}
+\definecolor{tmNavy}{HTML}{212C42}
+\definecolor{tmCrema}{HTML}{F6EFDD}
+\definecolor{tmOro}{HTML}{C9A24B}
+\definecolor{tmMorado}{HTML}{6A4C93}
+
+%% ---------- URLs de TortuMath ----------
+\newcommand{\tmbase}{https://isaccmealla.github.io/TortuMath/\#/retos/}
+\newcommand{\tmurlbr}[1]{https://isaccmealla.github.io/\allowbreak TortuMath/\allowbreak\#/\allowbreak retos/\allowbreak capitulo-#1}
+\newcommand{\tmurl}[1]{https://isaccmealla.github.io/TortuMath/\#/retos/capitulo-#1}
+
+%% ---------- Mascota Tortu ----------
+\newcommand{\tortu}[2][1]{%
+\begin{tikzpicture}[scale=#1,baseline=(tc.south)]
+  \coordinate (tc) at (0,-0.25);
+  \fill[#2!80!black] (-0.95,-0.1) -- (-1.25,-0.05) -- (-0.95,0.12) -- cycle;
+  \foreach \x in {-0.6,0.5}{\fill[#2] (\x,-0.1) ellipse (0.2 and 0.22);}
+  \fill[#2] (1.0,0.12) circle (0.27);
+  \fill[#2] (0.8,0.0) rectangle (1.05,0.3);
+  \fill[white] (1.1,0.2) circle (0.075); \fill[black] (1.13,0.2) circle (0.035);
+  \draw[black,line width=0.5pt] (1.12,0.03) arc (-30:-120:0.1);
+  \fill[#2!65!black] (-0.9,0) arc[start angle=180,end angle=0,x radius=0.9,y radius=0.75] -- cycle;
+  \draw[white,opacity=0.6,line width=0.6pt] (0,0) -- (0,0.72) (-0.45,0) -- (-0.3,0.55) (0.45,0) -- (0.3,0.55);
+  \draw[white,opacity=0.6,line width=0.6pt] (-0.62,0.38) -- (0.62,0.38);
+\end{tikzpicture}}
+
+%% ---------- Espiral aurea (decoracion) ----------
+\newcommand{\tmespiral}[2]{% #1 = estilo del trazo, #2 = vueltas (grados)
+\draw[#1,domain=0:#2,samples=400,smooth,variable=\t]
+ plot ({6*exp(-0.3063*\t/90)*cos(\t)},{6*exp(-0.3063*\t/90)*sin(\t)});}
+
+%% ---------- Titulos ----------
+\RequirePackage{needspace}
+\newcommand{\sectionbreak}{\needspace{10\baselineskip}}
+\newcommand{\subsectionbreak}{\needspace{8\baselineskip}}
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside\ifodd\c@page\else\hbox{}\thispagestyle{empty}\newpage\fi\fi}
+\makeatother
+\setcounter{secnumdepth}{1}
+\newcommand{\tmbadge}[1]{\tikz[baseline=(n.base)]\node[fill=tmAzul,text=white,rounded corners=3pt,inner xsep=6pt,inner ysep=3pt,font=\sffamily\bfseries\large] (n) {#1};}
+\titleformat{\section}{\sffamily\bfseries\huge\color{tmNavy}}{\tmbadge{\thesection}}{0.7em}{}[{\color{tmOro}\titlerule[1.2pt]}]
+\titlespacing*{\section}{0pt}{0pt}{12pt}
+\titleformat{\subsection}{\sffamily\bfseries\Large\color{tmAzul}}{}{0pt}{{\color{tmAmbar}\ding{108}}\ }
+\titlespacing*{\subsection}{0pt}{16pt}{6pt}
+\titleformat{\subsubsection}{\sffamily\bfseries\large\color{tmVerde}}{}{0pt}{}
+\titlespacing*{\subsubsection}{0pt}{12pt}{4pt}
+
+%% Apertura de capitulo: macro \tmcapitulo{color}{gancho}{lista de temas}
+\newcommand{\tmcapcolor}{tmAzul}
+\newcommand{\tmcapgancho}{}
+\newcommand{\tmcapitulo}[3]{%
+ \renewcommand{\tmcapcolor}{#1}\renewcommand{\tmcapgancho}{#2}\def\tmcaptemas{#3}}
+\newcommand{\tmchaphead}[1]{%
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[tmNavy] (current page.north west) rectangle ([yshift=-8.2cm]current page.north east);
+  \begin{scope}[shift={([xshift=-1cm,yshift=-4.6cm]current page.north east)},rotate=20]
+    \tmespiral{tmOro,line width=0.9pt,opacity=0.55}{900}
+  \end{scope}
+  \fill[\tmcapcolor] ([yshift=-8.2cm]current page.north west) rectangle ([yshift=-8.45cm]current page.north east);
+  \node[anchor=north west,text=\tmcapcolor!60!white,font=\sffamily\bfseries\fontsize{96}{96}\selectfont,opacity=0.9]
+       at ([xshift=2.2cm,yshift=-1.2cm]current page.north west) {\thechapter};
+  \node[anchor=north west,text=tmCrema,font=\sffamily\bfseries\fontsize{30}{34}\selectfont,text width=0.62\paperwidth]
+       at ([xshift=2.5cm,yshift=-4.2cm]current page.north west) {#1};
+  \node[anchor=north west,text=tmOro,font=\sffamily\small,text width=0.6\paperwidth]
+       at ([xshift=2.5cm,yshift=-6.9cm]current page.north west) {\tmcapgancho};
+  \node[anchor=south east] at ([xshift=-1.6cm,yshift=-3.1cm]current page.north east) {\tortu[1.1]{\tmcapcolor}};
+  \node[anchor=south west] at ([xshift=4cm,yshift=-8.2cm]current page.north west) {\tortu[0.3]{tmCrema}};
+  \node[anchor=south west] at ([xshift=7cm,yshift=-8.2cm]current page.north west) {\tortu[0.4]{tmOro}};
+  \node[anchor=south west] at ([xshift=11cm,yshift=-8.2cm]current page.north west) {\tortu[0.5]{tmCrema}};
+  \node[anchor=south west] at ([xshift=15cm,yshift=-8.2cm]current page.north west) {\tortu[0.35]{tmOro}};
+\end{tikzpicture}\par}
+\titleformat{\chapter}[block]{\normalfont}{}{0pt}{\tmchaphead}
+\titlespacing*{\chapter}{0pt}{-1.5cm}{6.6cm}
+\titleformat{name=\chapter,numberless}[block]{\normalfont\sffamily\bfseries\Huge\color{tmNavy}}{}{0pt}{}[{\color{tmOro}\titlerule[2pt]}]
+\titlespacing*{name=\chapter,numberless}{0pt}{0pt}{20pt}
+
+%% ---------- Encabezados ----------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\headrule}{{\color{tmOro}\hrule width\headwidth height\headrulewidth}}
+\fancyhead[LE]{\sffamily\small\color{tmGris}\textbf{TortuMath} \,|\, \leftmark}
+\fancyhead[RO]{\sffamily\small\color{tmGris}\rightmark}
+\fancyfoot[LE]{\tortu[0.22]{tmVerde}\ \tikz[baseline=(n.base)]\node[circle,fill=tmAzul,text=white,inner sep=2.5pt,font=\sffamily\bfseries\scriptsize](n){\thepage};}
+\fancyfoot[RO]{\tikz[baseline=(n.base)]\node[circle,fill=tmAzul,text=white,inner sep=2.5pt,font=\sffamily\bfseries\scriptsize](n){\thepage};\ \tortu[0.22]{tmVerde}}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+ \fancyfoot[C]{\tortu[0.22]{tmVerde}\ \tikz[baseline=(n.base)]\node[circle,fill=tmAzul,text=white,inner sep=2.5pt,font=\sffamily\bfseries\scriptsize](n){\thepage};}}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+
+%% ---------- Cajas ----------
+\newtcolorbox{tmdef}[1]{enhanced,colback=tmAzulClaro,colframe=tmAzul,
+  fonttitle=\bfseries\sffamily,title={\ding{70}\; #1},boxrule=0pt,
+  titlerule=0pt,toprule=0pt,leftrule=3pt,arc=3pt,sharp corners=downhill,
+  colbacktitle=tmAzul,coltitle=white,attach boxed title to top left={yshift=-2mm,xshift=3mm},
+  boxed title style={arc=2pt,boxrule=0pt},top=4mm,before skip=12pt,after skip=10pt}
+
+\newtcolorbox{tmejemplo}[1]{enhanced,breakable,colback=white,colframe=tmVerde,
+  fonttitle=\bfseries\sffamily,title={\ding{51}\; Ejemplo: #1},
+  boxrule=0.8pt,arc=4pt,colbacktitle=tmVerde,coltitle=white,
+  before skip=12pt,after skip=10pt}
+
+\newtcolorbox{tmsistemas}{enhanced,colback=tmAmbarClaro,colframe=tmAmbar,
+  boxrule=0pt,leftrule=4pt,arc=3pt,left=14mm,
+  overlay={\node[anchor=west,circle,fill=tmAmbar,text=white,inner sep=2pt,font=\ttfamily\bfseries\small] at ([xshift=2.5mm]frame.west) {>\_};
+           \node[anchor=north west,font=\sffamily\bfseries\scriptsize,text=tmAmbar!70!black]
+           at ([xshift=9mm,yshift=-1.5mm]frame.north west) {EN SISTEMAS};},
+  top=5mm,before skip=12pt,after skip=10pt}
+
+\newtcolorbox{tmtip}{enhanced,colback=tmVerdeClaro,colframe=tmVerde,boxrule=0pt,
+  leftrule=4pt,arc=3pt,left=4mm,before skip=8pt,after skip=8pt,
+  title={\tortu[0.28]{tmVerde}\; Truco},fonttitle=\bfseries\sffamily\small,coltitle=tmVerde!70!black,
+  colbacktitle=tmVerdeClaro,attach title to upper={\ }}
+
+\newtcolorbox{tmcuidado}{enhanced,colback=tmCoralClaro,colframe=tmCoral,boxrule=0pt,
+  leftrule=4pt,arc=3pt,left=4mm,before skip=8pt,after skip=8pt,
+  title={\tortu[0.28]{tmCoral}\; Cuidado},fonttitle=\bfseries\sffamily\small,coltitle=tmCoral,
+  colbacktitle=tmCoralClaro,attach title to upper={\ }}
+
+%% Tortu dice: gancho de apertura de cada seccion
+\newcommand{\tmgancho}[1]{%
+\begin{tcolorbox}[enhanced,colback=tmCrema,colframe=tmOro,boxrule=0pt,leftrule=0pt,arc=6pt,
+  borderline={1pt}{0pt}{tmOro},before skip=6pt,after skip=10pt,left=2mm,right=2mm,top=1mm,bottom=1mm]
+\begin{minipage}[c]{0.14\linewidth}\centering\tortu[0.55]{tmVerde}\end{minipage}%
+\begin{minipage}[c]{0.83\linewidth}\sffamily\color{tmNavy}\textbf{Tortu pregunta:} #1\end{minipage}
+\end{tcolorbox}}
+
+%% Formula destacada
+\newcommand{\tmformula}[1]{\par\vspace{4pt}\noindent\hfil%
+\tcbox[colback=tmAmbarClaro,colframe=tmAmbar,boxrule=1pt,arc=4pt,on line]{$\displaystyle #1$}\hfil\par\vspace{6pt}}
+
+%% Pasos numerados con insignias
+\newlist{tmpasos}{enumerate}{1}
+\setlist[tmpasos]{label={\textcolor{tmVerde}{\ding{\numexpr171+\arabic*\relax}}},
+  leftmargin=*,itemsep=3pt,topsep=3pt}
+
+%% ---------- Reto con QR ----------  \tmreto{capitulo}{descripcion corta}
+\newcommand{\tmreto}[2]{%
+\begin{tcolorbox}[enhanced,colback=tmVerdeClaro,colframe=tmVerde,boxrule=0pt,
+  arc=6pt,borderline={1.4pt}{0pt}{tmVerde,dash pattern=on 5pt off 3pt},before skip=14pt,after skip=12pt]
+\begin{minipage}[c]{0.70\linewidth}
+  {\sffamily\bfseries\color{tmVerde}\Large \tortu[0.5]{tmVerde}\ RETO TortuMath}\\[2pt]
+  #2\\[4pt]
+  {\small\color{tmGris} Escanea el QR o abre:\\ \texttt{\footnotesize\tmurl{#1}}}\\[2pt]
+  {\small\bfseries Gana \textcolor{tmAmbar}{TortuPuntos}\;\ding{72}}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.24\linewidth}\centering
+  \qrcode[height=2.6cm]{\tmurl{#1}}
+\end{minipage}
+\end{tcolorbox}}
+
+%% ---------- Ejercicios por nivel ----------
+\newcommand{\tmbasico}{\textcolor{tmVerde}{\ding{72}}\textcolor{gray!50}{\ding{73}\ding{73}}}
+\newcommand{\tmmedio}{\textcolor{tmAmbar}{\ding{72}\ding{72}}\textcolor{gray!50}{\ding{73}}}
+\newcommand{\tmdificil}{\textcolor{tmCoral}{\ding{72}\ding{72}\ding{72}}}
+
+\newtcolorbox{tmejercicios}[1][Ejercicios]{enhanced,breakable,colback=white,colframe=tmAzul,
+  title={\ding{46}\; #1},fonttitle=\bfseries\sffamily,boxrule=0.8pt,arc=4pt,
+  colbacktitle=tmAzul,coltitle=white,before skip=12pt,after skip=12pt}
+\newlist{tmlista}{enumerate}{1}
+\setlist[tmlista]{label=\textbf{\textcolor{tmAzul}{\arabic*.}},leftmargin=*,itemsep=5pt}
+
+%% ---------- Resumen ----------
+\newtcolorbox{tmresumen}{enhanced,colback=tmAzulClaro,colframe=tmAzul,boxrule=0pt,
+  arc=4pt,title={\tortu[0.3]{tmCrema}\; Resumen en 1 minuto},fonttitle=\bfseries\sffamily,
+  colbacktitle=tmAzul,coltitle=white,before skip=12pt,after={\par\vspace{2pt}\centering\tmfin\par}}
+
+%% ---------- Codigo ----------
+\lstdefinestyle{tmcodigo}{basicstyle=\ttfamily\footnotesize,keywordstyle=\color{tmAzul}\bfseries,
+  commentstyle=\color{tmGris},stringstyle=\color{tmVerde},showstringspaces=false,
+  breaklines=true,columns=fullflexible,keepspaces=true,
+  morekeywords={import,from,def,return,for,in,if,else,print,lambda,range,while,as}}
+\newtcblisting{tmcodigo}{enhanced,listing only,listing options={style=tmcodigo},colback=tmNavy!4,
+  colframe=tmNavy,boxrule=0.6pt,arc=3pt,title={\ding{118}\; Python},fonttitle=\sffamily\bfseries\small,
+  colbacktitle=tmNavy,coltitle=white,before skip=10pt,after skip=10pt}
+
+%% ---------- Autoevaluacion ----------
+
+
+\newcounter{tmq}
+\newcommand{\tmpreg}[5]{\refstepcounter{tmq}\par\noindent\textbf{\textcolor{tmAzul}{P\thetmq.}} #1\par\nopagebreak
+ \begin{tabular}{@{}p{0.47\linewidth}p{0.47\linewidth}@{}}\textbf{a)} #2 & \textbf{b)} #3 \\ \textbf{c)} #4 & \textbf{d)} #5\end{tabular}\par\medskip}
+\newtcolorbox{tmquiz}[1][Autoevaluacion]{enhanced,breakable,colback=tmCrema,colframe=tmOro,boxrule=0.8pt,arc=5pt,
+  title={\ding{167}\; #1},fonttitle=\bfseries\sffamily,colbacktitle=tmOro,coltitle=tmNavy,
+  before skip=12pt,after skip=12pt,before upper={\setcounter{tmq}{0}}}
+
+%% ---------- Mapa mental: \tmmapa{Centro}{{rama1},{rama2},...,{rama6}} ----------
+\newcommand{\tmmapa}[2]{%
+\begin{center}\begin{tikzpicture}[every node/.style={align=center,font=\sffamily\small}]
+  \node[circle,fill=tmNavy,text=tmCrema,font=\sffamily\bfseries,inner sep=6pt,text width=2.4cm] (c) {#1};
+  \foreach \t [count=\i from 0] in {#2}{%
+    \pgfmathsetmacro{\ang}{90-60*\i}
+    \node[rounded corners=6pt,fill=tmAzulClaro,draw=tmAzul,line width=0.8pt,text width=3.1cm,inner sep=5pt]
+      (r\i) at (\ang:4.3cm and 3.1cm) {\t};
+    \draw[tmOro,line width=1.2pt] (c) -- (r\i);}
+\end{tikzpicture}\end{center}}
+
+%% ---------- Insignia de puntos ----------
+\newcommand{\tmpuntos}[1]{\tikz[baseline=(n.base)]\node[rounded corners=6pt,fill=tmAmbar,text=white,font=\sffamily\bfseries\small,inner sep=3pt](n){\ding{72}\ +#1 TortuPuntos};}
+
+%% ---------- Diagramas de Venn: \tmvenn{union|inter|dif|comp|sim} ----------
+\def\tmv@union{\fill[tmAzul!35] (0,0) circle (1); \fill[tmAzul!35] (1.3,0) circle (1);}
+\def\tmv@inter{\begin{scope}\clip (0,0) circle (1); \fill[tmAzul!35] (1.3,0) circle (1);\end{scope}}
+\def\tmv@dif{\fill[tmAzul!35] (0,0) circle (1); \begin{scope}\clip (1.3,0) circle (1); \fill[white] (-2,-2) rectangle (4,2);\end{scope}}
+\def\tmv@comp{\fill[tmAzul!35] (-1.5,-1.4) rectangle (2.8,1.4); \fill[white] (0,0) circle (1);}
+\def\tmv@sim{\tmv@union \begin{scope}\clip (0,0) circle (1); \fill[white] (1.3,0) circle (1);\end{scope}}
+\newcommand{\tmvenn}[1]{\begin{tikzpicture}[scale=0.5,baseline=(current bounding box.center)]
+  \csname tmv@#1\endcsname
+  \draw[tmNavy,line width=0.5pt] (-1.5,-1.4) rectangle (2.8,1.4);
+  \draw[tmNavy,line width=0.7pt] (0,0) circle (1) (1.3,0) circle (1);
+  \node[font=\sffamily\scriptsize] at (-0.55,0) {$A$}; \node[font=\sffamily\scriptsize] at (1.85,0) {$B$};
+\end{tikzpicture}}
+
+%% ---------- Huellas de tortuga al cerrar una seccion ----------
+\newcommand{\tmfin}{\textcolor{tmOro}{\ding{108}}\ \tortu[0.3]{tmVerde}\ \textcolor{tmOro}{\ding{108}}\ \tortu[0.22]{tmAzul}\ \textcolor{tmOro}{\ding{108}}\ \tortu[0.15]{tmAmbar}}
+
+%% ---------- Concepto: Tortu explica con palabras simples ----------
+\newtcolorbox{tmconcepto}[1]{enhanced,colback=tmCrema,colframe=tmOro,boxrule=1pt,arc=10pt,
+  left=21mm,right=3mm,top=2.5mm,bottom=2mm,before skip=14pt,after skip=10pt,
+  title={\ding{169}\; Concepto: #1},fonttitle=\sffamily\bfseries\small,coltitle=tmNavy,
+  colbacktitle=tmCrema,attach title to upper={\\},
+  fontupper=\sffamily\small\color{tmNavy},
+  overlay={\node at ([xshift=10.5mm]frame.west) {\tortu[0.55]{tmVerde}};
+           \draw[tmOro,line width=1pt,dotted] ([xshift=19mm,yshift=3mm]frame.south west) -- ([xshift=19mm,yshift=-3mm]frame.north west);}}
+
+%% ---------- Como se hace: pasos con flechas ----------
+\usetikzlibrary{chains}
+\newcommand{\tmcomo}[2]{%
+\begin{tcolorbox}[enhanced,colback=white,colframe=tmMorado,boxrule=0.8pt,arc=6pt,before skip=10pt,after skip=10pt,
+  title={\ding{228}\; C\'omo se hace: #1},fonttitle=\sffamily\bfseries\small,colbacktitle=tmMorado,coltitle=white,left=1mm,right=1mm]
+\centering
+\begin{tikzpicture}[start chain=going right,node distance=5mm,every node/.style={font=\sffamily\scriptsize},
+  every join/.style={-{Stealth},tmOro,line width=1.5pt}]
+ \foreach \t [count=\i] in {#2}{%
+  \node[on chain,join,draw=tmMorado,fill=tmMorado!8,rounded corners=5pt,text width=2.5cm,align=center,inner sep=4pt,minimum height=1.5cm]
+   {\textcolor{tmMorado}{\textbf{\i}}\\\t};}
+\end{tikzpicture}
+\end{tcolorbox}}
+
+%% ---------- Formula con burbujas y flechas ----------
+\newcommand{\tmformulanota}[3]{%
+\par\vspace{6pt}\begin{center}\begin{tikzpicture}[every node/.style={font=\sffamily\scriptsize}]
+ \node[draw=tmAmbar,fill=tmAmbarClaro,rounded corners=5pt,inner sep=7pt,line width=1pt,font=\normalsize] (f) {$\displaystyle #1$};
+ \node[draw=tmAzul,fill=tmAzulClaro,rounded corners=9pt,align=center,text width=3.7cm,inner sep=4pt] (a) at ([xshift=-3.6cm,yshift=-1.7cm]f.south) {#2};
+ \node[draw=tmVerde,fill=tmVerdeClaro,rounded corners=9pt,align=center,text width=3.7cm,inner sep=4pt] (b) at ([xshift=3.6cm,yshift=-1.7cm]f.south) {#3};
+ \draw[-{Stealth},tmAzul,line width=1.3pt] (a.north) to[bend left=18] ([xshift=-0.9cm]f.south);
+ \draw[-{Stealth},tmVerde,line width=1.3pt] (b.north) to[bend right=18] ([xshift=0.9cm]f.south);
+\end{tikzpicture}\end{center}\par\vspace{4pt}}
+
+\endinput

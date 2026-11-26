@@ -1,0 +1,599 @@
+\tmcapitulo{tmCoral}{Decidir con incertidumbre: medir el azar, resumir datos y aprender de ellos.}{x}
+\chapter{Probabilidad y estad\'istica}
+\label{cap:probabilidad}
+
+\begin{tmsistemas}
+Un filtro de spam, la disponibilidad de un servicio, el tr\'afico de una red, las pruebas A/B y todo el aprendizaje autom\'atico trabajan con incertidumbre. La probabilidad la modela; la estad\'istica la resume y aprende de los datos.
+\end{tmsistemas}
+
+\begin{center}
+\begin{tabular}{|p{3.6cm}|p{5.2cm}|p{4.0cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tema} & \textbf{Qu\'e aprender\'as} & \textbf{D\'onde se usa}\\ \hline
+5.1 Probabilidad & Medir el azar y condicionar & Spam, fallos, riesgos\\ \hline
+5.2 Variables aleatorias & Valor esperado y varianza & Costos, rendimiento\\ \hline
+5.3 Distribuciones & Binomial, Poisson, normal & Tr\'afico, latencias\\ \hline
+5.4 Estad\'istica descriptiva & Resumir un conjunto de datos & Monitoreo, m\'etricas\\ \hline
+5.5 An\'alisis de datos & Correlaci\'on y regresi\'on & IA, predicci\'on\\ \hline
+\end{tabular}
+\end{center}
+
+% TODO: URL cap\'itulo 5 -- el reto del cap\'itulo 5 todav\'ia no existe en TortuMath. Cuando se publique,
+% cambiar solo la macro \tmurl en tortumath-diseno.sty (todos los QR del cap\'itulo 5 se actualizan solos).
+
+% =====================================================================
+\section{Probabilidad}
+\label{sec:5-1}
+\tmgancho{Si un correo contiene la palabra ``gratis'', \textquestiondown qu\'e tan probable es que sea spam?}
+
+\begin{tmconcepto}{medir qu\'e tan posible es algo}
+La probabilidad mide \textbf{qu\'e tan posible} es algo, de 0 (imposible) a 1 (seguro).
+\end{tmconcepto}
+
+\tmcomo{aplicar Bayes}{{Define los eventos $A$ y $B$},{Calcula $P(B)$ con el \'arbol},{Multiplica $P(B\mid A)\,P(A)$},{Divide entre $P(B)$}}
+
+\tmformulanota{P(A\mid B)=\dfrac{P(B\mid A)\,P(A)}{P(B)}}{lo que quieres saber despu\'es de ver la evidencia}{lo que sab\'ias antes (probabilidad inicial)}
+
+\subsection{Espacio muestral, eventos y axiomas}
+\begin{tmdef}{Probabilidad}
+El \textbf{espacio muestral} $\Omega$ es el conjunto de resultados posibles; un \textbf{evento} es un subconjunto de $\Omega$. Si todos son equiprobables: $P(A)=\dfrac{\text{casos favorables}}{\text{casos posibles}}$, con $0\le P(A)\le1$ y $P(\Omega)=1$.
+\end{tmdef}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Regla} & \textbf{F\'ormula}\\ \hline
+Complemento & $P(A^c)=1-P(A)$\\ \hline
+Uni\'on & $P(A\cup B)=P(A)+P(B)-P(A\cap B)$\\ \hline
+Condicional & $P(B\mid A)=\dfrac{P(A\cap B)}{P(A)}$\\ \hline
+Independencia & $P(A\cap B)=P(A)\,P(B)$\\ \hline
+Bayes & $P(A\mid B)=\dfrac{P(B\mid A)\,P(A)}{P(B)}$\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmejemplo}{Dado y monedas}
+\begin{tmpasos}
+\item Dado: $P(\text{par})=\frac36=\frac12$.
+\item Dos monedas: $\Omega=\{CC, CS, SC, SS\}$ y $P(\text{dos caras})=\frac14$.
+\item Si $P(A)=0{,}3$, entonces $P(A^c)=0{,}7$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Disponibilidad con redundancia}
+Tres servidores independientes, cada uno falla con probabilidad $0{,}1$.
+\begin{tmpasos}
+\item Fallan los tres: $0{,}1\cdot0{,}1\cdot0{,}1=0{,}001$ (independencia).
+\item El servicio sigue activo si al menos uno funciona: $1-0{,}001=0{,}999$.
+\item Disponibilidad: \textbf{99,9\%}, frente a 90\% con un solo servidor.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Teorema de Bayes}
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\small},
+  nd/.style={draw=tmAzul,fill=tmAzulClaro,rounded corners=3pt,inner sep=4pt},
+  hoja/.style={draw=tmVerde,fill=tmVerdeClaro,rounded corners=3pt,inner sep=4pt}]
+  \node[nd] (r) at (0,0) {correo};
+  \node[nd] (s) at (3.6,1.6) {spam};
+  \node[nd] (n) at (3.6,-1.6) {no spam};
+  \node[hoja] (s1) at (8,2.4) {``gratis''\ \ $0{,}2\cdot0{,}6=0{,}12$};
+  \node[nd] (s2) at (8,1.0) {sin ``gratis''};
+  \node[hoja] (n1) at (8,-1.0) {``gratis''\ \ $0{,}8\cdot0{,}05=0{,}04$};
+  \node[nd] (n2) at (8,-2.4) {sin ``gratis''};
+  \draw[-{Stealth},tmOro,line width=1.1pt] (r) -- node[above left,font=\sffamily\scriptsize] {0,2} (s);
+  \draw[-{Stealth},tmOro,line width=1.1pt] (r) -- node[below left,font=\sffamily\scriptsize] {0,8} (n);
+  \draw[-{Stealth},tmOro,line width=1.1pt] (s) -- node[above,font=\sffamily\scriptsize] {0,6} (s1);
+  \draw[-{Stealth},tmOro,line width=1.1pt] (s) -- node[below,font=\sffamily\scriptsize] {0,4} (s2);
+  \draw[-{Stealth},tmOro,line width=1.1pt] (n) -- node[above,font=\sffamily\scriptsize] {0,05} (n1);
+  \draw[-{Stealth},tmOro,line width=1.1pt] (n) -- node[below,font=\sffamily\scriptsize] {0,95} (n2);
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Filtro de spam}
+$P(\text{spam})=0{,}2$, $P(\text{``gratis''}\mid\text{spam})=0{,}6$ y $P(\text{``gratis''}\mid\text{no spam})=0{,}05$.
+\begin{tmpasos}
+\item $P(\text{``gratis''})=0{,}2\cdot0{,}6+0{,}8\cdot0{,}05=0{,}12+0{,}04=0{,}16$.
+\item $P(\text{spam}\mid\text{``gratis''})=\dfrac{0{,}12}{0{,}16}=0{,}75$.
+\item Ver la palabra sube la sospecha de $20\%$ a $75\%$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmsistemas}
+Los filtros bayesianos de spam, el diagn\'ostico de fallos y la detecci\'on de intrusos usan Bayes: actualizan una probabilidad inicial con nueva evidencia. Las pruebas A/B y la fiabilidad de sistemas dependen de la independencia entre componentes.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+p_spam = 0.2
+p_gratis_spam, p_gratis_nospam = 0.6, 0.05
+
+p_gratis = p_spam*p_gratis_spam + (1 - p_spam)*p_gratis_nospam
+print(p_spam*p_gratis_spam / p_gratis)      # 0.75
+print(1 - 0.1**3)                           # 0.999 (disponibilidad)
+\end{tmcodigo}
+
+\begin{tmcuidado}$P(A\mid B)\neq P(B\mid A)$. Que un correo spam contenga ``gratis'' con 60\% no significa que un correo con ``gratis'' sea spam con 60\%: depende de cu\'anto spam hay.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 5.1 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:5-1}}]
+\label{ej:5-1}
+\begin{tmlista}
+\item \tmbasico\ Calcula $P(\text{par})$ al lanzar un dado.
+\item \tmbasico\ Al lanzar dos monedas, \textquestiondown cu\'al es $P(\text{dos caras})$?
+\item \tmbasico\ Si $P(A)=0{,}3$, halla $P(A^c)$.
+\item \tmmedio\ Con $P(A)=0{,}5$, $P(B)=0{,}4$ y $P(A\cap B)=0{,}2$, halla $P(A\cup B)$.
+\item \tmmedio\ Tres servidores independientes fallan con probabilidad $0{,}1$ cada uno. \textquestiondown Cu\'al es la probabilidad de que fallen los tres?
+\item \tmmedio\ Con $P(A)=0{,}5$ y $P(A\cap B)=0{,}2$, halla $P(B\mid A)$.
+\item \tmdificil\ Aplica Bayes al filtro de spam con los datos del ejemplo.
+\item \tmdificil\ Una bolsa tiene 5 bolas rojas y 3 azules. Se sacan 2 sin reemplazo. \textquestiondown $P(\text{ambas rojas})$?
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{5}{Reto del cap\'itulo 5: calcula la probabilidad de disponibilidad de un cl\'uster con servidores redundantes.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item $P(A)=$ favorables $/$ posibles; $P(A^c)=1-P(A)$.
+\item Condicional: $P(B\mid A)=P(A\cap B)/P(A)$; independientes: se multiplican.
+\item Bayes actualiza una probabilidad con nueva evidencia.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Variables aleatorias}
+\label{sec:5-2}
+\tmgancho{Si un servidor puede fallar 0, 1 o 2 veces al d\'ia, \textquestiondown cu\'antas fallas esperas en promedio?}
+
+\begin{tmconcepto}{del azar a los n\'umeros}
+Una variable aleatoria convierte los resultados del azar en \textbf{n\'umeros}; la esperanza es el promedio a la larga.
+\end{tmconcepto}
+
+\tmcomo{calcular $E[X]$ y la varianza}{{Haz la tabla de $x$ y $P(x)$},{$E[X]=\sum x\,P(x)$},{$E[X^2]=\sum x^2\,P(x)$},{$\operatorname{Var}=E[X^2]-E[X]^2$}}
+
+\subsection{Discretas y continuas}
+\begin{tmdef}{Variable aleatoria}
+Funci\'on $X$ que asigna un n\'umero a cada resultado del azar. Es \textbf{discreta} si toma valores contables (n\'umero de fallos) y \textbf{continua} si toma cualquier valor de un intervalo (tiempo de respuesta). Su distribuci\'on se describe con $P(X=x)$ (discreta) o con una densidad $f(x)$ (continua).
+\end{tmdef}
+
+\subsection{Esperanza y varianza}
+\tmformula{E[X]=\sum_x x\,P(X=x)\qquad\operatorname{Var}(X)=E[X^2]-(E[X])^2\qquad\sigma=\sqrt{\operatorname{Var}(X)}}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[ybar,width=8cm,height=5cm,bar width=24pt,axis lines=left,ymin=0,ymax=0.65,xmin=-0.7,xmax=2.7,
+  xtick={0,1,2},ytick={0.2,0.4,0.6},xlabel={fallos $x$},ylabel={$P(X=x)$},label style={font=\sffamily\small},tick label style={font=\sffamily\scriptsize},
+  nodes near coords,nodes near coords style={font=\sffamily\scriptsize}]
+ \addplot[fill=tmCoral!70,draw=tmCoral] coordinates {(0,0.5) (1,0.3) (2,0.2)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Fallos por d\'ia}
+$P(0)=0{,}5$, $P(1)=0{,}3$, $P(2)=0{,}2$.
+\begin{tmpasos}
+\item $E[X]=0\cdot0{,}5+1\cdot0{,}3+2\cdot0{,}2=0{,}7$ fallos al d\'ia.
+\item $E[X^2]=0+0{,}3+4\cdot0{,}2=1{,}1$.
+\item $\operatorname{Var}(X)=1{,}1-0{,}7^2=0{,}61$ y $\sigma\approx0{,}78$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Un dado}
+$E[X]=\frac{1+2+3+4+5+6}6=3{,}5$ y $E[X^2]=\frac{91}6$, as\'i que $\operatorname{Var}(X)=\frac{91}6-\frac{49}4=\frac{35}{12}\approx2{,}917$.
+\end{tmejemplo}
+
+\begin{tmdef}{Propiedades lineales}
+$E[aX+b]=aE[X]+b$ y $\operatorname{Var}(aX+b)=a^2\operatorname{Var}(X)$. Sumar una constante no cambia la dispersi\'on.
+\end{tmdef}
+
+\begin{tmsistemas}
+\textbf{Costo esperado:} una consulta cuesta Bs 10 con probabilidad $0{,}7$ (usa la API de pago) y Bs 0 con $0{,}3$: $E=7$ Bs por consulta. \textbf{Riesgo:} dos servicios con el mismo promedio pero distinta varianza no son igual de confiables; la varianza mide qu\'e tan impredecible es el servicio.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+import numpy as np
+
+x = np.array([0, 1, 2])
+p = np.array([0.5, 0.3, 0.2])
+media = (x * p).sum()
+var = (x**2 * p).sum() - media**2
+print(media, var, var**0.5)      # 0.7  0.61  0.781...
+\end{tmcodigo}
+
+\begin{tmcuidado}El valor esperado \textbf{no es el valor m\'as probable} ni tiene por qu\'e ser un resultado posible: un dado tiene $E[X]=3{,}5$ y nunca sale 3,5.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 5.2 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:5-2}}]
+\label{ej:5-2}
+\begin{tmlista}
+\item \tmbasico\ Calcula $E[X]$ al lanzar un dado.
+\item \tmbasico\ Una moneda vale 1 si sale cara y 0 si sale sello. Calcula $E[X]$.
+\item \tmbasico\ Si $P(0)=0{,}4$, $P(1)=0{,}35$ y $X$ toma solo los valores 0, 1 y 2, \textquestiondown cu\'anto vale $P(2)$?
+\item \tmmedio\ Calcula $E[X]$ y $\operatorname{Var}(X)$ con $P(0)=0{,}5$, $P(1)=0{,}3$ y $P(2)=0{,}2$.
+\item \tmmedio\ Si $E[X]=4$ y $\operatorname{Var}(X)=2$, halla $E[3X+2]$ y $\operatorname{Var}(3X+2)$.
+\item \tmmedio\ Una consulta cuesta Bs 10 con probabilidad $0{,}7$ y Bs 0 con $0{,}3$. Calcula el costo esperado.
+\item \tmdificil\ Un boleto cuesta Bs 2 y paga Bs 100 con probabilidad $\frac1{100}$. \textquestiondown Cu\'al es la ganancia esperada?
+\item \tmdificil\ Verifica que para un dado $\operatorname{Var}(X)=E[X^2]-E[X]^2=\frac{35}{12}$.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{5}{Calcula el costo esperado de un servicio con dos niveles de tarifa y comp\'aralo con otro de igual promedio pero mayor varianza.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Una variable aleatoria asigna un n\'umero a cada resultado; puede ser discreta o continua.
+\item $E[X]=\sum xP(x)$ y $\operatorname{Var}=E[X^2]-E[X]^2$.
+\item $E[aX+b]=aE[X]+b$; $\operatorname{Var}(aX+b)=a^2\operatorname{Var}(X)$.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Distribuciones}
+\label{sec:5-3}
+\tmgancho{\textquestiondown Cu\'antas peticiones por segundo recibir\'a tu servidor, y qu\'e tan raro es que lleguen 10 de golpe?}
+
+\begin{tmconcepto}{moldes del azar}
+Una distribuci\'on es el \textbf{molde} de c\'omo se reparten las probabilidades: la binomial cuenta \'exitos, la de Poisson cuenta llegadas y la normal es la campana.
+\end{tmconcepto}
+
+\tmcomo{elegir la distribuci\'on}{{\textquestiondown Cuentas \'exitos en $n$ intentos? Binomial},{\textquestiondown Cuentas eventos por tiempo? Poisson},{\textquestiondown Medida continua y sim\'etrica? Normal},{Aplica su f\'ormula}}
+
+\subsection{Binomial}
+\begin{tmdef}{Distribuci\'on binomial}
+$n$ intentos independientes, cada uno con \'exito $p$. El n\'umero de \'exitos $X$ cumple $P(X=k)=\binom nk p^k(1-p)^{n-k}$, con $E[X]=np$ y $\operatorname{Var}(X)=np(1-p)$.
+\end{tmdef}
+
+\begin{tmejemplo}{Fallos en un lote}
+5 servidores, cada uno falla con $p=0{,}1$. $P(X=2)$:
+\[\binom52(0{,}1)^2(0{,}9)^3=10\cdot0{,}01\cdot0{,}729=0{,}0729.\]
+Fallos esperados: $np=0{,}5$.
+\end{tmejemplo}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[ybar,width=9cm,height=5cm,bar width=14pt,axis lines=left,ymin=0,ymax=0.65,xmin=-0.7,xmax=5.7,
+  xtick={0,1,2,3,4,5},xlabel={fallos $k$},ylabel={$P(X=k)$},label style={font=\sffamily\small},tick label style={font=\sffamily\scriptsize}]
+ \addplot[fill=tmAzul!70,draw=tmAzul] coordinates {(0,0.5905) (1,0.3281) (2,0.0729) (3,0.0081) (4,0.00045) (5,0.00001)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Poisson}
+\begin{tmdef}{Distribuci\'on de Poisson}
+Cuenta eventos en un intervalo con tasa promedio $\lambda$: $P(X=k)=\dfrac{e^{-\lambda}\lambda^k}{k!}$, con $E[X]=\operatorname{Var}(X)=\lambda$.
+\end{tmdef}
+
+\begin{tmejemplo}{Peticiones por segundo}
+$\lambda=3$ peticiones por segundo.
+\begin{tmpasos}
+\item $P(X=0)=e^{-3}\approx0{,}0498$ (un segundo sin peticiones es raro).
+\item $P(X=2)=\dfrac{e^{-3}\cdot9}{2}\approx0{,}2240$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Normal}
+\begin{tmdef}{Distribuci\'on normal}
+$X\sim N(\mu,\sigma^2)$ tiene forma de campana. Se estandariza con $Z=\dfrac{X-\mu}{\sigma}$. Regla emp\'irica: $68\%$ de los datos est\'a a menos de $1\sigma$ de $\mu$, $95\%$ a menos de $2\sigma$ y $99{,}7\%$ a menos de $3\sigma$.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=9cm,height=5cm,axis lines=left,xmin=-3.5,xmax=3.5,ymin=0,ymax=0.45,xtick={-3,-2,-1,0,1,2,3},
+  xticklabels={$-3\sigma$,$-2\sigma$,$-\sigma$,$\mu$,$\sigma$,$2\sigma$,$3\sigma$},ytick=\empty,
+  tick label style={font=\sffamily\scriptsize}]
+ \addplot[domain=-1:1,samples=50,fill=tmAmbar!45,draw=none] {exp(-x^2/2)/sqrt(2*pi)} \closedcycle;
+ \addplot[domain=-3.4:3.4,samples=80,tmAzul,line width=1.5pt] {exp(-x^2/2)/sqrt(2*pi)};
+ \node[font=\sffamily\bfseries\scriptsize] at (axis cs:0,0.18) {68\%};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Tiempo de respuesta}
+$X\sim N(200, 20^2)$ ms. \textquestiondown $P(X\le240)$?
+\begin{tmpasos}
+\item $z=\dfrac{240-200}{20}=2$.
+\item $P(Z\le2)\approx0{,}9772$: el $97{,}7\%$ de las respuestas tarda 240 ms o menos.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmsistemas}
+\textbf{Binomial:} fallos en un conjunto de servidores o aciertos de un clasificador. \textbf{Poisson:} llegadas de peticiones, paquetes o errores por unidad de tiempo; sirve para dimensionar capacidad. \textbf{Normal:} latencias, errores de medici\'on y, por el teorema central del l\'imite, promedios de muchas muestras.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+from math import comb, exp, factorial
+from scipy.stats import norm
+
+print(comb(5, 2) * 0.1**2 * 0.9**3)          # 0.0729
+print(exp(-3) * 3**2 / factorial(2))         # 0.2240
+print(norm.cdf(240, loc=200, scale=20))      # 0.9772
+\end{tmcodigo}
+
+\begin{tmcuidado}Binomial exige intentos \textbf{independientes} con la misma probabilidad. Si el fallo de un servidor hace m\'as probable el de otro, ya no es binomial.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 5.3 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:5-3}}]
+\label{ej:5-3}
+\begin{tmlista}
+\item \tmbasico\ Binomial con $n=4$, $p=0{,}5$: halla $P(X=2)$.
+\item \tmbasico\ Binomial con $n=10$, $p=0{,}3$: halla $E[X]$.
+\item \tmbasico\ En una normal est\'andar, \textquestiondown aproximadamente qu\'e probabilidad hay entre $-1$ y $1$?
+\item \tmmedio\ Binomial con $n=5$, $p=0{,}1$: halla $P(X=1)$.
+\item \tmmedio\ Poisson con $\lambda=2$: halla $P(X=0)$.
+\item \tmmedio\ Calcula el valor $z$ de 240 ms si $\mu=200$ y $\sigma=20$.
+\item \tmdificil\ Con $n=3$ y $p=0{,}1$, halla $P(X\ge1)$.
+\item \tmdificil\ Un servidor recibe en promedio 4 peticiones por segundo (Poisson). Halla $P(X=2)$.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{5}{Simula las peticiones de un servidor con una distribuci\'on de Poisson y estima la probabilidad de saturaci\'on.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Binomial: $n$ intentos con probabilidad $p$; Poisson: eventos por intervalo con tasa $\lambda$.
+\item Normal: estandariza con $z=\frac{x-\mu}\sigma$; regla 68--95--99,7.
+\item Verifica siempre las hip\'otesis (independencia, tasa constante).
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Estad\'istica descriptiva}
+\label{sec:5-4}
+\tmgancho{Tienes 10\,000 mediciones de latencia. \textquestiondown C\'omo las resumes con solo dos o tres n\'umeros?}
+
+\begin{tmconcepto}{mucho en pocos n\'umeros}
+La estad\'istica descriptiva resume miles de datos en pocos n\'umeros: \textbf{d\'onde est\'an} (centro) y \textbf{qu\'e tan dispersos} est\'an.
+\end{tmconcepto}
+
+\tmcomo{resumir un conjunto de datos}{{Ordena los datos},{Calcula media y mediana},{Calcula $s$ y el IQR},{Busca at\'ipicos con las cercas}}
+
+\subsection{Centro y dispersi\'on}
+\begin{center}
+\begin{tabular}{|l|p{4.4cm}|p{4.6cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Medida} & \textbf{F\'ormula} & \textbf{Para qu\'e sirve}\\ \hline
+Media & $\bar x=\frac1n\sum x_i$ & centro; sensible a at\'ipicos\\ \hline
+Mediana & valor central ordenado & centro robusto\\ \hline
+Moda & el m\'as frecuente & dato t\'ipico\\ \hline
+Rango & m\'aximo $-$ m\'inimo & dispersi\'on simple\\ \hline
+Varianza muestral & $s^2=\frac{1}{n-1}\sum(x_i-\bar x)^2$ & dispersi\'on\\ \hline
+Desviaci\'on est\'andar & $s=\sqrt{s^2}$ & dispersi\'on en las unidades del dato\\ \hline
+Rango intercuart\'ilico & $\mathrm{IQR}=Q_3-Q_1$ & dispersi\'on robusta\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmejemplo}{Latencias en ms}
+Datos ordenados ($n=8$): $10, 12, 12, 14, 15, 16, 18, 43$.
+\begin{tmpasos}
+\item Media: $\bar x=\frac{140}8=17{,}5$. Mediana: $\frac{14+15}2=14{,}5$. Moda: $12$.
+\item Rango: $43-10=33$.
+\item Varianza: suma de cuadrados de las desviaciones $=788$, as\'i que $s^2=\frac{788}7\approx112{,}6$ y $s\approx10{,}6$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Cuartiles y valores at\'ipicos}
+Con los mismos datos: $Q_1=12$, mediana $14{,}5$ y $Q_3=17$, as\'i que $\mathrm{IQR}=5$. Regla de las cercas: un dato es at\'ipico si est\'a fuera de $[Q_1-1{,}5\,\mathrm{IQR},\ Q_3+1{,}5\,\mathrm{IQR}]=[4{,}5;\ 24{,}5]$. El valor $43$ es at\'ipico.
+
+\begin{center}
+\begin{tikzpicture}[x=0.2cm,every node/.style={font=\sffamily\scriptsize}]
+  \draw[-{Stealth},tmGris] (8,0) -- (46,0);
+  \foreach \v in {10,15,20,25,30,35,40,45}{\draw[tmGris] (\v,0.1) -- (\v,-0.1) node[below] {\v};}
+  \fill[tmAzulClaro,draw=tmAzul,line width=1pt] (12,0.7) rectangle (17,1.9);
+  \draw[tmAzul,line width=1.6pt] (14.5,0.7) -- (14.5,1.9);
+  \draw[tmAzul,line width=1pt] (10,1.3) -- (12,1.3) (17,1.3) -- (18,1.3) (10,1.0) -- (10,1.6) (18,1.0) -- (18,1.6);
+  \fill[tmCoral] (43,1.3) circle (2.5pt);
+  \node[text=tmCoral,above] at (43,1.5) {at\'ipico};
+  \node[text=tmAzul,above] at (14.5,1.9) {mediana 14,5};
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[ybar interval,width=9cm,height=4.8cm,axis lines=left,xmin=8,xmax=48,ymin=0,ymax=6,xtick={8,16,24,32,40,48},
+  xlabel={latencia (ms)},ylabel={frecuencia},label style={font=\sffamily\small},tick label style={font=\sffamily\scriptsize}]
+ \addplot[fill=tmVerde!65,draw=tmVerde] coordinates {(8,5) (16,2) (24,0) (32,0) (40,1) (48,0)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{tmsistemas}
+En monitoreo, la \textbf{media} de latencia puede ocultar problemas: aqu\'i la media (17,5) est\'a muy por encima de la mediana (14,5) por un solo dato de 43 ms. Por eso los equipos reportan \textbf{percentiles} (p50, p95, p99) y no solo el promedio.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+import numpy as np
+
+d = np.array([10, 12, 12, 14, 15, 16, 18, 43])
+print(d.mean(), np.median(d))                     # 17.5  14.5
+print(d.std(ddof=1))                              # 10.61 (muestral)
+print(np.percentile(d, [25, 50, 75]))             # [12.  14.5 16.5]
+\end{tmcodigo}
+
+\begin{tmcuidado}Hay varias definiciones de cuartil; NumPy interpola y da $Q_3=16{,}5$ en lugar de $17$. Indica siempre qu\'e m\'etodo usas. Y la varianza muestral divide entre $n-1$, no entre $n$.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 5.4 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:5-4}}]
+\label{ej:5-4}
+\begin{tmlista}
+\item \tmbasico\ Calcula la media de $4, 6, 8, 10, 12$.
+\item \tmbasico\ Calcula la mediana de $3, 9, 5, 7, 1$.
+\item \tmbasico\ Halla la moda de $2, 3, 3, 5, 3, 2$.
+\item \tmmedio\ Calcula la varianza muestral y la desviaci\'on de $2, 4, 6$.
+\item \tmmedio\ Halla el rango y la mediana de $5, 1, 9, 3, 7, 11$.
+\item \tmmedio\ \textquestiondown Qu\'e medida de centro usar\'ias si hay valores at\'ipicos?
+\item \tmdificil\ Con los datos del ejemplo, halla el IQR y verifica que 43 es at\'ipico.
+\item \tmdificil\ Si se suma 5 a cada dato, \textquestiondown c\'omo cambian la media y la desviaci\'on est\'andar?
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{5}{Analiza un conjunto de latencias: calcula media, mediana y percentiles, y detecta el valor at\'ipico.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Media, mediana y moda resumen el centro; varianza, desviaci\'on e IQR, la dispersi\'on.
+\item La mediana y el IQR resisten valores at\'ipicos; la media y $s$ no.
+\item Reporta percentiles en m\'etricas de rendimiento.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{An\'alisis de datos}
+\label{sec:5-5}
+\tmgancho{\textquestiondown Puedes predecir cu\'antos fallos tendr\'a un servidor a partir de sus horas de uso?}
+
+\begin{tmconcepto}{la mejor recta}
+La regresi\'on dibuja la \textbf{mejor recta} que atraviesa una nube de puntos, para poder predecir.
+\end{tmconcepto}
+
+\tmcomo{calcular la recta de regresi\'on}{{Calcula $\bar x$ y $\bar y$},{Calcula $S_{xy}$ y $S_{xx}$},{$b=S_{xy}/S_{xx}$},{$a=\bar y-b\bar x$ y predice}}
+
+\subsection{El flujo de trabajo}
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\scriptsize,rounded corners=4pt,draw=tmAzul,fill=tmAzulClaro,inner sep=5pt,align=center,minimum width=2.3cm}]
+  \node (a) {Recolectar\\datos};
+  \node[right=0.5cm of a] (b) {Limpiar\\(nulos, errores)};
+  \node[right=0.5cm of b] (c) {Explorar\\(gr\'aficos, medidas)};
+  \node[right=0.5cm of c,fill=tmAmbarClaro,draw=tmAmbar] (d) {Modelar\\(regresi\'on)};
+  \node[right=0.5cm of d,fill=tmVerdeClaro,draw=tmVerde] (e) {Evaluar y\\comunicar};
+  \foreach \p/\q in {a/b,b/c,c/d,d/e}{\draw[-{Stealth},tmOro,line width=1.2pt] (\p) -- (\q);}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Correlaci\'on y regresi\'on lineal}
+\begin{tmdef}{Correlaci\'on y recta de m\'inimos cuadrados}
+$r=\dfrac{S_{xy}}{\sqrt{S_{xx}S_{yy}}}$ con $-1\le r\le1$ mide la relaci\'on lineal. La recta $\hat y=a+bx$ que minimiza el error cuadr\'atico tiene $b=\dfrac{S_{xy}}{S_{xx}}$ y $a=\bar y-b\bar x$, donde $S_{xy}=\sum(x_i-\bar x)(y_i-\bar y)$.
+\end{tmdef}
+
+\begin{tmejemplo}{Horas de uso y fallos}
+Horas $x=1, 2, 3, 4, 5$ y fallos $y=2, 4, 5, 4, 5$.
+\begin{tmpasos}
+\item $\bar x=3$, $\bar y=4$. $S_{xy}=4+0+0+0+2=6$, $S_{xx}=10$ y $S_{yy}=6$.
+\item $b=\frac6{10}=0{,}6$ y $a=4-0{,}6\cdot3=2{,}2$. Recta: $\hat y=2{,}2+0{,}6x$.
+\item $r=\frac{6}{\sqrt{60}}\approx0{,}775$ y $R^2=r^2=0{,}6$: la recta explica el $60\%$ de la variaci\'on.
+\item Predicci\'on para $x=6$: $\hat y=2{,}2+3{,}6=5{,}8$ fallos.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=8.6cm,height=5.4cm,axis lines=left,xmin=0,xmax=7,ymin=0,ymax=7,xlabel={horas de uso},ylabel={fallos},
+  label style={font=\sffamily\small},tick label style={font=\sffamily\scriptsize},legend pos=south east,legend style={font=\sffamily\scriptsize}]
+ \addplot[only marks,mark=*,mark size=2.6pt,color=tmAzul] coordinates {(1,2) (2,4) (3,5) (4,4) (5,5)};
+ \addplot[tmCoral,line width=1.5pt,domain=0.3:6.5]{2.2+0.6*x};
+ \legend{datos,$\hat y=2{,}2+0{,}6x$}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Intervalo de confianza para la media}
+\begin{tmdef}{Intervalo de confianza del 95\%}
+Para una muestra grande: $\bar x\pm1{,}96\,\dfrac{s}{\sqrt n}$. Indica un rango plausible para la media poblacional.
+\end{tmdef}
+
+\begin{tmejemplo}{Tiempo medio de respuesta}
+$n=36$, $\bar x=200$ ms y $s=30$ ms.
+\begin{tmpasos}
+\item Error est\'andar: $\frac{30}{\sqrt{36}}=5$.
+\item Margen: $1{,}96\cdot5=9{,}8$. Intervalo: $[190{,}2;\ 209{,}8]$ ms.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Prueba A/B: \textquestiondown la mejora es real o es azar?}
+\begin{tmdef}{Contraste de dos proporciones}
+Con $\hat p_A$ y $\hat p_B$ las tasas observadas, $\hat p$ la tasa conjunta y $n$ usuarios por grupo: $z=\dfrac{\hat p_B-\hat p_A}{\sqrt{\hat p(1-\hat p)\cdot\frac2n}}$. Con $|z|>1{,}96$ la diferencia es significativa al 5\%.
+\end{tmdef}
+
+\begin{tmejemplo}{Dos versiones de una p\'agina}
+La versi\'on A tiene 30 conversiones de 200 usuarios ($15\%$); la B, 44 de 200 ($22\%$).
+\begin{tmpasos}
+\item Tasa conjunta: $\hat p=\frac{74}{400}=0{,}185$.
+\item Error est\'andar: $\sqrt{0{,}185\cdot0{,}815\cdot\frac{2}{200}}\approx0{,}0388$.
+\item $z=\frac{0{,}22-0{,}15}{0{,}0388}\approx1{,}80<1{,}96$.
+\item Conclusi\'on: con estos datos \textbf{no} hay evidencia suficiente al 5\%; hace falta una muestra m\'as grande.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmsistemas}
+La regresi\'on lineal es el modelo de aprendizaje autom\'atico m\'as simple: la recta se aprende con descenso del gradiente minimizando $J$ (cap\'itulos 1 y 4). Las pruebas A/B comparan medias con intervalos de confianza. Un modelo aprendido solo es tan bueno como la limpieza de los datos.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+import numpy as np
+
+x = np.array([1, 2, 3, 4, 5])
+y = np.array([2, 4, 5, 4, 5])
+
+b, a = np.polyfit(x, y, 1)
+print(a, b)                       # 2.2  0.6
+print(np.corrcoef(x, y)[0, 1])    # 0.7746
+print(a + b * 6)                  # 5.8
+\end{tmcodigo}
+
+\begin{tmcuidado}\textbf{Correlaci\'on no implica causalidad.} El n\'umero de procesos y el consumo de CPU pueden correlacionarse porque ambos crecen con la carga, no porque uno cause el otro. Y no extrapoles muy lejos del rango de los datos.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 5.5 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:5-5}}]
+\label{ej:5-5}
+\begin{tmlista}
+\item \tmbasico\ Interpreta $r=0{,}9$.
+\item \tmbasico\ Con $\hat y=2+3x$, predice $y$ para $x=4$.
+\item \tmbasico\ Si la pendiente de la recta es positiva, \textquestiondown qu\'e significa?
+\item \tmmedio\ Halla la recta de m\'inimos cuadrados para $(1, 2),(2, 3),(3, 5)$.
+\item \tmmedio\ Intervalo de confianza del 95\% con $n=25$, $\bar x=50$, $s=10$.
+\item \tmmedio\ Con la recta del ejemplo, predice los fallos para $x=6$.
+\item \tmdificil\ Da un ejemplo de correlaci\'on sin causalidad en un sistema de c\'omputo.
+\item \tmdificil\ \textquestiondown Cambia $r$ si sumas una constante a todos los valores de $y$?
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{5}{Ajusta una recta de regresi\'on a un conjunto de datos de uso y fallos y predice el siguiente valor.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item El an\'alisis sigue un flujo: recolectar, limpiar, explorar, modelar y evaluar.
+\item $r$ mide la relaci\'on lineal; la recta de m\'inimos cuadrados es $\hat y=a+bx$.
+\item El intervalo de confianza $\bar x\pm1{,}96\,s/\sqrt n$ acota la media.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\clearpage
+\section*{Cierre del cap\'itulo 5}
+\addcontentsline{toc}{section}{Cierre del cap\'itulo 5}
+\subsection{Mapa mental}
+\tmmapa{Probabilidad y estad\'istica}{{Probabilidad\\condicional y Bayes},{Variables\\$E[X]$ y $\operatorname{Var}$},{Distribuciones\\binomial, Poisson, normal},{Descriptiva\\media, mediana, IQR},{Regresi\'on\\$\hat y=a+bx$},{Confianza\\$\bar x\pm1{,}96\,s/\sqrt n$}}
+
+\subsection{Hoja de f\'ormulas}
+\begin{center}
+\begin{tabular}{|p{4.2cm}|p{8.4cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tema} & \textbf{F\'ormula}\\ \hline
+Uni\'on / complemento & $P(A\cup B)=P(A)+P(B)-P(A\cap B)$; $P(A^c)=1-P(A)$\\ \hline
+Condicional / Bayes & $P(B\mid A)=\frac{P(A\cap B)}{P(A)}$; $P(A\mid B)=\frac{P(B\mid A)P(A)}{P(B)}$\\ \hline
+Esperanza y varianza & $E[X]=\sum xP(x)$; $\operatorname{Var}=E[X^2]-E[X]^2$\\ \hline
+Binomial / Poisson & $\binom nkp^k(1-p)^{n-k}$ \quad $\frac{e^{-\lambda}\lambda^k}{k!}$\\ \hline
+Estandarizaci\'on & $z=\frac{x-\mu}\sigma$\\ \hline
+Regresi\'on & $b=\frac{S_{xy}}{S_{xx}}$, $a=\bar y-b\bar x$\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Actividades de cierre: mini proyecto}
+\begin{tmsistemas}
+\textbf{Monitoreo de un servicio.} Un servicio tiene 3 r\'eplicas independientes (falla cada una con $0{,}1$), recibe en promedio 3 peticiones por segundo (Poisson) y tiene latencia normal $N(200, 20^2)$ ms.
+\end{tmsistemas}
+
+\begin{tmlista}
+\item Calcula la disponibilidad del servicio con las tres r\'eplicas.
+\item Halla la probabilidad de recibir 0 peticiones en un segundo.
+\item Calcula la probabilidad de que una respuesta tarde 240 ms o menos.
+\item Con las latencias $10, 12, 12, 14, 15, 16, 18, 43$ calcula media y mediana y detecta el at\'ipico.
+\end{tmlista}
+
+\tmreto{5}{Cierre del cap\'itulo: cuando est\'e disponible, completa el laboratorio de probabilidad y estad\'istica y acredita tus TortuPuntos.}
+
+\begin{tmquiz}[Autoevaluaci\'on 5]
+\label{quiz:5}
+\tmpreg{$P(\text{par})$ al lanzar un dado es}{$\frac16$}{$\frac12$}{$\frac13$}{$\frac23$}
+\tmpreg{Con $P(A)=0{,}5$, $P(B)=0{,}4$ y $P(A\cap B)=0{,}2$, $P(A\cup B)$ es}{0,9}{0,7}{0,1}{0,2}
+\tmpreg{Con $P(A)=0{,}5$ y $P(A\cap B)=0{,}2$, $P(B\mid A)$ es}{0,4}{0,1}{0,7}{0,25}
+\tmpreg{$E[X]$ de un dado es}{3}{3,5}{4}{6}
+\tmpreg{Si $\operatorname{Var}(X)=2$, $\operatorname{Var}(3X+2)$ es}{6}{8}{18}{20}
+\tmpreg{Binomial con $n=10$, $p=0{,}3$: $E[X]$ es}{3}{7}{0,3}{10}
+\tmpreg{En una normal, aprox. 68\% de los datos est\'a en}{$\mu\pm\sigma$}{$\mu\pm2\sigma$}{$\mu\pm3\sigma$}{$\mu$}
+\tmpreg{La mediana de $3, 9, 5, 7, 1$ es}{3}{5}{7}{25}
+\tmpreg{La medida de centro menos sensible a at\'ipicos es}{la media}{la mediana}{el rango}{la varianza}
+\tmpreg{Un coeficiente $r=-0{,}95$ indica}{correlaci\'on positiva fuerte}{correlaci\'on negativa fuerte}{ninguna relaci\'on}{causalidad}
+\end{tmquiz}

@@ -1,0 +1,604 @@
+\tmcapitulo{tmAmbar}{Qu\'e tan r\'apido cambia algo, d\'onde es m\'inimo y cu\'anto se acumula: el c\'alculo al servicio de los sistemas.}{x}
+\chapter{C\'alculo}
+\label{cap:calculo}
+
+\begin{tmsistemas}
+El tiempo de respuesta de un servidor, el costo de una infraestructura, la cantidad de solicitudes acumuladas y el aprendizaje de una red neuronal son preguntas de c\'alculo: l\'imites, derivadas, optimizaci\'on e integrales.
+\end{tmsistemas}
+
+\begin{center}
+\begin{tabular}{|p{3.4cm}|p{5.6cm}|p{3.8cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tema} & \textbf{Qu\'e aprender\'as} & \textbf{D\'onde se usa}\\ \hline
+4.1 L\'imites & Qu\'e pasa cerca de un punto & Latencia, convergencia\\ \hline
+4.2 Derivadas & Velocidad de cambio & Rendimiento, IA\\ \hline
+4.3 Derivadas parciales & Cambio en varias variables & P\'erdida de un modelo\\ \hline
+4.4 Optimizaci\'on & M\'inimos y m\'aximos & Costos, recursos\\ \hline
+4.5 Integrales & Acumular y medir \'areas & Tr\'afico, solicitudes\\ \hline
+\end{tabular}
+\end{center}
+
+% =====================================================================
+\section{L\'imites}
+\label{sec:4-1}
+\tmgancho{\textquestiondown Qu\'e le pasa a una funci\'on cuando $x$ se acerca a un valor sin llegar a tocarlo?}
+
+\begin{tmconcepto}{acercarse sin tocar}
+El l\'imite pregunta: \textquestiondown hacia qu\'e valor \textbf{se acerca} $f(x)$ cuando $x$ se acerca a $a$? No importa qu\'e pasa justo en $a$.
+\end{tmconcepto}
+
+\tmcomo{resolver un l\'imite $0/0$}{{Sustituye y detecta $0/0$},{Factoriza o racionaliza},{Simplifica el factor com\'un},{Sustituye de nuevo}}
+
+\subsection{La idea de l\'imite}
+\begin{tmdef}{L\'imite}
+$\lim_{x\to a}f(x)=L$ si $f(x)$ se acerca tanto como se quiera a $L$ cuando $x$ se acerca a $a$, con $x\neq a$. No importa el valor de $f(a)$, ni siquiera que exista.
+\end{tmdef}
+
+\begin{tmdef}{Propiedades}
+Si $\lim f=L$ y $\lim g=M$: $\lim(f\pm g)=L\pm M$, $\lim fg=LM$ y $\lim\frac fg=\frac LM$ (con $M\neq0$).
+\end{tmdef}
+
+\begin{tmejemplo}{Indeterminaci\'on $0/0$}
+Calcular $\displaystyle\lim_{x\to2}\frac{x^2-4}{x-2}$.
+\begin{tmpasos}
+\item Al sustituir $x=2$ queda $0/0$: no se puede concluir.
+\item Factorizamos: $\dfrac{(x-2)(x+2)}{x-2}=x+2$ (v\'alido porque $x\neq2$).
+\item $\lim_{x\to2}(x+2)=4$. La funci\'on no est\'a definida en 2, pero el l\'imite vale 4.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=8cm,height=5.4cm,axis lines=middle,xmin=-2.5,xmax=4.5,ymin=-1,ymax=7,xlabel={$x$},ylabel={$y$},
+  label style={font=\sffamily\small},tick label style={font=\sffamily\scriptsize},xtick={-2,-1,1,2,3,4},ytick={2,4,6}]
+ \addplot[tmAmbar,line width=1.5pt,domain=-2:4.3]{x+2};
+ \addplot[only marks,mark=o,mark size=3pt,color=tmCoral,line width=1pt] coordinates {(2,4)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+La gr\'afica es la recta $y=x+2$ con un \textbf{hueco} en $(2, 4)$.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\rowcolor{tmAzulClaro}$x$ & 1,9 & 1,99 & 1,999 & 2,001 & 2,01 & 2,1\\ \hline
+$f(x)$ & 3,9 & 3,99 & 3,999 & 4,001 & 4,01 & 4,1\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{L\'imites laterales, infinito y notables}
+Un l\'imite existe si y solo si los dos l\'imites laterales ($x\to a^-$ y $x\to a^+$) existen y son iguales.
+
+\begin{tmejemplo}{Un l\'imite que no existe}
+$\displaystyle\lim_{x\to0}\frac{|x|}{x}$.
+\begin{tmpasos}
+\item Con $x>0$: $\frac{|x|}x=1$. Por la derecha, el l\'imite es 1.
+\item Con $x<0$: $\frac{|x|}x=-1$. Por la izquierda, el l\'imite es $-1$.
+\item $1\neq-1$: el l\'imite \textbf{no existe}.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{L\'imite en el infinito}
+$\displaystyle\lim_{x\to\infty}\frac{3x^2+1}{x^2-5x}$: se divide entre la mayor potencia, $x^2$:
+\[\frac{3+\frac1{x^2}}{1-\frac5x}\to\frac{3+0}{1-0}=3.\]
+\end{tmejemplo}
+
+\tmformula{\lim_{x\to0}\dfrac{\sin x}{x}=1\quad(x\text{ en radianes})}
+
+\begin{tmtip}Si al sustituir te sale $0/0$: factoriza, racionaliza o usa el l\'imite notable del seno.\end{tmtip}
+
+\begin{tmsistemas}
+El tiempo de respuesta de un servicio es $f(x)=\dfrac{x^2-16}{x-4}$ ms, donde $x$ es la carga. En $x=4$ la f\'ormula da $0/0$, pero $\dfrac{(x-4)(x+4)}{x-4}=x+4$, as\'i que $\lim_{x\to4}f(x)=8$ ms. Esta es justo la misi\'on 1 del reto del cap\'itulo.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+from sympy import *
+x = symbols("x")
+
+print(limit((x**2 - 4)/(x - 2), x, 2))          # 4
+print(limit((x**2 - 16)/(x - 4), x, 4))         # 8
+print(limit((3*x**2 + 1)/(x**2 - 5*x), x, oo))  # 3
+print(limit(sin(3*x)/x, x, 0))                  # 3
+print(limit(Abs(x)/x, x, 0, "+"))               # 1
+print(limit(Abs(x)/x, x, 0, "-"))               # -1
+\end{tmcodigo}
+
+\begin{tmcuidado}$f(a)$ puede no existir y el l\'imite s\'i. Y $\infty$ no es un n\'umero: ``el l\'imite es $\infty$'' significa que la funci\'on crece sin cota, no que valga $\infty$.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 4.1 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:4-1}}]
+\label{ej:4-1}
+\begin{tmlista}
+\item \tmbasico\ Calcula $\lim_{x\to3}\frac{x^2-9}{x-3}$.
+\item \tmbasico\ Calcula $\lim_{x\to\infty}\frac{2x+1}{x-4}$.
+\item \tmbasico\ Calcula $\lim_{x\to0}\frac{\sin3x}{x}$.
+\item \tmmedio\ Halla los l\'imites laterales en $x=0$ de $f(x)=\frac1x$ y decide si el l\'imite existe.
+\item \tmmedio\ Calcula $\lim_{x\to1}\frac{x^2+x-2}{x-1}$.
+\item \tmmedio\ Calcula $\lim_{x\to\infty}\frac{5x^2+3}{2x^2-x}$.
+\item \tmdificil\ Calcula $\lim_{x\to4}\frac{x^2-16}{x-4}$ y arma la tabla de valores cerca de 4.
+\item \tmdificil\ Calcula $\lim_{x\to0}\frac{\sqrt{x+4}-2}{x}$ (racionaliza).
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{4}{Misi\'on 1 (Resolver L\'imite 0/0): acerca la sonda $x$ a 3,99 o 4,01 para comprobar que el l\'imite es $L=8$ ms.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item El l\'imite describe lo que pasa cerca de $a$, no en $a$.
+\item Si hay $0/0$: factoriza, racionaliza o usa $\lim\frac{\sin x}x=1$.
+\item El l\'imite existe solo si coinciden los laterales.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Derivadas}
+\label{sec:4-2}
+\tmgancho{Tu veloc\'imetro no mide el promedio del viaje: mide cu\'anto cambia tu posici\'on ahora mismo. \textquestiondown C\'omo se calcula eso?}
+
+\begin{tmconcepto}{la pendiente en un punto}
+La derivada es la \textbf{pendiente en un punto}: qu\'e tan r\'apido sube o baja la funci\'on justo ah\'i.
+\end{tmconcepto}
+
+\tmcomo{derivar con la regla de la cadena}{{Identifica la funci\'on de afuera},{Der\'ivala dejando lo de adentro igual},{Multiplica por la derivada de lo de adentro},{Simplifica}}
+
+\tmformulanota{f'(x)=\lim_{h\to0}\dfrac{f(x+h)-f(x)}{h}}{cambio de la funci\'on entre dos puntos}{$h$: tama\~no del paso, que se hace cero}
+
+\subsection{La derivada}
+\begin{tmdef}{Derivada}
+$f'(x)=\displaystyle\lim_{h\to0}\frac{f(x+h)-f(x)}{h}$. Geom\'etricamente es la pendiente de la recta tangente; f\'isicamente, una velocidad de cambio.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=8.6cm,height=5.6cm,axis lines=middle,xmin=-1,xmax=3.2,ymin=-2,ymax=7,xlabel={$x$},ylabel={$y$},
+  label style={font=\sffamily\small},tick label style={font=\sffamily\scriptsize},legend pos=north west,legend style={font=\sffamily\scriptsize}]
+ \addplot[tmAmbar,line width=1.5pt,domain=-1:2.8]{x^2};
+ \addplot[tmAzul,line width=1.1pt,dashed,domain=-0.4:3]{3*x-2};
+ \addplot[tmVerde,line width=1.3pt,domain=-0.4:3]{2*x-1};
+ \addplot[only marks,mark=*,color=tmCoral] coordinates {(1,1) (2,4)};
+ \legend{$y=x^2$,secante,tangente $y=2x-1$}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+Al acercar el segundo punto al primero ($h\to0$), la \textbf{secante} se convierte en \textbf{tangente}.
+
+\begin{tmejemplo}{Derivada por definici\'on}
+Hallar $f'(x)$ para $f(x)=x^2$.
+\begin{tmpasos}
+\item Cociente incremental: $\dfrac{(x+h)^2-x^2}{h}=\dfrac{2xh+h^2}{h}=2x+h$.
+\item Hacemos $h\to0$: $f'(x)=2x$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Reglas de derivaci\'on}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Regla} & \textbf{F\'ormula}\\ \hline
+Potencia & $(x^n)'=nx^{n-1}$\\ \hline
+Producto & $(fg)'=f'g+fg'$\\ \hline
+Cociente & $\left(\frac fg\right)'=\frac{f'g-fg'}{g^2}$\\ \hline
+Cadena & $\big(f(g(x))\big)'=f'(g(x))\,g'(x)$\\ \hline
+\end{tabular}
+\hspace{0.6cm}
+\begin{tabular}{|c|c|}
+\hline
+\rowcolor{tmAzulClaro}$f(x)$ & $f'(x)$\\ \hline
+$\sin x$ & $\cos x$\\ \hline
+$\cos x$ & $-\sin x$\\ \hline
+$e^x$ & $e^x$\\ \hline
+$\ln x$ & $\frac1x$\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmejemplo}{Producto y cadena}
+\begin{tmpasos}
+\item $f(x)=x^2\sin x$: $f'(x)=2x\sin x+x^2\cos x$.
+\item $g(x)=(3x^2+1)^5$: $g'(x)=5(3x^2+1)^4\cdot6x=30x(3x^2+1)^4$.
+\item $h(x)=xe^x$: $h'(x)=e^x+xe^x$, as\'i que $h'(0)=1$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Recta tangente}
+La tangente a $f$ en $x=a$ es $y=f(a)+f'(a)(x-a)$. Para $f(x)=x^2$ en $x=1$:
+\begin{tmpasos}
+\item Punto: $f(1)=1$. Pendiente: $f'(1)=2$.
+\item $y=1+2(x-1)=2x-1$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmsistemas}
+\textbf{Velocidad de un m\'ovil:} si $s(t)=5t^2+2t$ metros, entonces $v(t)=s'(t)=10t+2$ m/s y $v(3)=32$ m/s. \textbf{Rendimiento:} la derivada del tiempo de ejecuci\'on respecto al tama\~no de entrada dice qu\'e tan r\'apido empeora un algoritmo. \textbf{IA:} el descenso del gradiente usa derivadas.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+from sympy import *
+x, h = symbols("x h")
+
+print(diff(x**2 * sin(x), x))           # x**2*cos(x) + 2*x*sin(x)
+print(diff((3*x**2 + 1)**5, x))         # 30*x*(3*x**2 + 1)**4
+print(limit(((x + h)**2 - x**2)/h, h, 0))   # 2*x
+\end{tmcodigo}
+
+\begin{tmcuidado}Olvidar la cadena es el error m\'as com\'un: $\big((2x+1)^3\big)'=3(2x+1)^2\cdot\textbf{2}$, no $3(2x+1)^2$.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 4.2 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:4-2}}]
+\label{ej:4-2}
+\begin{tmlista}
+\item \tmbasico\ Deriva por definici\'on $f(x)=3x+2$.
+\item \tmbasico\ Calcula $f'(2)$ si $f(x)=x^3-2x$.
+\item \tmbasico\ Deriva $f(x)=xe^x$ y eval\'ua $f'(0)$.
+\item \tmmedio\ Calcula $f'(1)$ si $f(x)=(2x+1)^3$.
+\item \tmmedio\ Halla la recta tangente a $f(x)=x^3$ en $x=1$.
+\item \tmmedio\ Deriva $f(x)=\dfrac{x^2+1}{x-1}$.
+\item \tmdificil\ Si $s(t)=5t^2+2t$, halla $v(3)$ y la aceleraci\'on $a(t)=v'(t)$.
+\item \tmdificil\ Deriva $f(x)=\ln(x^2+1)$.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{4}{Usa la derivada en el laboratorio: en la misi\'on 2 buscar\'as d\'onde la derivada del costo se anula.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item $f'(x)$ es la pendiente de la tangente: la tasa de cambio instant\'anea.
+\item Potencia, producto, cociente y cadena cubren casi todo.
+\item Tangente: $y=f(a)+f'(a)(x-a)$.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Derivadas parciales}
+\label{sec:4-3}
+\tmgancho{Si una red neuronal tiene millones de par\'ametros, \textquestiondown c\'omo sabe cu\'al ajustar primero?}
+
+\begin{tmconcepto}{mover una sola perilla}
+Una derivada parcial mide c\'omo cambia $f$ si mueves \textbf{una sola variable} y congelas las dem\'as, como girar una perilla a la vez.
+\end{tmconcepto}
+
+\tmcomo{clasificar un punto cr\'itico}{{Resuelve $f_x=0$ y $f_y=0$},{Calcula $f_{xx}$, $f_{yy}$ y $f_{xy}$},{Calcula $D=f_{xx}f_{yy}-f_{xy}^2$},{$D>0$: m\'in o m\'ax; $D<0$: silla}}
+
+\subsection{Cambiar una variable a la vez}
+\begin{tmdef}{Derivada parcial}
+Para $z=f(x, y)$: $\dfrac{\partial f}{\partial x}$ es la derivada respecto a $x$ tratando $y$ como constante, y $\dfrac{\partial f}{\partial y}$ lo contrario. El gradiente es $\nabla f=\left(\frac{\partial f}{\partial x},\frac{\partial f}{\partial y}\right)$.
+\end{tmdef}
+
+\begin{tmejemplo}{Derivadas parciales}
+$f(x, y)=x^2y+3y^2$.
+\begin{tmpasos}
+\item Respecto a $x$ ($y$ constante): $f_x=2xy$.
+\item Respecto a $y$ ($x$ constante): $f_y=x^2+6y$.
+\item En $(1, 2)$: $\nabla f=(4, 13)$. Es la direcci\'on de m\'aximo crecimiento.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Puntos cr\'iticos en dos variables}
+Un punto cr\'itico cumple $f_x=0$ y $f_y=0$. Para clasificarlo se usa $D=f_{xx}f_{yy}-f_{xy}^2$.
+
+\begin{center}
+\begin{tabular}{|c|c|l|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{$D$} & \textbf{$f_{xx}$} & \textbf{Tipo de punto}\\ \hline
+$D>0$ & $>0$ & m\'inimo local\\ \hline
+$D>0$ & $<0$ & m\'aximo local\\ \hline
+$D<0$ & -- & punto silla\\ \hline
+$D=0$ & -- & no concluyente\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmejemplo}{M\'inimo de $f(x, y)=x^2+y^2-4x+6y$}
+\begin{tmpasos}
+\item $f_x=2x-4=0\Rightarrow x=2$ y $f_y=2y+6=0\Rightarrow y=-3$.
+\item $f_{xx}=2$, $f_{yy}=2$, $f_{xy}=0$: $D=4>0$ y $f_{xx}>0$. Es un \textbf{m\'inimo}.
+\item Valor: $f(2,-3)=4+9-8-18=-13$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Punto silla}
+$f(x, y)=x^2-y^2$ tiene $f_x=2x$, $f_y=-2y$, punto cr\'itico $(0, 0)$ y $D=(2)(-2)-0=-4<0$. Sube en una direcci\'on y baja en otra: es un \textbf{punto silla}.
+\end{tmejemplo}
+
+\subsection{Aplicaci\'on: ajustar un modelo}
+\begin{tmsistemas}
+Un modelo $\hat y=wx+b$ se entrena minimizando $J=(wx+b-y)^2$. Con un dato $(x, y)=(2, 5)$ y $w=1$, $b=0$: error $=2-5=-3$. Entonces $\frac{\partial J}{\partial w}=2(-3)(2)=-12$ y $\frac{\partial J}{\partial b}=2(-3)=-6$. Ambas son negativas: para bajar el error hay que \textbf{subir} $w$ y $b$. As\'i funciona el descenso del gradiente: $w\leftarrow w-\alpha\frac{\partial J}{\partial w}$.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+from sympy import *
+x, y = symbols("x y")
+f = x**2*y + 3*y**2
+
+print(diff(f, x), diff(f, y))                  # 2*x*y  x**2 + 6*y
+print([d.subs({x: 1, y: 2}) for d in (diff(f, x), diff(f, y))])  # [4, 13]
+\end{tmcodigo}
+
+\begin{tmcuidado}Una derivada parcial \textbf{no es} la derivada total. Si $y$ depende de $x$ hay que usar la regla de la cadena multivariable; aqu\'i las variables son independientes.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 4.3 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:4-3}}]
+\label{ej:4-3}
+\begin{tmlista}
+\item \tmbasico\ Calcula $f_x$ y $f_y$ de $f=x^2y+3y$.
+\item \tmbasico\ Calcula $f_x$ de $f=e^{xy}$.
+\item \tmbasico\ Halla $\nabla f$ y $\|\nabla f\|$ de $f=x^2+y^2$ en $(3, 4)$.
+\item \tmmedio\ Halla los puntos cr\'iticos de $f=x^3+y^3-3xy$.
+\item \tmmedio\ Clasifica el punto cr\'itico de $f=x^2+y^2-4x+6y$.
+\item \tmmedio\ Clasifica $(0, 0)$ para $f=x^2-y^2$.
+\item \tmdificil\ Con $J=(wx+b-y)^2$, $(x, y)=(2, 5)$, $w=1$, $b=0$, calcula $\frac{\partial J}{\partial w}$ y $\frac{\partial J}{\partial b}$.
+\item \tmdificil\ \textquestiondown En qu\'e direcci\'on crece m\'as r\'apido $f=xy$ en $(2, 3)$?
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{4}{Las derivadas parciales son la base de lo que haces en el laboratorio: mueve una variable a la vez y observa el costo.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item $\frac{\partial f}{\partial x}$: derivar respecto a $x$ con las dem\'as variables constantes.
+\item Punto cr\'itico: $\nabla f=\mathbf 0$; se clasifica con $D=f_{xx}f_{yy}-f_{xy}^2$.
+\item El gradiente apunta al m\'aximo crecimiento; el descenso va en sentido contrario.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Optimizaci\'on}
+\label{sec:4-4}
+\tmgancho{\textquestiondown Cu\'antos servidores conviene tener para pagar lo m\'inimo sin quedarte corto?}
+
+\begin{tmconcepto}{buscar la cima o el fondo}
+Optimizar es buscar la cima o el fondo de la curva: all\'i la \textbf{pendiente es cero}.
+\end{tmconcepto}
+
+\tmcomo{la receta de optimizaci\'on}{{Escribe qu\'e quieres optimizar},{Reduce a una variable},{Deriva e iguala a 0},{Clasifica con $f''$}}
+
+\tmformulanota{f'(c)=0\quad\text{y}\quad f''(c)>0}{pendiente cero: punto cr\'itico}{curva hacia arriba: es un m\'inimo}
+
+\subsection{M\'aximos y m\'inimos}
+\begin{tmdef}{Criterio de la segunda derivada}
+Un punto cr\'itico cumple $f'(c)=0$. Si $f''(c)>0$ es un \textbf{m\'inimo}; si $f''(c)<0$ es un \textbf{m\'aximo}; si $f''(c)=0$ el criterio no concluye.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=8.4cm,height=5.4cm,axis lines=left,xmin=0,xmax=8,ymin=0,ymax=22,xlabel={$x$},ylabel={$C(x)$},
+  label style={font=\sffamily\small},tick label style={font=\sffamily\scriptsize}]
+ \addplot[tmAmbar,line width=1.5pt,domain=0:8]{x^2-8*x+20};
+ \addplot[only marks,mark=*,mark size=3pt,color=tmCoral] coordinates {(4,4)};
+ \draw[tmCoral,dashed] (axis cs:4,0) -- (axis cs:4,4);
+ \node[font=\sffamily\scriptsize,text=tmCoral,anchor=south west] at (axis cs:4.2,5) {m\'inimo $C(4)=4$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Costo m\'inimo}
+$C(x)=x^2-8x+20$.
+\begin{tmpasos}
+\item $C'(x)=2x-8=0\Rightarrow x=4$.
+\item $C''(x)=2>0$: es un m\'inimo.
+\item $C(4)=16-32+20=4$. El costo m\'inimo es 4.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{\'Area m\'axima con 100 m de cerca}
+Un rect\'angulo de ancho $x$ tiene per\'imetro 100, as\'i que su largo es $50-x$.
+\begin{tmpasos}
+\item $A(x)=x(50-x)=50x-x^2$.
+\item $A'(x)=50-2x=0\Rightarrow x=25$, y $A''=-2<0$: m\'aximo.
+\item El rect\'angulo es un cuadrado de $25\times25$ con $A=625$ m$^2$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{N\'umero \'optimo de servidores}
+El costo con $n$ servidores es $C(n)=2n+\dfrac{800}{n}$ (cada servidor cuesta, pero menos servidores aumentan la espera).
+\begin{tmpasos}
+\item $C'(n)=2-\dfrac{800}{n^2}=0\Rightarrow n^2=400\Rightarrow n=20$.
+\item $C''(n)=\dfrac{1600}{n^3}>0$: m\'inimo.
+\item $C(20)=40+40=80$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmdef}{Receta de optimizaci\'on}
+(1) Escribe lo que quieres optimizar. (2) Reduce a una variable usando la restricci\'on. (3) Deriva e iguala a cero. (4) Clasifica con $f''$. (5) Comprueba que la respuesta tenga sentido (en los bordes del dominio tambi\'en).
+\end{tmdef}
+
+\begin{tmsistemas}
+\textbf{IA:} entrenar un modelo es optimizar: se busca el m\'inimo de la p\'erdida con descenso del gradiente. \textbf{Infraestructura:} el tama\~no \'optimo de un cl\'uster, de un lote o de una cach\'e se halla con la misma receta. El costo del reto del cap\'itulo, $C(x)=x^2-8x+20$, es exactamente el del primer ejemplo.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+from sympy import *
+x = symbols("x", positive=True)
+C = x**2 - 8*x + 20
+print(solve(diff(C, x), x), C.subs(x, 4))     # [4] 4
+
+n = symbols("n", positive=True)
+Cn = 2*n + 800/n
+print(solve(diff(Cn, n), n), Cn.subs(n, 20))  # [20] 80
+\end{tmcodigo}
+
+\begin{tmcuidado}Un punto cr\'itico no siempre es m\'aximo o m\'inimo: $f(x)=x^3$ tiene $f'(0)=0$ y no tiene ni uno ni otro. Clasif\'icalo siempre.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 4.4 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:4-4}}]
+\label{ej:4-4}
+\begin{tmlista}
+\item \tmbasico\ Halla el punto cr\'itico de $f=x^2-6x+5$ y clasif\'icalo.
+\item \tmbasico\ Halla el m\'aximo de $f=-x^2+4x$.
+\item \tmbasico\ Halla el m\'inimo de $C(x)=x^2-8x+20$.
+\item \tmmedio\ Clasifica los puntos cr\'iticos de $f=x^3-3x$.
+\item \tmmedio\ Con 60 m de cerca, halla las dimensiones del rect\'angulo de \'area m\'axima.
+\item \tmmedio\ Minimiza $C(n)=3n+\frac{300}n$ para $n>0$.
+\item \tmdificil\ La ganancia es $G(x)=-2x^2+40x-100$. Halla $x$ y la ganancia m\'axima.
+\item \tmdificil\ Explica por qu\'e el descenso del gradiente es un m\'etodo de optimizaci\'on.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{4}{Misi\'on 2 (Optimizaci\'on): encuentra el punto cr\'itico $x=4$ donde $C'(4)=0$ y comprueba que el costo m\'inimo es 4.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Optimizar es derivar, igualar a 0 y clasificar con la segunda derivada.
+\item Reduce a una variable usando la restricci\'on.
+\item Entrenar un modelo es minimizar una funci\'on de p\'erdida.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Integrales}
+\label{sec:4-5}
+\tmgancho{Si un servidor recibe cada vez m\'as peticiones por minuto, \textquestiondown cu\'antas habr\'a recibido en total despu\'es de 5 minutos?}
+
+\begin{tmconcepto}{sumar pedacitos}
+Integrar es \textbf{sumar infinitos pedacitos} muy finos: el \'area bajo la curva o lo que se acumula con el tiempo.
+\end{tmconcepto}
+
+\tmcomo{calcular una integral definida}{{Halla una antiderivada $F$},{Eval\'ua $F(b)$},{Eval\'ua $F(a)$},{Resta: $F(b)-F(a)$}}
+
+\tmformulanota{\int_a^bf(x)\,dx=F(b)-F(a)}{l\'imites: se suma desde $a$ hasta $b$}{$F$ es una antiderivada de $f$}
+
+\subsection{Acumular}
+\begin{tmdef}{Antiderivada e integral definida}
+$F$ es una antiderivada de $f$ si $F'=f$; se escribe $\int f(x)\,dx=F(x)+C$. La integral definida $\int_a^bf(x)\,dx$ es el \'area (con signo) bajo la curva entre $a$ y $b$.
+\end{tmdef}
+
+\begin{tmdef}{Teorema fundamental del c\'alculo}
+Si $F'=f$, entonces $\displaystyle\int_a^bf(x)\,dx=F(b)-F(a)$. Derivar e integrar son operaciones inversas.
+\end{tmdef}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Integral} & \textbf{Resultado}\\ \hline
+$\int x^n\,dx$ & $\frac{x^{n+1}}{n+1}+C$ \quad ($n\neq-1$)\\ \hline
+$\int\frac1x\,dx$ & $\ln|x|+C$\\ \hline
+$\int e^x\,dx$ & $e^x+C$\\ \hline
+$\int\sin x\,dx$ & $-\cos x+C$\\ \hline
+$\int\cos x\,dx$ & $\sin x+C$\\ \hline
+$\int kf(x)\,dx$ & $k\int f(x)\,dx$\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Sumas de Riemann}
+El \'area se aproxima con rect\'angulos; con m\'as rect\'angulos, mejor aproximaci\'on.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.6]
+  \draw[-{Stealth},tmGris] (-0.2,0) -- (2.4,0) node[right,font=\sffamily\scriptsize] {$x$};
+  \draw[-{Stealth},tmGris] (0,-0.2) -- (0,4.4) node[above,font=\sffamily\scriptsize] {$y$};
+  \foreach \i in {1,2,3,4}{
+    \pgfmathsetmacro{\xr}{0.5*\i}
+    \pgfmathsetmacro{\hh}{(0.5*\i)^2}
+    \fill[tmAmbar!35,draw=tmAmbar] ({\xr-0.5},0) rectangle ({\xr},{\hh});}
+  \draw[tmAzul,line width=1.4pt,domain=0:2.1,samples=40] plot (\x,{\x*\x});
+  \node[font=\sffamily\scriptsize,text=tmAzul] at (1.1,3.4) {$f(x)=x^2$};
+  \node[font=\sffamily\scriptsize,text=tmGris,anchor=north] at (1,-0.15) {$n=4$ rect\'angulos};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Riemann frente a la integral exacta}
+$\int_0^2x^2\,dx$ con $n=4$ y extremos derechos: $\Delta x=0{,}5$.
+\begin{tmpasos}
+\item Suma: $0{,}5\,(0{,}25+1+2{,}25+4)=0{,}5\cdot7{,}5=3{,}75$.
+\item Exacta: $\left[\frac{x^3}{3}\right]_0^2=\frac83\approx2{,}667$.
+\item La aproximaci\'on mejora al aumentar $n$ (aqu\'i sobreestima, porque $f$ crece).
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Integrales b\'asicas}
+\begin{tmpasos}
+\item $\int(2x+1)\,dx=x^2+x+C$.
+\item $\int_0^3(2x+1)\,dx=[x^2+x]_0^3=9+3=12$.
+\item $\int_0^\pi\sin x\,dx=[-\cos x]_0^\pi=1+1=2$.
+\item Sustituci\'on: $\int2x(x^2+1)^3\,dx$ con $u=x^2+1$ da $\frac{(x^2+1)^4}{4}+C$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmsistemas}
+\textbf{Acumulaci\'on de solicitudes.} Si la tasa de peticiones es $r(t)=4t+2$ por minuto, el total acumulado es $N(t)=\int_0^t(4x+2)\,dx=2t^2+2t$. En $t=5$: $N(5)=50+10=\mathbf{60}$ solicitudes. Es la misi\'on 3 del reto: calibrar $t$ hasta obtener exactamente 60.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+from sympy import *
+x, t = symbols("x t")
+
+print(integrate(4*x + 2, (x, 0, t)))        # 2*t**2 + 2*t
+print(integrate(4*x + 2, (x, 0, 5)))        # 60
+print(integrate(sin(x), (x, 0, pi)))        # 2
+
+# Suma de Riemann (extremos derechos)
+n = 1000
+dt = 5 / n
+print(sum((4*(i*dt) + 2) * dt for i in range(1, n + 1)))  # ~ 60.05
+\end{tmcodigo}
+
+\begin{tmcuidado}No olvides la constante $+C$ en la integral indefinida. Y el \'area ``con signo'': si la curva est\'a bajo el eje $x$, la integral da negativo.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 4.5 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:4-5}}]
+\label{ej:4-5}
+\begin{tmlista}
+\item \tmbasico\ Calcula $\int3x^2\,dx$.
+\item \tmbasico\ Calcula $\int_0^2x\,dx$.
+\item \tmbasico\ Calcula $\int(2x+1)\,dx$.
+\item \tmmedio\ Calcula $\int_0^3(2x+1)\,dx$.
+\item \tmmedio\ Calcula $\int_0^1e^x\,dx$.
+\item \tmmedio\ Calcula $\int_0^\pi\sin x\,dx$.
+\item \tmdificil\ La tasa de peticiones es $r(t)=4t+2$. \textquestiondown Cu\'antas se acumulan entre 0 y 5 minutos?
+\item \tmdificil\ Aproxima $\int_0^2x^2\,dx$ con $n=4$ rect\'angulos de extremo derecho y compara con el valor exacto.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{4}{Misi\'on 3 (Integral Acumulada): calibra la acumulaci\'on para $t=5$ minutos y logra exactamente $N=60$ solicitudes.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item La integral acumula: $\int_a^bf=F(b)-F(a)$.
+\item Riemann aproxima el \'area con rect\'angulos; m\'as rect\'angulos, mejor aproximaci\'on.
+\item Derivada e integral son operaciones inversas.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\clearpage
+\section*{Cierre del cap\'itulo 4}
+\addcontentsline{toc}{section}{Cierre del cap\'itulo 4}
+\subsection{Mapa mental}
+\tmmapa{C\'alculo}{{L\'imites\\$0/0$, laterales},{Derivadas\\pendiente de la tangente},{Parciales\\gradiente $\nabla f$},{Optimizaci\'on\\$f'=0$ y $f''$},{Integrales\\$F(b)-F(a)$},{Aplicaciones\\latencia, costo, tr\'afico}}
+
+\subsection{Hoja de f\'ormulas}
+\begin{center}
+\begin{tabular}{|p{4.2cm}|p{8.4cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tema} & \textbf{F\'ormula}\\ \hline
+L\'imite notable & $\lim_{x\to0}\frac{\sin x}{x}=1$\\ \hline
+Derivada & $f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}h$\\ \hline
+Potencia / cadena & $(x^n)'=nx^{n-1}$ \quad $(f\circ g)'=f'(g)g'$\\ \hline
+Tangente & $y=f(a)+f'(a)(x-a)$\\ \hline
+Gradiente & $\nabla f=(f_x, f_y)$\\ \hline
+Clasificaci\'on 2 variables & $D=f_{xx}f_{yy}-f_{xy}^2$\\ \hline
+Optimizaci\'on & $f'(c)=0$; $f''>0$ m\'in, $f''<0$ m\'ax\\ \hline
+Teorema fundamental & $\int_a^bf=F(b)-F(a)$\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Actividades de cierre: mini proyecto}
+\begin{tmsistemas}
+\textbf{Cálculo aplicado a un servicio en producci\'on.} (a) Latencia: $f(x)=\frac{x^2-16}{x-4}$ ms. (b) Costo operativo: $C(x)=x^2-8x+20$. (c) Tasa de solicitudes: $r(t)=4t+2$ por minuto.
+\end{tmsistemas}
+
+\begin{tmlista}
+\item Calcula $\lim_{x\to4}f(x)$ y explica por qu\'e no puedes sustituir directamente.
+\item Halla el $x$ que minimiza $C$ y el costo m\'inimo; justifica con $C''$.
+\item Calcula cu\'antas solicitudes se acumulan en 5 minutos.
+\item Verifica los tres resultados en el laboratorio de TortuMath.
+\end{tmlista}
+
+\tmreto{4}{Cierre del cap\'itulo: completa las tres misiones del laboratorio (l\'imite $0/0$, optimizaci\'on $C'(x)=0$ e integral acumulada) y acredita tus TortuPuntos.}
+
+\begin{tmquiz}[Autoevaluaci\'on 4]
+\label{quiz:4}
+\tmpreg{$\lim_{x\to3}\frac{x^2-9}{x-3}$ vale}{0}{3}{6}{no existe}
+\tmpreg{$\lim_{x\to\infty}\frac{2x+1}{x-4}$ vale}{1}{2}{$\infty$}{0}
+\tmpreg{$(x^3)'$ es}{$x^2$}{$3x^2$}{$3x$}{$x^3/3$}
+\tmpreg{$\big((3x^2+1)^5\big)'$ es}{$5(3x^2+1)^4$}{$30x(3x^2+1)^4$}{$6x(3x^2+1)^5$}{$30(3x^2+1)^4$}
+\tmpreg{La derivada de $e^x$ es}{$xe^{x-1}$}{$e^x$}{$\ln x$}{$\frac1x$}
+\tmpreg{$\frac{\partial}{\partial x}(x^2y)$ es}{$x^2$}{$2xy$}{$2x$}{$y$}
+\tmpreg{El punto cr\'itico de $C(x)=x^2-8x+20$ es}{2}{4}{8}{20}
+\tmpreg{Si $f'(c)=0$ y $f''(c)>0$, $c$ es}{m\'aximo}{m\'inimo}{inflexi\'on}{discontinuidad}
+\tmpreg{$\int2x\,dx$ es}{$x^2+C$}{$2x^2+C$}{$x+C$}{$2+C$}
+\tmpreg{$N(5)=\int_0^5(4x+2)\,dx$ vale}{30}{50}{60}{70}
+\end{tmquiz}

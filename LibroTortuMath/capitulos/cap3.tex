@@ -1,0 +1,784 @@
+\tmcapitulo{tmVerde}{El lenguaje de los valores desconocidos: desde un plan de hosting hasta el cifrado de un mensaje.}{x}
+\chapter{\'Algebra}
+\label{cap:algebra}
+
+\begin{tmsistemas}
+Calcular cu\'antos servidores necesitas, cu\'anto cuesta un plan de hosting, c\'omo se guarda una imagen o c\'omo se cifra un mensaje: todo empieza con una inc\'ognita.
+\end{tmsistemas}
+
+\begin{center}
+\begin{tabular}{|p{3.3cm}|p{5.4cm}|p{4.4cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tema} & \textbf{Qu\'e aprender\'as} & \textbf{D\'onde se usa}\\ \hline
+3.1 Ecuaciones & Resolver ecuaciones lineales, cuadr\'aticas y otras & Costos, redes, c\'odigo\\ \hline
+3.2 Sistemas & Resolver varias ecuaciones a la vez & Carga de servidores, presupuestos\\ \hline
+3.3 Matrices & Organizar datos en tablas y operar con ellas & IA, gr\'aficos, grafos\\ \hline
+3.4 Determinantes & Saber si algo tiene soluci\'on \'unica & Criptograf\'ia, gr\'aficos\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmtip}Cada secci\'on se apoya en la anterior: ecuaciones $\to$ sistemas $\to$ matrices $\to$ determinantes. No te saltes ninguna.\end{tmtip}
+
+% =====================================================================
+\section{Ecuaciones}
+\label{sec:3-1}
+\tmgancho{Si un plan de hosting cobra Bs 30 fijos m\'as Bs 2 por GB extra y pagaste Bs 70, \textquestiondown cu\'antos GB extra usaste?}
+
+\begin{tmconcepto}{desatar nudos}
+Resolver una ecuaci\'on es \textbf{deshacer}, en orden inverso, lo que se le hizo a $x$, como desatar nudos.
+\end{tmconcepto}
+
+\tmcomo{resolver una cuadr\'atica}{{Ord\'enala: $ax^2+bx+c=0$},{Calcula $\Delta=b^2-4ac$},{Aplica la f\'ormula general},{Comprueba con Vieta}}
+
+\tmformulanota{x=\frac{-b\pm\sqrt{\Delta}}{2a}}{$\Delta=b^2-4ac$ decide cu\'antas ra\'ices hay}{$\pm$: una ra\'iz con $+$ y otra con $-$}
+
+\subsection{La balanza en equilibrio}
+Una \textbf{ecuaci\'on} es una igualdad con una inc\'ognita (casi siempre $x$). Resolverla es encontrar el valor que la hace verdadera.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9,every node/.style={font=\sffamily\small}]
+  \draw[tmNavy,line width=2pt] (0,0) -- (0,1.6);
+  \draw[tmNavy,line width=2pt] (-3,1.6) -- (3,1.6);
+  \fill[tmNavy] (-0.5,0) rectangle (0.5,-0.15);
+  \draw[tmNavy] (-3,1.6) -- (-3,1.1) (3,1.6) -- (3,1.1);
+  \fill[tmAzulClaro,draw=tmAzul] (-4,0.75) rectangle (-2,1.1);
+  \fill[tmVerdeClaro,draw=tmVerde] (2,0.75) rectangle (4,1.1);
+  \node[font=\sffamily\bfseries] at (-3,0.93) {$3x+7$};
+  \node[font=\sffamily\bfseries] at (3,0.93) {$22$};
+  \node[text=tmCoral] at (-3,0.3) {resta 7};
+  \node[text=tmCoral] at (3,0.3) {resta 7};
+  \node[text=tmGris] at (0,-0.6) {lo que haces a un lado, lo haces al otro};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmdef}{Ecuaciones equivalentes}
+Tienen las mismas soluciones. Se obtienen sumando o restando lo mismo, o multiplicando o dividiendo por algo distinto de cero.
+\end{tmdef}
+
+\begin{tmdef}{Grado}
+Es el mayor exponente de la inc\'ognita. Grado 1: lineal. Grado 2: cuadr\'atica. Grado $n$: como m\'aximo $n$ soluciones reales.
+\end{tmdef}
+
+\subsection{Ecuaciones lineales}
+\begin{tmdef}{Ecuaci\'on lineal}
+Tiene la forma $ax+b=0$ con $a\neq 0$. Su \'unica soluci\'on es:
+\end{tmdef}
+\tmformula{x=-\dfrac{b}{a}}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\small,rounded corners=4pt,draw=tmAzul,fill=tmAzulClaro,inner sep=5pt,minimum width=2.6cm,align=center}]
+  \node (a) {1. Quitar\\par\'entesis};
+  \node[right=0.6cm of a] (b) {2. Juntar\\t\'erminos con $x$};
+  \node[right=0.6cm of b] (c) {3. Reducir\\t\'erminos};
+  \node[right=0.6cm of c,fill=tmVerdeClaro,draw=tmVerde] (d) {4. Despejar y\\comprobar};
+  \foreach \p/\q in {a/b,b/c,c/d}{\draw[-{Stealth},tmOro,line width=1.2pt] (\p) -- (\q);}
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Lineal sencilla}
+Resolver $3x+7=22$.
+\begin{tmpasos}
+\item Restamos 7: $3x=15$.
+\item Dividimos entre 3: $x=5$.
+\item \textbf{Comprobaci\'on:} $3(5)+7=22$. Correcto.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Par\'entesis e inc\'ognita en ambos lados}
+Resolver $2(x-3)+5=3x-4$.
+\begin{tmpasos}
+\item Quitamos el par\'entesis: $2x-6+5=3x-4$.
+\item Reducimos: $2x-1=3x-4$.
+\item Pasamos las $x$: $-1+4=3x-2x$, o sea $x=3$.
+\item \textbf{Comprobaci\'on:} izquierda $5$, derecha $5$. Correcto.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Con fracciones}
+Resolver $\dfrac{x+1}{2}-\dfrac{x-2}{3}=2$.
+\begin{tmpasos}
+\item El m.c.m. de 2 y 3 es 6. Multiplicamos todo por 6: $3(x+1)-2(x-2)=12$.
+\item Quitamos par\'entesis: $x+7=12$, as\'i que $x=5$.
+\item \textbf{Comprobaci\'on:} $3-1=2$. Correcto.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmcuidado}Al quitar un par\'entesis precedido por un signo menos, \textbf{todos} los t\'erminos de adentro cambian de signo.\end{tmcuidado}
+
+\subsection{Ecuaciones cuadr\'aticas}
+\begin{tmdef}{Ecuaci\'on cuadr\'atica}
+Tiene la forma $ax^2+bx+c=0$ con $a\neq 0$ y se resuelve con la f\'ormula general. El discriminante es $\Delta=b^2-4ac$.
+\end{tmdef}
+\tmformula{x=\dfrac{-b\pm\sqrt{b^2-4ac}}{2a}}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=3 by 1,horizontal sep=1.1cm},width=4.6cm,height=3.6cm,
+  axis lines=middle,xmin=-3,xmax=3,ymin=-2,ymax=5,ticks=none,every axis title/.style={font=\sffamily\small\bfseries}]
+\nextgroupplot[title={$\Delta>0$: dos ra\'ices}]
+ \addplot[tmVerde,line width=1.4pt,domain=-2.3:2.3,samples=40]{x^2-2};
+ \addplot[only marks,mark=*,color=tmCoral] coordinates {(-1.414,0) (1.414,0)};
+\nextgroupplot[title={$\Delta=0$: una ra\'iz}]
+ \addplot[tmAzul,line width=1.4pt,domain=-2.3:2.3,samples=40]{x^2};
+ \addplot[only marks,mark=*,color=tmCoral] coordinates {(0,0)};
+\nextgroupplot[title={$\Delta<0$: ninguna real}]
+ \addplot[tmMorado,line width=1.4pt,domain=-2.3:2.3,samples=40]{x^2+1.5};
+\end{groupplot}
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Dos ra\'ices enteras}
+Resolver $x^2-5x+6=0$.
+\begin{tmpasos}
+\item $a=1$, $b=-5$, $c=6$. Entonces $\Delta=25-24=1$.
+\item Como $\Delta>0$: $x=\dfrac{5\pm1}{2}$, es decir, $x_1=3$ y $x_2=2$.
+\item \textbf{Comprobaci\'on (Vieta):} $3+2=5$ y $3\cdot2=6$. Correcto.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmtip}\textbf{F\'ormulas de Vieta:} las ra\'ices cumplen $x_1+x_2=-\frac{b}{a}$ y $x_1x_2=\frac{c}{a}$. Sirven para comprobar tu resultado en 5 segundos.\end{tmtip}
+
+\begin{tmejemplo}{Ra\'ices irracionales y discriminante cero}
+\begin{tmpasos}
+\item $x^2+6x+2=0$: $\Delta=28$ y $x=-3\pm\sqrt7\approx-0{,}354$ o $-5{,}646$.
+\item $4x^2-12x+9=0$: $\Delta=0$, una soluci\'on doble $x=\frac32$.
+\item $x^2+4x+5=0$: $\Delta=-4<0$. Sin ra\'ices reales (complejas: $-2\pm i$).
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Otros tipos de ecuaciones}
+\begin{center}
+\begin{tabular}{|p{2.6cm}|p{4.4cm}|p{5.6cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tipo} & \textbf{Truco} & \textbf{Ejemplo}\\ \hline
+Bicuadrada & Cambio $t=x^2$ & $x^4-5x^2+4=0\Rightarrow x\in\{\pm1,\pm2\}$\\ \hline
+Racional & Multiplicar por el denominador com\'un y descartar ra\'ices prohibidas & $\frac1x+\frac1{x+1}=\frac56\Rightarrow x=2$ o $x=-\frac35$\\ \hline
+Con ra\'iz & Aislar, elevar al cuadrado y \textbf{comprobar} & $\sqrt{x+7}=x+1\Rightarrow x=2$ ($x=-3$ es extra\~na)\\ \hline
+Valor absoluto & Dos casos: $u=k$ o $u=-k$ & $|2x-3|=7\Rightarrow x=5$ o $x=-2$\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmcuidado}Elevar al cuadrado puede \textbf{inventar} soluciones. Con $\sqrt{x+7}=x+1$ aparece $x=-3$, pero al comprobar da $2=-2$. Se descarta.\end{tmcuidado}
+
+\subsection{Planteo de problemas}
+Sigue siempre estos 4 pasos: (1) llama $x$ a lo que se pide, (2) escribe la ecuaci\'on, (3) resuelve, (4) comprueba que tenga sentido.
+
+\begin{tmejemplo}{Tiempo de descarga}
+Un archivo de 180 MB se descarga a velocidad constante. Con 10 MB/s m\'as, tardar\'ia 3 s menos. \textquestiondown Velocidad actual?
+\begin{tmpasos}
+\item $\dfrac{180}{v}-\dfrac{180}{v+10}=3\Rightarrow v^2+10v-600=0$.
+\item $\Delta=2500$, as\'i que $v=20$ o $v=-30$. Se descarta la negativa.
+\item \textbf{Comprobaci\'on:} $\frac{180}{20}=9$ s y $\frac{180}{30}=6$ s. Diferencia: 3 s.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Cuando no hay f\'ormula: m\'etodos num\'ericos}
+\begin{tmdef}{Bisecci\'on y Newton}
+Bisecci\'on: si $f(a)$ y $f(b)$ tienen signos opuestos, hay una ra\'iz en $[a,b]$; se parte el intervalo a la mitad una y otra vez. Newton: $x_{k+1}=x_k-\dfrac{f(x_k)}{f'(x_k)}$.
+\end{tmdef}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Iteraci\'on} & \textbf{Intervalo} & \textbf{Punto medio} & \textbf{Signo de $f(m)$}\\ \hline
+1 & $[1, 2]$ & $1{,}5$ & $+$\\ \hline
+2 & $[1, 1{,}5]$ & $1{,}25$ & $-$\\ \hline
+3 & $[1{,}25, 1{,}5]$ & $1{,}375$ & $-$\\ \hline
+4 & $[1{,}375, 1{,}5]$ & $1{,}4375$ & $+$\\ \hline
+\end{tabular}
+
+{\small Aproximaci\'on de $\sqrt2$ resolviendo $x^2-2=0$ por bisecci\'on.}
+\end{center}
+
+\begin{tmsistemas}
+\textbf{Hosting:} $30+2x=70\Rightarrow x=20$ GB extra. \textbf{Red en malla completa:} $\frac{n(n-1)}{2}=28\Rightarrow n^2-n-56=0\Rightarrow n=8$ computadoras. Newton para $\sqrt2$ converge en 3 pasos: $1{,}5;\ 1{,}41667;\ 1{,}414216$.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+import math
+
+def resolver_cuadratica(a, b, c):
+    delta = b**2 - 4*a*c
+    if delta < 0:
+        return []                 # sin soluciones reales
+    if delta == 0:
+        return [-b / (2*a)]       # solucion doble
+    r = math.sqrt(delta)
+    return [(-b + r) / (2*a), (-b - r) / (2*a)]
+
+print(resolver_cuadratica(1, -5, 6))   # [3.0, 2.0]
+\end{tmcodigo}
+
+\begin{tmejercicios}[Ejercicios 3.1 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:3-1}}]
+\label{ej:3-1}
+\begin{tmlista}
+\item \tmbasico\ Resuelve $5x-8=17$.
+\item \tmbasico\ Resuelve $4(x+2)=2x+18$.
+\item \tmbasico\ Resuelve $\dfrac{x}{3}+4=9$.
+\item \tmmedio\ Resuelve $x^2-7x+12=0$ y comprueba con Vieta.
+\item \tmmedio\ Calcula el discriminante de $x^2+4x+5=0$ y decide cu\'antas ra\'ices reales tiene.
+\item \tmmedio\ Resuelve $x^4-10x^2+9=0$ y $|3x+1|=11$.
+\item \tmdificil\ Un servicio cobra Bs 50 fijos m\'as Bs 0,5 por hora; otro, Bs 20 fijos m\'as Bs 0,8 por hora. \textquestiondown Desde cu\'antas horas es m\'as barato el primero?
+\item \tmdificil\ Un rect\'angulo de 40 cm$^2$ tiene un largo 3 cm mayor que el ancho. Halla sus dimensiones.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{3}{Misi\'on 1 (Balancear Cl\'uster): entra al laboratorio y balancea el cl\'uster de servidores. Aqu\'i las ecuaciones se vuelven recursos reales.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Una ecuaci\'on es una balanza: lo que haces a un lado, lo haces al otro.
+\item La cuadr\'atica se resuelve con $\Delta=b^2-4ac$ y se comprueba con Vieta.
+\item Despu\'es de elevar al cuadrado o multiplicar por denominadores, \textbf{siempre comprueba}.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Sistemas de ecuaciones}
+\label{sec:3-2}
+\tmgancho{Tres servidores reciben 600 peticiones por segundo. \textquestiondown C\'omo repartes la carga si conoces c\'omo se relacionan entre s\'i?}
+
+\begin{tmconcepto}{el punto donde todo se cumple}
+La soluci\'on de un sistema es el \textbf{punto de cruce}: el \'unico lugar donde todas las ecuaciones se cumplen a la vez.
+\end{tmconcepto}
+
+\tmcomo{el m\'etodo de Gauss}{{Escribe la matriz ampliada},{Haz ceros bajo cada pivote},{Llega a la forma escalonada},{Sustituye hacia atr\'as}}
+
+\subsection{Varias ecuaciones a la vez}
+Un \textbf{sistema} es un conjunto de ecuaciones que se cumplen simult\'aneamente. Cada ecuaci\'on con dos inc\'ognitas es una \textbf{recta}; la soluci\'on es donde se cruzan.
+
+\begin{tmdef}{Sistema lineal $m\times n$}
+Son $m$ ecuaciones con $n$ inc\'ognitas: $a_{i1}x_1+a_{i2}x_2+\cdots+a_{in}x_n=b_i$ para $i=1,\dots,m$.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=3 by 1,horizontal sep=1.1cm},width=4.6cm,height=3.6cm,
+  axis lines=middle,xmin=-1,xmax=5,ymin=-1,ymax=5,ticks=none,every axis title/.style={font=\sffamily\small\bfseries}]
+\nextgroupplot[title={Una soluci\'on}]
+ \addplot[tmAzul,line width=1.4pt,domain=-1:5]{5-x};
+ \addplot[tmVerde,line width=1.4pt,domain=-1:5]{x-1};
+ \addplot[only marks,mark=*,color=tmCoral] coordinates {(3,2)};
+\nextgroupplot[title={Ninguna}]
+ \addplot[tmAzul,line width=1.4pt,domain=-1:5]{x+1};
+ \addplot[tmCoral,line width=1.4pt,domain=-1:5]{x+3};
+\nextgroupplot[title={Infinitas}]
+ \addplot[tmAzul,line width=3.5pt,domain=-1:5,opacity=0.5]{x+1};
+ \addplot[tmVerde,line width=1.2pt,domain=-1:5]{x+1};
+\end{groupplot}
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Las rectas\ldots} & \textbf{Sistema} & \textbf{Soluciones}\\ \hline
+se cruzan en un punto & compatible determinado & una\\ \hline
+son paralelas & incompatible & ninguna\\ \hline
+son la misma recta & compatible indeterminado & infinitas\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Sustituci\'on y eliminaci\'on}
+\begin{tmejemplo}{Sustituci\'on}
+Resolver $x+y=12$ y $2x-y=3$.
+\begin{tmpasos}
+\item De la primera: $y=12-x$.
+\item Sustituimos: $2x-(12-x)=3\Rightarrow 3x=15\Rightarrow x=5$.
+\item Entonces $y=7$. \textbf{Comprobaci\'on:} $5+7=12$ y $10-7=3$. Correcto.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Eliminaci\'on}
+Resolver $3x+2y=16$ y $5x-2y=8$.
+\begin{tmpasos}
+\item Los coeficientes de $y$ son opuestos. Sumamos: $8x=24\Rightarrow x=3$.
+\item En la primera: $9+2y=16\Rightarrow y=\frac72$.
+\item \textbf{Comprobaci\'on:} $15-7=8$. Correcto.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{M\'etodo de Gauss}
+Con m\'as inc\'ognitas, se escribe la \textbf{matriz ampliada} y se aplican operaciones entre filas: intercambiar $F_i\leftrightarrow F_j$, multiplicar $F_i\to kF_i$ ($k\neq0$) y sumar $F_i\to F_i+kF_j$.
+
+\begin{tmejemplo}{Gauss con tres inc\'ognitas}
+Resolver $x+y+z=6$, $2x-y+z=3$, $x+2y-z=2$.
+\begin{tmpasos}
+\item Ceros bajo el primer pivote: $F_2\to F_2-2F_1$ y $F_3\to F_3-F_1$.
+\[\begin{bmatrix}1&1&1&6\\0&-3&-1&-9\\0&1&-2&-4\end{bmatrix}\]
+\item Intercambiamos $F_2\leftrightarrow F_3$ y hacemos $F_3\to F_3+3F_2$.
+\[\begin{bmatrix}1&1&1&6\\0&1&-2&-4\\0&0&-7&-21\end{bmatrix}\]
+\item Hacia atr\'as: $z=3$, luego $y=2$ y $x=1$.
+\item \textbf{Comprobaci\'on:} $2(1)-2+3=3$ y $1+4-3=2$. Correcto.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmdef}{Teorema de Rouch\'e--Frobenius}
+El sistema es compatible si y solo si $\operatorname{rango}(A)=\operatorname{rango}(A^*)$. Si adem\'as es igual a $n$: soluci\'on \'unica. Si es menor que $n$: infinitas. Si $\operatorname{rango}(A)<\operatorname{rango}(A^*)$: incompatible.
+\end{tmdef}
+
+\begin{tmejemplo}{Rouch\'e--Frobenius}
+Clasificar $x+y=3$, $2x+2y=8$. Con $F_2\to F_2-2F_1$ queda la fila $(0\ 0\ |\ 2)$, que dice $0=2$. Rangos: $1<2$. \textbf{Incompatible.}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Recta y circunferencia (no lineal)}
+Resolver $y=x+1$ y $x^2+y^2=25$.
+\begin{tmpasos}
+\item Sustituimos: $x^2+(x+1)^2=25\Rightarrow x^2+x-12=0$.
+\item Factorizamos: $(x+4)(x-3)=0$, as\'i que $x=-4$ o $x=3$.
+\item Puntos: $(3, 4)$ y $(-4,-3)$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Presupuesto de un centro de c\'omputo}
+12 equipos entre PCs (Bs 3\,000) y laptops (Bs 5\,000), total Bs 44\,000. \textquestiondown Cu\'antos de cada uno?
+\begin{tmpasos}
+\item $x+y=12$ y $3x+5y=44$ (en miles).
+\item $3(12-y)+5y=44\Rightarrow 2y=8\Rightarrow y=4$ y $x=8$.
+\item \textbf{Comprobaci\'on:} $24\,000+20\,000=44\,000$. Correcto.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmsistemas}
+Balanceo de carga, flujos de red, leyes de Kirchhoff y regresi\'on lineal terminan en un sistema $Ax=b$. Resolver uno $n\times n$ con Gauss cuesta $O(n^3)$: duplicar las inc\'ognitas multiplica el tiempo por 8.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+import numpy as np
+
+A = np.array([[1, 1, 1],
+              [2, -1, 1],
+              [1, 2, -1]], dtype=float)
+b = np.array([6, 3, 2], dtype=float)
+print(np.linalg.solve(A, b))    # [1. 2. 3.]
+\end{tmcodigo}
+
+\begin{tmcuidado}Si al escalonar aparece una fila $(0\ 0\ 0\ |\ k)$ con $k\neq0$, el sistema \textbf{no tiene soluci\'on}. Si aparece $(0\ 0\ 0\ |\ 0)$, esa ecuaci\'on sobraba.\end{tmcuidado}
+
+\begin{tmejercicios}[Ejercicios 3.2 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:3-2}}]
+\label{ej:3-2}
+\begin{tmlista}
+\item \tmbasico\ Resuelve por sustituci\'on: $x+y=9$ y $x-y=1$.
+\item \tmbasico\ Resuelve: $y=2x$ y $3x+y=15$.
+\item \tmbasico\ Resuelve: $x=y+4$ y $2x+y=17$.
+\item \tmmedio\ Clasifica: $x+y=3$ y $2x+2y=8$.
+\item \tmmedio\ Clasifica: $x-y=1$ y $2x-2y=2$.
+\item \tmmedio\ Resuelve por Gauss: $x+y+z=10$, $x-y+z=4$, $2x+y-z=5$.
+\item \tmdificil\ Una app tiene 200 suscriptores: plan b\'asico a Bs 30 y premium a Bs 50. Recaud\'o Bs 8\,000. \textquestiondown Cu\'antos de cada plan?
+\item \tmdificil\ Tres servidores reciben 600 peticiones/s. $S_2$ recibe el doble que $S_1$ y $S_3$ recibe 60 m\'as que $S_1$. \textquestiondown Cu\'anto recibe cada uno?
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{3}{En el laboratorio resuelves el sistema $Ax=b$ del cl\'uster y comprobamos que todos los recursos queden usados.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Un sistema es un conjunto de ecuaciones que se cumplen a la vez; geom\'etricamente, rectas que se cruzan.
+\item Gauss: escalonar con operaciones entre filas y sustituir hacia atr\'as.
+\item Rouch\'e--Frobenius clasifica: compara el rango de $A$ con el de la ampliada.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Matrices}
+\label{sec:3-3}
+\tmgancho{\textquestiondown C\'omo guarda tu computadora una foto, y c\'omo la rota?}
+
+\begin{tmconcepto}{la matriz como transformaci\'on}
+Una matriz es una tabla de n\'umeros. Al multiplicarla por un vector lo \textbf{transforma}: lo rota, lo estira o lo proyecta.
+\end{tmconcepto}
+
+\tmcomo{multiplicar $A\cdot B$}{{Verifica: columnas de $A$ = filas de $B$},{Toma la fila $i$ de $A$},{Multiplica con la columna $j$ de $B$ y suma},{Repite para cada posici\'on}}
+
+\subsection{Datos en forma de tabla}
+\begin{tmdef}{Matriz}
+Arreglo de $m$ filas y $n$ columnas: $A=[a_{ij}]$. Si $m=n$ es cuadrada. La diagonal principal es $a_{11}, a_{22},\dots$
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \foreach \i in {0,1,2}{\foreach \j in {0,1,2,3}{
+    \fill[tmAzulClaro,draw=tmAzul] (\j,-\i) rectangle (\j+1,-\i-1);
+    \node[font=\sffamily\small] at (\j+0.5,-\i-0.5) {$a_{\the\numexpr\i+1\relax\the\numexpr\j+1\relax}$};}}
+  \node[font=\sffamily\small,text=tmCoral] at (2,0.5) {4 columnas};
+  \node[font=\sffamily\small,text=tmCoral,rotate=90] at (-0.5,-1.5) {3 filas};
+  \node[font=\sffamily\small\bfseries,text=tmVerde] at (7.2,-1.5) {orden $3\times4$};
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{4cm}|p{8.5cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tipo} & \textbf{Caracter\'istica}\\ \hline
+Nula $O$ & Todas las entradas son 0\\ \hline
+Diagonal & Solo la diagonal principal es distinta de 0\\ \hline
+Identidad $I$ & Diagonal de unos, ceros fuera\\ \hline
+Sim\'etrica & $a_{ij}=a_{ji}$ (igual a su transpuesta)\\ \hline
+Triangular & Ceros debajo (o encima) de la diagonal\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Operaciones b\'asicas}
+Suma y resta: solo entre matrices del \textbf{mismo orden}, entrada por entrada. Producto por escalar: se multiplica cada entrada. Transpuesta $A^T$: filas por columnas.
+
+\begin{tmejemplo}{Suma, escalar y transpuesta}
+Con $A=\begin{bmatrix}1&2\\3&4\end{bmatrix}$ y $B=\begin{bmatrix}0&-1\\1&0\end{bmatrix}$:
+\begin{tmpasos}
+\item $A+B=\begin{bmatrix}1&1\\4&4\end{bmatrix}$.
+\item $2A-B=\begin{bmatrix}2&5\\5&8\end{bmatrix}$.
+\item $A^T=\begin{bmatrix}1&3\\2&4\end{bmatrix}$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Producto de matrices}
+\begin{tmdef}{Producto}
+Si $A$ es $m\times n$ y $B$ es $n\times p$, entonces $AB$ es $m\times p$ y $(AB)_{ij}=\sum_{k=1}^{n}a_{ik}b_{kj}$: fila $i$ de $A$ por columna $j$ de $B$.
+\end{tmdef}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\small}]
+  \fill[tmAzulClaro,draw=tmAzul] (0,0) rectangle (2.2,1); \node at (1.1,0.5) {fila $i$ de $A$};
+  \node at (2.6,0.5) {$\times$};
+  \fill[tmVerdeClaro,draw=tmVerde] (3,-0.6) rectangle (4,1.6); \node[rotate=90] at (3.5,0.5) {columna $j$ de $B$};
+  \node at (4.5,0.5) {$=$};
+  \fill[tmAmbarClaro,draw=tmAmbar] (5,0) rectangle (6,1); \node at (5.5,0.5) {$c_{ij}$};
+  \node[text=tmCoral] at (3.1,-1.2) {condici\'on: columnas de $A$ = filas de $B$};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Producto rectangular}
+$A=\begin{bmatrix}1&2&3\\0&1&4\end{bmatrix}$ ($2\times3$) y $B=\begin{bmatrix}2&1\\0&3\\1&1\end{bmatrix}$ ($3\times2$).
+\begin{tmpasos}
+\item $(AB)_{11}=2+0+3=5$ y $(AB)_{12}=1+6+3=10$.
+\item $(AB)_{21}=0+0+4=4$ y $(AB)_{22}=0+3+4=7$.
+\item $AB=\begin{bmatrix}5&10\\4&7\end{bmatrix}$. En cambio $BA$ es $3\times3$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmcuidado}El producto \textbf{no es conmutativo}: en general $AB\neq BA$. Con $A=\begin{bmatrix}1&2\\3&4\end{bmatrix}$ y $B=\begin{bmatrix}0&-1\\1&0\end{bmatrix}$ se tiene $AB=\begin{bmatrix}2&-1\\4&-3\end{bmatrix}$ y $BA=\begin{bmatrix}-3&-4\\1&2\end{bmatrix}$.\end{tmcuidado}
+
+\begin{tmtip}Propiedades que s\'i se cumplen: $(AB)C=A(BC)$, $A(B+C)=AB+AC$, $AI=IA=A$ y $(AB)^T=B^TA^T$.\end{tmtip}
+
+\subsection{Matriz inversa}
+\begin{tmdef}{Inversa}
+$A$ (cuadrada) es invertible si existe $A^{-1}$ con $AA^{-1}=A^{-1}A=I$. Para $2\times2$:
+\end{tmdef}
+\tmformula{A^{-1}=\dfrac{1}{ad-bc}\begin{bmatrix}d&-b\\-c&a\end{bmatrix},\quad ad-bc\neq0}
+
+\begin{tmejemplo}{Inversa $2\times2$}
+Hallar la inversa de $A=\begin{bmatrix}2&-1\\3&1\end{bmatrix}$.
+\begin{tmpasos}
+\item $ad-bc=2+3=5\neq0$.
+\item $A^{-1}=\frac15\begin{bmatrix}1&1\\-3&2\end{bmatrix}$.
+\item \textbf{Comprobaci\'on:} $AA^{-1}=\frac15\begin{bmatrix}5&0\\0&5\end{bmatrix}=I$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmejemplo}{Gauss--Jordan y sistema con inversa}
+Para $A=\begin{bmatrix}2&1\\5&3\end{bmatrix}$ se parte de $[A\,|\,I]$ y se opera hasta obtener $[I\,|\,A^{-1}]$:
+\[A^{-1}=\begin{bmatrix}3&-1\\-5&2\end{bmatrix}.\]
+Con ella, el sistema $2x+y=4$, $5x+3y=11$ se resuelve como $\mathbf{x}=A^{-1}\mathbf{b}=\begin{bmatrix}3&-1\\-5&2\end{bmatrix}\begin{bmatrix}4\\11\end{bmatrix}=\begin{bmatrix}1\\2\end{bmatrix}$.
+\end{tmejemplo}
+
+\begin{tmdef}{Rango}
+N\'umero de filas no nulas tras escalonar la matriz. Si el rango es menor que el orden, la matriz no es invertible.
+\end{tmdef}
+
+\begin{tmejemplo}{Rango}
+$M=\begin{bmatrix}1&2&3\\4&5&6\\7&8&9\end{bmatrix}$. Con $F_2\to F_2-4F_1$, $F_3\to F_3-7F_1$ y $F_3\to F_3-2F_2$ queda una fila de ceros. Entonces $\operatorname{rango}(M)=2$ y $M$ \textbf{no es invertible}.
+\end{tmejemplo}
+
+\subsection{Matrices en acci\'on}
+\begin{tmejemplo}{Rotar un punto 90$^\circ$}
+La rotaci\'on de \'angulo $\theta$ es $R(\theta)=\begin{bmatrix}\cos\theta&-\sin\theta\\\sin\theta&\cos\theta\end{bmatrix}$. Con $\theta=90^\circ$: $R\begin{bmatrix}3\\1\end{bmatrix}=\begin{bmatrix}-1\\3\end{bmatrix}$.
+\end{tmejemplo}
+
+\begin{tmejemplo}{Caminos en un grafo}
+Para el grafo de 4 nodos con aristas $1\text{--}2$, $1\text{--}3$, $2\text{--}3$, $3\text{--}4$, la matriz de adyacencia y su cuadrado son:
+\[A=\begin{bmatrix}0&1&1&0\\1&0&1&0\\1&1&0&1\\0&0&1&0\end{bmatrix},\quad A^2=\begin{bmatrix}2&1&1&1\\1&2&1&1\\1&1&3&0\\1&1&0&1\end{bmatrix}.\]
+La entrada $(1, 4)=1$: hay un solo camino de longitud 2 entre los nodos 1 y 4 (por el 3).
+\end{tmejemplo}
+
+\begin{tmejemplo}{Cadena de Markov: estado de un servidor}
+Activo sigue activo con prob. $0{,}9$; ca\'ido se recupera con $0{,}5$. Con $P=\begin{bmatrix}0{,}9&0{,}1\\0{,}5&0{,}5\end{bmatrix}$ la distribuci\'on estable cumple $\pi P=\pi$, lo que da $\pi_1=5\pi_2$. Luego $\pi=(\frac56,\frac16)$: activo el \textbf{83,3\%} del tiempo.
+\end{tmejemplo}
+
+\begin{tmsistemas}
+Una capa de red neuronal calcula $\mathbf{y}=W\mathbf{x}+\mathbf{b}$. Con $W=\begin{bmatrix}1&2\\0&1\\-1&1\end{bmatrix}$, $\mathbf{x}=(2, 1)$ y $\mathbf{b}=(1, 0,-1)$ resulta $\mathbf{y}=(5, 1,-2)$; tras ReLU (negativos a cero): $(5, 1, 0)$. Una imagen en grises es una matriz de enteros de 0 a 255.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+import numpy as np
+
+W = np.array([[1, 2], [0, 1], [-1, 1]])
+x = np.array([2, 1])
+b = np.array([1, 0, -1])
+y = W @ x + b
+print(y)                      # [ 5  1 -2]
+print(np.maximum(y, 0))       # ReLU -> [5 1 0]
+print(np.linalg.inv(np.array([[2, 1], [5, 3]])))
+\end{tmcodigo}
+
+\begin{tmejercicios}[Ejercicios 3.3 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:3-3}}]
+\label{ej:3-3}
+Sean $A=\begin{bmatrix}1&2\\3&4\end{bmatrix}$ y $B=\begin{bmatrix}0&-1\\1&0\end{bmatrix}$.
+\begin{tmlista}
+\item \tmbasico\ Calcula $A+B$ y $3A$.
+\item \tmbasico\ Calcula $A^T$.
+\item \tmbasico\ Calcula el rango de $\begin{bmatrix}1&2\\2&4\end{bmatrix}$. \textquestiondown Es invertible?
+\item \tmmedio\ Calcula $AB$ y $BA$. \textquestiondown Son iguales?
+\item \tmmedio\ Halla $A^{-1}$ con la f\'ormula $2\times2$.
+\item \tmmedio\ Halla por Gauss--Jordan la inversa de $\begin{bmatrix}2&-1\\3&1\end{bmatrix}$.
+\item \tmdificil\ La matriz $W=\begin{bmatrix}2&0\\1&1\end{bmatrix}$ transforma un p\'ixel y se obtiene $(6, 5)$. \textquestiondown Cu\'al era su posici\'on original?
+\item \tmdificil\ Verifica que $(AB)^T=B^TA^T$ con las matrices dadas.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{3}{Usa matrices en el laboratorio para validar el cl\'uster y comprobar que el sistema $Ax=b$ tiene la soluci\'on esperada.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item Una matriz es una tabla; sumar exige el mismo orden y multiplicar exige columnas de $A$ = filas de $B$.
+\item $AB\neq BA$ en general.
+\item Una matriz es invertible solo si su rango es completo.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\section{Determinantes}
+\label{sec:3-4}
+\tmgancho{\textquestiondown Hay una forma de saber, con un solo n\'umero, si un sistema tiene soluci\'on \'unica?}
+
+\begin{tmconcepto}{un n\'umero que resume}
+El determinante es un n\'umero-resumen: si es \textbf{cero}, la matriz aplasta el plano y no tiene inversa; si no es cero, todo funciona.
+\end{tmconcepto}
+
+\tmcomo{cifrar con Hill}{{Cambia letras por n\'umeros ($A=0$)},{Parte en bloques de 2},{Calcula $K\mathbf p$ y reduce m\'od 26},{Vuelve de n\'umeros a letras}}
+
+\subsection{Un n\'umero que resume una matriz}
+El \textbf{determinante} se calcula para matrices cuadradas. Su regla de oro:
+\tmformula{A\ \text{es invertible}\iff\det(A)\neq0}
+
+\begin{tmdef}{Determinante de orden 2}
+$\det\begin{bmatrix}a&b\\c&d\end{bmatrix}=ad-bc$: diagonal principal menos diagonal secundaria.
+\end{tmdef}
+
+\begin{tmejemplo}{Orden 2}
+$\begin{vmatrix}3&1\\2&5\end{vmatrix}=15-2=13$. En cambio $\begin{vmatrix}1&2\\3&6\end{vmatrix}=6-6=0$: la segunda fila es el triple de la primera, as\'i que \textbf{no es invertible}.
+\end{tmejemplo}
+
+\subsection{Regla de Sarrus (orden 3)}
+Se suman las tres diagonales que bajan y se restan las tres que suben.
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\small}]
+  \foreach \i in {0,1,2}{\foreach \j in {0,1,2}{
+    \node[draw=tmAzul,fill=tmAzulClaro,minimum width=1cm,minimum height=0.7cm] at (\i*1.1,-\j*0.8) {$a_{\the\numexpr\j+1\relax\the\numexpr\i+1\relax}$};}}
+  \draw[tmVerde,line width=1.6pt,-{Stealth}] (-0.5,0.5) -- (2.7,-2.1);
+  \draw[tmCoral,line width=1.6pt,-{Stealth}] (2.7,0.5) -- (-0.5,-2.1);
+  \node[text=tmVerde,anchor=west] at (4,-0.3) {diagonales que bajan: \textbf{suman}};
+  \node[text=tmCoral,anchor=west] at (4,-1.3) {diagonales que suben: \textbf{restan}};
+\end{tikzpicture}
+\end{center}
+
+\begin{tmejemplo}{Sarrus}
+$M=\begin{bmatrix}2&1&3\\0&-1&4\\1&2&-2\end{bmatrix}$.
+\begin{tmpasos}
+\item Bajan: $2(-1)(-2)+1\cdot4\cdot1+3\cdot0\cdot2=4+4+0=8$.
+\item Suben: $3(-1)(1)+2\cdot4\cdot2+1\cdot0\cdot(-2)=-3+16+0=13$.
+\item $\det M=8-13=-5$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Cofactores y Laplace}
+\begin{tmdef}{Cofactor y Laplace}
+El menor $M_{ij}$ es el determinante que queda al quitar la fila $i$ y la columna $j$. El cofactor es $C_{ij}=(-1)^{i+j}M_{ij}$. Se puede desarrollar por cualquier fila o columna: $\det A=\sum_j a_{ij}C_{ij}$.
+\end{tmdef}
+
+\begin{tmtip}Desarrolla siempre por la fila o columna con m\'as ceros: cada cero te ahorra un c\'alculo. Los signos siguen un tablero de ajedrez: $+\,-\,+\,-\cdots$\end{tmtip}
+
+\begin{tmejemplo}{Determinante de orden 4}
+$\det A=\begin{vmatrix}1&2&0&3\\2&0&1&1\\0&1&3&2\\1&1&0&2\end{vmatrix}$. Desarrollamos por la columna 3, que tiene dos ceros.
+\begin{tmpasos}
+\item $C_{23}=(-1)^5\cdot1=-1$, pues el menor $\begin{vmatrix}1&2&3\\0&1&2\\1&1&2\end{vmatrix}$ vale 1.
+\item $C_{33}=(-1)^6\cdot(-1)=-1$, pues el menor $\begin{vmatrix}1&2&3\\2&0&1\\1&1&2\end{vmatrix}$ vale $-1$.
+\item $\det A=1\cdot(-1)+3\cdot(-1)=-4$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\subsection{Propiedades y c\'alculo eficiente}
+\begin{tmdef}{Propiedades}
+$\det(A^T)=\det A$, $\det(AB)=\det A\det B$, $\det(kA)=k^n\det A$, $\det(A^{-1})=\frac{1}{\det A}$. Intercambiar filas cambia el signo; sumar un m\'ultiplo de una fila a otra no cambia nada; en una triangular es el producto de la diagonal.
+\end{tmdef}
+
+\begin{tmejemplo}{Por eliminaci\'on}
+$A=\begin{bmatrix}2&1&1\\4&3&3\\8&7&9\end{bmatrix}$. Con $F_2\to F_2-2F_1$, $F_3\to F_3-4F_1$ y $F_3\to F_3-3F_2$ queda la triangular con diagonal $2, 1, 2$. Luego $\det A=4$.
+\end{tmejemplo}
+
+\begin{tmejemplo}{Usar las propiedades}
+Si $A$ es de orden 3 y $\det A=5$: $\det(2A)=2^3\cdot5=40$, $\det(A^T)=5$, $\det(A^2)=25$ y $\det(A^{-1})=\frac15$.
+\end{tmejemplo}
+
+\subsection{Inversa con adjunta y regla de Cramer}
+La matriz adjunta es la transpuesta de la matriz de cofactores. Si $\det A\neq0$: $A^{-1}=\frac{1}{\det A}\operatorname{adj}(A)$.
+
+\begin{tmdef}{Regla de Cramer}
+Si $\det A\neq0$, la soluci\'on de $A\mathbf{x}=\mathbf{b}$ es $x_i=\dfrac{\det A_i}{\det A}$, donde $A_i$ es $A$ con la columna $i$ cambiada por $\mathbf{b}$.
+\end{tmdef}
+
+\begin{tmejemplo}{Cramer, sistema $3\times3$}
+El sistema $x+y+z=6$, $2x-y+z=3$, $x+2y-z=2$ (el mismo de Gauss).
+\begin{tmpasos}
+\item $\det A=7$, $D_x=7$, $D_y=14$ y $D_z=21$.
+\item $x=\frac77=1$, $y=\frac{14}{7}=2$ y $z=\frac{21}{7}=3$.
+\end{tmpasos}
+Coincide con Gauss. Cramer es elegante, pero para sistemas grandes es mucho m\'as lento.
+\end{tmejemplo}
+
+\subsection{\'Areas y vol\'umenes}
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
+  \fill[tmVerdeClaro,draw=tmVerde,line width=1pt] (0,0) -- (4,1) -- (2,5) -- cycle;
+  \node[font=\sffamily\small] at (-0.4,-0.3) {$P$};
+  \node[font=\sffamily\small] at (4.4,0.8) {$Q$};
+  \node[font=\sffamily\small] at (2,5.4) {$R$};
+  \node[font=\sffamily\small\bfseries,text=tmVerde] at (2,2) {$\frac12|\det|$};
+\end{tikzpicture}
+\end{center}
+El \'area del tri\'angulo $PQR$ es $\frac12\left|\det\begin{bmatrix}Q-P&R-P\end{bmatrix}\right|$.
+
+\begin{tmejemplo}{\'Area de un tri\'angulo}
+$P(1, 1)$, $Q(5, 2)$, $R(3, 6)$: los vectores son $(4, 1)$ y $(2, 5)$, con $\det=20-2=18$. \'Area $=9$ unidades cuadradas.
+\end{tmejemplo}
+
+\begin{tmtip}En gr\'aficos por computadora: $\det=0$ aplasta el plano (se pierde informaci\'on); $\det<0$ refleja la figura como un espejo; $|\det|$ es el factor por el que se multiplica el \'area.\end{tmtip}
+
+\subsection{Aplicaci\'on: cifrado de Hill}
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\scriptsize,rounded corners=4pt,draw=tmAzul,fill=tmAzulClaro,inner sep=4pt,align=center,minimum width=2cm}]
+  \node (a) {Mensaje\\HELP};
+  \node[right=0.45cm of a] (b) {Letras a n\'umeros\\$A=0,\dots,Z=25$};
+  \node[right=0.45cm of b] (c) {Bloques de 2\\vector $\mathbf p$};
+  \node[right=0.45cm of c,fill=tmAmbarClaro,draw=tmAmbar] (d) {$\mathbf c=K\mathbf p$\\m\'od 26};
+  \node[right=0.45cm of d,fill=tmVerdeClaro,draw=tmVerde] (e) {Cifrado\\HIAT};
+  \foreach \p/\q in {a/b,b/c,c/d,d/e}{\draw[-{Stealth},tmOro,line width=1.2pt] (\p) -- (\q);}
+\end{tikzpicture}
+\end{center}
+
+\begin{tmcuidado}La clave $K$ sirve solo si $\det K$ es coprimo con 26: no puede ser par ni m\'ultiplo de 13. Si no, no existe $K^{-1}$ m\'odulo 26 y no podr\'as descifrar.\end{tmcuidado}
+
+\begin{tmejemplo}{Cifrar HELP}
+Clave $K=\begin{bmatrix}3&3\\2&5\end{bmatrix}$, $\det K=15-6=9$, coprimo con 26.
+\begin{tmpasos}
+\item $\text{HELP}\to(7, 4),(11, 15)$.
+\item $K\begin{bmatrix}7\\4\end{bmatrix}=\begin{bmatrix}33\\34\end{bmatrix}\equiv\begin{bmatrix}7\\8\end{bmatrix}$, es decir, HI.
+\item $K\begin{bmatrix}11\\15\end{bmatrix}=\begin{bmatrix}78\\97\end{bmatrix}\equiv\begin{bmatrix}0\\19\end{bmatrix}$, es decir, AT. \textbf{Cifrado: HIAT.}
+\item Descifrado: $9\cdot3=27\equiv1$, as\'i que $K^{-1}\equiv3\begin{bmatrix}5&-3\\-2&3\end{bmatrix}\equiv\begin{bmatrix}15&17\\20&9\end{bmatrix}\pmod{26}$.
+\end{tmpasos}
+\end{tmejemplo}
+
+\begin{tmsistemas}
+Los determinantes responden: \textquestiondown el sistema tiene soluci\'on \'unica? \textquestiondown la transformaci\'on gr\'afica es reversible? \textquestiondown la clave de cifrado es v\'alida? Por Laplace cuestan $O(n!)$ (imposible con $n=20$: $2{,}4\times10^{18}$ operaciones); por eliminaci\'on, $O(n^3)$ ($8\,000$). Por eso el software siempre escalona.
+\end{tmsistemas}
+
+\begin{tmcodigo}
+import numpy as np
+
+K = np.array([[3, 3], [2, 5]])
+print(round(np.linalg.det(K)))        # 9
+
+def hill_cifrar(texto, K):
+    v = [ord(c) - 65 for c in texto]
+    salida = ""
+    for i in range(0, len(v), 2):
+        for n in (K @ np.array(v[i:i+2])) % 26:
+            salida += chr(int(n) + 65)
+    return salida
+
+print(hill_cifrar("HELP", K))         # HIAT
+\end{tmcodigo}
+
+\begin{tmejercicios}[Ejercicios 3.4 \hfill {\small\mdseries respuestas en p\'ag. \pageref{resp:3-4}}]
+\label{ej:3-4}
+\begin{tmlista}
+\item \tmbasico\ Calcula $\begin{vmatrix}3&1\\2&5\end{vmatrix}$ y $\begin{vmatrix}4&1\\3&1\end{vmatrix}$.
+\item \tmbasico\ Si $\det A=5$ y $A$ es de orden 3, halla $\det(2A)$ y $\det(A^{-1})$.
+\item \tmbasico\ \textquestiondown Es invertible $\begin{bmatrix}2&4\\1&2\end{bmatrix}$? Justif\'icalo.
+\item \tmmedio\ Calcula por Sarrus $\begin{vmatrix}1&0&2\\3&1&0\\2&2&1\end{vmatrix}$.
+\item \tmmedio\ Halla los valores de $k$ para los que $\begin{bmatrix}k&2\\3&k+1\end{bmatrix}$ no es invertible.
+\item \tmmedio\ Resuelve por Cramer: $x+y=5$ y $2x-y=1$.
+\item \tmdificil\ Cifra la palabra OK con la clave $K=\begin{bmatrix}3&3\\2&5\end{bmatrix}$.
+\item \tmdificil\ Un tri\'angulo tiene v\'ertices $(1, 1)$, $(4, 2)$ y $(2, 5)$. Halla su \'area y qu\'e pasa con ella si se aplica una transformaci\'on de determinante 3.
+\end{tmlista}
+\end{tmejercicios}
+
+\tmreto{3}{Misiones 2 (Cramer \& det(A)) y 3 (Cifrado Hill): verifica $\det A$, resuelve por Cramer y cifra la palabra NUBE con la clave de Hill en el laboratorio.}
+
+\begin{tmresumen}
+\begin{itemize}
+\item $\det A\neq0$ equivale a que $A$ sea invertible y a que $A\mathbf x=\mathbf b$ tenga soluci\'on \'unica.
+\item Orden 2: $ad-bc$; orden 3: Sarrus; mayor: Laplace o eliminaci\'on.
+\item Hill cifra con $K$ y descifra con $K^{-1}$ m\'odulo 26; $\det K$ debe ser coprimo con 26.
+\end{itemize}
+\end{tmresumen}
+
+% =====================================================================
+\clearpage
+\section*{Cierre del cap\'itulo 3}
+\addcontentsline{toc}{section}{Cierre del cap\'itulo 3}
+\subsection{Mapa mental}
+\tmmapa{\'Algebra}{{Ecuaciones\\lineales y cuadr\'aticas},{Sistemas\\Gauss y Rouch\'e},{Matrices\\producto e inversa},{Determinantes\\Sarrus y Laplace},{Cramer\\$x_i=D_i/D$},{Hill\\cifrado con $K$}}
+
+\subsection{Hoja de f\'ormulas}
+\begin{center}
+\begin{tabular}{|p{4.2cm}|p{8.4cm}|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Tema} & \textbf{F\'ormula}\\ \hline
+Lineal & $x=-b/a$\\ \hline
+Cuadr\'atica & $x=\dfrac{-b\pm\sqrt{b^2-4ac}}{2a}$; Vieta: $x_1+x_2=-\frac ba$, $x_1x_2=\frac ca$\\ \hline
+Newton & $x_{k+1}=x_k-f(x_k)/f'(x_k)$\\ \hline
+Inversa $2\times2$ & $\frac{1}{ad-bc}\begin{bmatrix}d&-b\\-c&a\end{bmatrix}$\\ \hline
+Determinante $2\times2$ & $ad-bc$\\ \hline
+Propiedades & $\det(AB)=\det A\det B$; $\det(kA)=k^n\det A$\\ \hline
+Cramer & $x_i=\det A_i/\det A$\\ \hline
+\'Area del tri\'angulo & $\frac12|\det[Q-P\ \ R-P]|$\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Actividades de cierre: mini proyecto}
+\begin{tmsistemas}
+\textbf{Mini proyecto: infraestructura y mensajes cifrados.} Una empresa despliega servicios web ($x$), base de datos ($y$) y cach\'e ($z$). Cada tipo consume CPU, RAM y disco; el cl\'uster tiene 17 n\'ucleos, 23 GB de RAM y 21 centenas de GB de disco, y todo debe quedar usado.
+\end{tmsistemas}
+
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\rowcolor{tmAzulClaro}\textbf{Recurso} & \textbf{Web} & \textbf{BD} & \textbf{Cach\'e} & \textbf{Total}\\ \hline
+CPU (n\'ucleos) & 2 & 1 & 1 & 17\\ \hline
+RAM (GB) & 1 & 3 & 2 & 23\\ \hline
+Disco (cientos de GB) & 1 & 1 & 4 & 21\\ \hline
+\end{tabular}
+\end{center}
+
+\begin{tmlista}
+\item Plantea el sistema y esc\'ribelo como $A\mathbf x=\mathbf b$.
+\item Calcula $\det A$ y justifica que la soluci\'on es \'unica.
+\item Resuelve por Gauss o Cramer: \textquestiondown cu\'antas instancias de cada servicio?
+\item Verifica que $K=\begin{bmatrix}2&3\\1&4\end{bmatrix}$ es una clave v\'alida, cifra NUBE y descifra con $K^{-1}$.
+\end{tmlista}
+
+\tmreto{3}{Cierre del cap\'itulo: completa las tres misiones del laboratorio (balancear el cl\'uster, Cramer y cifrado de Hill) y acredita tus TortuPuntos.}
+
+\begin{tmquiz}[Autoevaluaci\'on 3]
+\label{quiz:3}
+\tmpreg{La soluci\'on de $3x+7=22$ es}{$x=3$}{$x=5$}{$x=7$}{$x=15$}
+\tmpreg{Si $\Delta=0$ en una cuadr\'atica, hay}{dos ra\'ices reales}{una ra\'iz doble}{ninguna ra\'iz real}{infinitas ra\'ices}
+\tmpreg{Un sistema con rectas paralelas es}{compatible determinado}{indeterminado}{incompatible}{homog\'eneo}
+\tmpreg{Si $A$ es $2\times3$ y $B$ es $3\times4$, entonces $AB$ es de orden}{$2\times4$}{$3\times3$}{$4\times2$}{no existe}
+\tmpreg{En general, para matrices cuadradas}{$AB=BA$}{$AB\neq BA$}{$AB=0$}{$AB=I$}
+\tmpreg{$\begin{vmatrix}3&1\\2&5\end{vmatrix}$ vale}{17}{13}{$-13$}{7}
+\tmpreg{Si $\det A=5$ y $A$ es $3\times3$, $\det(2A)$ vale}{10}{15}{40}{25}
+\tmpreg{Una matriz con $\det=0$}{es invertible}{no es invertible}{es la identidad}{es sim\'etrica}
+\tmpreg{La clave $K$ de Hill es v\'alida si $\det K$ es coprimo con}{10}{13}{26}{100}
+\tmpreg{Resolver un sistema $n\times n$ por Gauss cuesta}{$O(n!)$}{$O(2^n)$}{$O(n^3)$}{$O(n)$}
+\end{tmquiz}

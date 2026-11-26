@@ -15,6 +15,7 @@ import RetoCapitulo2 from "./components/student/RetoCapitulo2";
 import RetoCapitulo3 from "./components/student/RetoCapitulo3";
 import RetoCapitulo4 from "./components/student/RetoCapitulo4";
 import RetosSidebar from "./components/shared/RetosSidebar";
+import GuardiaCapitulo from "./bloqueo/GuardiaCapitulo"; // BLOQUEO CAPÍTULOS
 
 import { StudentRegistration, AssignedMaterial, HomeworkSubmission, QuizLog } from "./types";
 
@@ -298,115 +299,145 @@ export default function App() {
     localStorage.removeItem("tortumath_role");
   };
 
+  // BLOQUEO CAPÍTULOS
+  const salirDeReto = (n: number) => {
+    if (window.location.hash.includes(`capitulo-${n}`)) {
+      window.location.hash = "";
+    } else {
+      window.history.pushState({}, "", "/");
+    }
+    setCurrentRoute("/");
+  };
+
   if (currentRoute === "/retos/capitulo-4") {
     const currentStudent = students.find(s => user && s.email.toLowerCase() === user.email.toLowerCase());
     return (
-      <RetoCapitulo4
-        onBack={() => {
-          if (window.location.hash.includes("capitulo-4")) {
-            window.location.hash = "";
-          } else {
-            window.history.pushState({}, "", "/");
-          }
-          setCurrentRoute("/");
-        }}
-        userEmail={user?.email || "sofia.ramos@gmail.com"}
-        studentId={currentStudent?.id || "STU-001"}
-        studentName={currentStudent?.name || "Sofía Ramos Ortiz"}
-        onSuccessCompletion={() => {
-          fetch("http://localhost:5000/api/quizzes")
-            .then(res => res.json())
-            .then(data => {
-              setQuizScores(data);
-              lastSyncedQuizScores.current = data;
-            })
-            .catch(() => { });
-        }}
-      />
+      <GuardiaCapitulo key={4} capitulo={4} onSalir={() => salirDeReto(4)}>
+        {(reportar) => (
+          <RetoCapitulo4
+            onBack={() => {
+              if (window.location.hash.includes("capitulo-4")) {
+                window.location.hash = "";
+              } else {
+                window.history.pushState({}, "", "/");
+              }
+              setCurrentRoute("/");
+            }}
+            userEmail={user?.email || "sofia.ramos@gmail.com"}
+            studentId={currentStudent?.id || "STU-001"}
+            studentName={currentStudent?.name || "Sofía Ramos Ortiz"}
+            onSuccessCompletion={() => {
+              fetch("http://localhost:5000/api/quizzes")
+                .then(res => res.json())
+                .then(data => {
+                  setQuizScores(data);
+                  lastSyncedQuizScores.current = data;
+                })
+                .catch(() => { });
+            }}
+            onProgresoMisiones={reportar}
+          />
+        )}
+      </GuardiaCapitulo>
     );
   }
 
   if (currentRoute === "/retos/capitulo-3") {
     const currentStudent = students.find(s => user && s.email.toLowerCase() === user.email.toLowerCase());
     return (
-      <RetoCapitulo3
-        onBack={() => {
-          if (window.location.hash.includes("capitulo-3")) {
-            window.location.hash = "";
-          } else {
-            window.history.pushState({}, "", "/");
-          }
-          setCurrentRoute("/");
-        }}
-        userEmail={user?.email || "sofia.ramos@gmail.com"}
-        studentId={currentStudent?.id || "STU-001"}
-        studentName={currentStudent?.name || "Sofía Ramos Ortiz"}
-        onSuccessCompletion={() => {
-          fetch("http://localhost:5000/api/quizzes")
-            .then(res => res.json())
-            .then(data => {
-              setQuizScores(data);
-              lastSyncedQuizScores.current = data;
-            })
-            .catch(() => { });
-        }}
-      />
+      <GuardiaCapitulo key={3} capitulo={3} onSalir={() => salirDeReto(3)}>
+        {(reportar) => (
+          <RetoCapitulo3
+            onBack={() => {
+              if (window.location.hash.includes("capitulo-3")) {
+                window.location.hash = "";
+              } else {
+                window.history.pushState({}, "", "/");
+              }
+              setCurrentRoute("/");
+            }}
+            userEmail={user?.email || "sofia.ramos@gmail.com"}
+            studentId={currentStudent?.id || "STU-001"}
+            studentName={currentStudent?.name || "Sofía Ramos Ortiz"}
+            onSuccessCompletion={() => {
+              fetch("http://localhost:5000/api/quizzes")
+                .then(res => res.json())
+                .then(data => {
+                  setQuizScores(data);
+                  lastSyncedQuizScores.current = data;
+                })
+                .catch(() => { });
+            }}
+            onProgresoMisiones={reportar}
+          />
+        )}
+      </GuardiaCapitulo>
     );
   }
 
   if (currentRoute === "/retos/capitulo-2") {
     const currentStudent = students.find(s => user && s.email.toLowerCase() === user.email.toLowerCase());
     return (
-      <RetoCapitulo2
-        onBack={() => {
-          if (window.location.hash.includes("capitulo-2")) {
-            window.location.hash = "";
-          } else {
-            window.history.pushState({}, "", "/");
-          }
-          setCurrentRoute("/");
-        }}
-        userEmail={user?.email || "sofia.ramos@gmail.com"}
-        studentId={currentStudent?.id || "STU-001"}
-        studentName={currentStudent?.name || "Sofía Ramos Ortiz"}
-        onSuccessCompletion={() => {
-          fetch("http://localhost:5000/api/quizzes")
-            .then(res => res.json())
-            .then(data => {
-              setQuizScores(data);
-              lastSyncedQuizScores.current = data;
-            })
-            .catch(() => { });
-        }}
-      />
+      <GuardiaCapitulo key={2} capitulo={2} onSalir={() => salirDeReto(2)}>
+        {(reportar) => (
+          <RetoCapitulo2
+            onBack={() => {
+              if (window.location.hash.includes("capitulo-2")) {
+                window.location.hash = "";
+              } else {
+                window.history.pushState({}, "", "/");
+              }
+              setCurrentRoute("/");
+            }}
+            userEmail={user?.email || "sofia.ramos@gmail.com"}
+            studentId={currentStudent?.id || "STU-001"}
+            studentName={currentStudent?.name || "Sofía Ramos Ortiz"}
+            onSuccessCompletion={() => {
+              fetch("http://localhost:5000/api/quizzes")
+                .then(res => res.json())
+                .then(data => {
+                  setQuizScores(data);
+                  lastSyncedQuizScores.current = data;
+                })
+                .catch(() => { });
+            }}
+            onProgresoMisiones={reportar}
+          />
+        )}
+      </GuardiaCapitulo>
     );
   }
 
   if (currentRoute === "/retos/capitulo-1") {
     const currentStudent = students.find(s => user && s.email.toLowerCase() === user.email.toLowerCase());
     return (
-      <RetoCapitulo1
-        onBack={() => {
-          if (window.location.hash.includes("capitulo-1")) {
-            window.location.hash = "";
-          } else {
-            window.history.pushState({}, "", "/");
-          }
-          setCurrentRoute("/");
-        }}
-        userEmail={user?.email || "sofia.ramos@gmail.com"}
-        studentId={currentStudent?.id || "STU-001"}
-        studentName={currentStudent?.name || "Sofía Ramos Ortiz"}
-        onSuccessCompletion={() => {
-          fetch("http://localhost:5000/api/quizzes")
-            .then(res => res.json())
-            .then(data => {
-              setQuizScores(data);
-              lastSyncedQuizScores.current = data;
-            })
-            .catch(() => { });
-        }}
-      />
+      <GuardiaCapitulo key={1} capitulo={1} onSalir={() => salirDeReto(1)}>
+        {(reportar) => (
+          <RetoCapitulo1
+            onBack={() => {
+              if (window.location.hash.includes("capitulo-1")) {
+                window.location.hash = "";
+              } else {
+                window.history.pushState({}, "", "/");
+              }
+              setCurrentRoute("/");
+            }}
+            userEmail={user?.email || "sofia.ramos@gmail.com"}
+            studentId={currentStudent?.id || "STU-001"}
+            studentName={currentStudent?.name || "Sofía Ramos Ortiz"}
+            onSuccessCompletion={() => {
+              fetch("http://localhost:5000/api/quizzes")
+                .then(res => res.json())
+                .then(data => {
+                  setQuizScores(data);
+                  lastSyncedQuizScores.current = data;
+                })
+                .catch(() => { });
+            }}
+            onProgresoMisiones={reportar}
+          />
+        )}
+      </GuardiaCapitulo>
     );
   }
 

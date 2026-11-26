@@ -40,6 +40,7 @@ export interface RetoCapitulo4Props {
   studentName?: string;
   initialTheme?: "tortuga" | "matrix" | "cyber";
   onSuccessCompletion?: (points: number) => void;
+  onProgresoMisiones?: (resueltas: number, total: number) => void; // BLOQUEO CAPÍTULOS
 }
 
 export default function RetoCapitulo4({
@@ -48,7 +49,8 @@ export default function RetoCapitulo4({
   studentId = "STU-001",
   studentName = "Sofía Ramos Ortiz",
   initialTheme = "tortuga",
-  onSuccessCompletion
+  onSuccessCompletion,
+  onProgresoMisiones
 }: RetoCapitulo4Props) {
   // Tema
   const [theme, setTheme] = useState<"tortuga" | "matrix" | "cyber">(() => {
@@ -189,6 +191,11 @@ export default function RetoCapitulo4({
 
   const completedMissionsCount = (mission1Completed ? 1 : 0) + (mission2Completed ? 1 : 0) + (mission3Completed ? 1 : 0);
   const allMissionsCompleted = completedMissionsCount === 3;
+
+  // BLOQUEO CAPÍTULOS
+  useEffect(() => {
+    onProgresoMisiones?.(completedMissionsCount, 3);
+  }, [completedMissionsCount, onProgresoMisiones]);
 
   // Envío
   const [isSubmitting, setIsSubmitting] = useState(false);
